@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>我的第一次博客之旅 | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="Author Gongjianbo" />
+<meta name="description" content="本项目为记录我的第一次利用hugo框架建立自己的个人博客过程
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/" />
+
+
+<meta property="og:title" content="我的第一次博客之旅" />
+<meta property="og:description" content="本项目为记录我的第一次利用hugo框架建立自己的个人博客过程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/" />
+<meta property="article:published_time" content="2020-11-22T10:29:04+08:00" />
+<meta property="article:modified_time" content="2020-11-22T10:29:04+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="我的第一次博客之旅"/>
+<meta name="twitter:description" content="本项目为记录我的第一次利用hugo框架建立自己的个人博客过程"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+  
+    <link rel="stylesheet" data-highlight href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css" />
+  
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          我的第一次博客之旅
+          <div class="sub header">
+            @
+            
+              
+                Author Gongjianbo
+              
+            
+
+            | 
+                Sunday, Nov 22, 2020
+              
+
+            | 1 minute read
+
+            | Update at
+              
+                Sunday, Nov 22, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本项目为记录我的第一次利用hugo框架建立自己的个人博客过程</p>
+<p><em><strong>本项目为记录我的第一次利用hugo框架建立自己的个人博客过程</strong></em>
+通过B站的CodeSheep（程序羊）的视频教学认识到了博客的个人搭建过程：
+整个搭建过程大概可以分为 个步骤：</p>
+<ul>
+<li>
+<p>1.下载并部署git(一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理)</p>
+<ul>
+<li>1.1 <a href="https://git-scm.com/">git官方下载链接</a></li>
+<li>1.2 <a href="https://www.runoob.com/git/git-basic-operations.html">git基本命令教学网站</a></li>
+</ul>
+</li>
+<li>
+<p>2.下载Hugo并配置环境变量path</p>
+<ul>
+<li>2.1	从Github上下载hugo.exe压缩包（window方法）</li>
+<li>2.2 通过brew工具(MacOS上的包管理工具，可以简化 macOS 和 Linux 操作系统上软件的安装)下载hugo(通过指令：brew install hugo)</li>
+<li>2.3 需要在新建一个文件夹名为hugo，里面还有再新建一个bin的文件夹再放入下好的hugo.exe版本，在系统变量path中添加到&hellip;/bin路径</li>
+</ul>
+</li>
+<li>
+<p>3.建立个人博客</p>
+<ul>
+<li>3.1	hugo建立网站命令：<code>hugo new site [网站名称]</code></li>
+<li>3.2	添加网站主题命令：<code>git clone [主题网址]</code></li>
+</ul>
+</li>
+<li>
+<p>4.在本地启动个人博客</p>
+<ul>
+<li>4.1	hugo在本地启动个人博客命令：<code>hugo server -t [主题名称] --buildDrafts</code>
+<ul>
+<li>注：启动个人博客时需要在相应的博客文件夹内执行此命令</li>
+</ul>
+</li>
+<li>4.2	通过cmd得到的网址检验网址是否启动成功</li>
+</ul>
+</li>
+<li>
+<p>5.新建一篇博客文章</p>
+<ul>
+<li>5.1 通过hugo命令：<code>hugo new post/[markdown文件名称].md</code></li>
+<li>5.2 将需要展示的内容编辑到新建的文件中，致此来完成需要发布的博客文章</li>
+</ul>
+</li>
+<li>
+<p>6.将个人博客部署到远端服务器(Github免费服务器)</p>
+<ul>
+<li>6.1 创建新仓库，名称必须是<code>[owner的名称].github.io</code></li>
+<li>6.2 通过hugo命令：<code>hugo --theme=[主题名称] --baseUrl=&quot;[https://owner的名称.github.io/]&quot; --buildDrafts</code></li>
+<li>6.3 在项目文件夹内会生成一个public文件,检验成功后，进入public文件夹中，
+<ul>
+<li>通过命令：</li>
+<li>1.<code>git init</code></li>
+<li>2.<code>git add .</code></li>
+<li>3.<code>git commit -m &quot;我的hugo博客第一次提交&quot;</code></li>
+<li>将public上传到github的仓库中</li>
+</ul>
+</li>
+<li>6.4 进行远地和本地的关联，通过命令：<code>git remote add origin https://github.com/[owner的名称]/[onwer的名称].github.io.git</code></li>
+<li>6.5 推送到远端的master上，通过命令：<code>git push -u origin master</code>，再输入github的账号密码</li>
+<li>6.6 去刚新建的仓库中检验一下是否提交成功</li>
+</ul>
+</li>
+<li>
+<p>7.通过远端生成的网址访问个人博客</p>
+<ul>
+<li>7.1 博客网站为：<code>http://[owner的名称].github.io</code></li>
+</ul>
+</li>
+<li>
+<p>搭建网站视频链接：<a href="https://www.bilibili.com/video/BV1q4411i7gL?t=1435">B站up主：CodeSheep·程序羊</a></p>
+</li>
+<li>
+<p>搭建网站文本链接：<a href="https://blog.csdn.net/weixin_44438749/article/details/103006099">csdn博主：勤勉的一只洋</a></p>
+</li>
+</ul>
+<hr>
+<h1 id="hugo下载系列">Hugo下载系列</h1>
+<ul>
+<li><strong>Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署</strong> -</li>
+<li><a href="https://github.com/gohugoio/hugo/releases">Hugo网站生成器下载页面</a></li>
+<li><a href="https://themes.gohugo.io/">Hugo主题下载页面</a></li>
+</ul>
+<hr>
+<h1 id="markdown语法教学">MarkDown语法教学</h1>
+<ul>
+<li><strong>Markdown是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档</strong> -</li>
+<li>Markdown的教学网站：<a href="https://www.runoob.com/markdown/md-tutorial.html">Markdown</a></li>
+</ul></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/%E5%AD%A6%E4%B9%A0" title="学习">学习</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%AD%A6%E4%B9%A0/" title="学习">
+        学习
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">我的第一次博客之旅</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Gongjianbo" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Gongjianbo" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">Me</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>Hi, my name is Gong jianbo.</p>
+<p>This is my blog.</p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Gongjianbo" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Gongjianbo" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  true 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script>
+
+  
+
+  <script>
+  hljs.initHighlightingOnLoad()
+  setHighlightTheme()
+
+  function setHighlightTheme() {
+    var isDark = localStore.getItem('hugo-theme-dream-is-dark')
+    var lightTheme =  null 
+    var darkTheme =  null 
+    var theme = isDark ? darkTheme : lightTheme
+
+    $('link[data-highlight]').attr('href', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/' + theme + '.min.css')
+    $('pre').css('background', isDark ? '#333' : '')
+  }
+</script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>
