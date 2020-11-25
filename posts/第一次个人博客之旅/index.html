@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="zh-Hans">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -84,10 +84,6 @@
 
     
 
-
-  
-    <link rel="stylesheet" data-highlight href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css" />
-  
 
 
 
@@ -391,19 +387,7 @@
   
 
   
-    <div class="item">
-      <a href="https://twitter.com/Gongjianbo" target="_blank">
-        <i class=" twitter icon" title="Twitter"></i>
-      </a>
-    </div>
-  
 
-  
-    <div class="item">
-      <a href="https://facebook.com/Gongjianbo" target="_blank">
-        <i class=" facebook icon" title="Facebook"></i>
-      </a>
-    </div>
   
 
   
@@ -557,19 +541,7 @@
   
 
   
-    <div class="item">
-      <a href="https://twitter.com/Gongjianbo" target="_blank">
-        <i class="large twitter icon" title="Twitter"></i>
-      </a>
-    </div>
-  
 
-  
-    <div class="item">
-      <a href="https://facebook.com/Gongjianbo" target="_blank">
-        <i class="large facebook icon" title="Facebook"></i>
-      </a>
-    </div>
   
 
   
@@ -611,7 +583,7 @@
     <script>
   window.backgroundDark = "black"
   window.backgroundImageDark = "/me/background-dark.jpg"
-  window.darkNav =  true 
+  window.darkNav =  null 
   window.hasTwitterEmbed =  null 
 
   if (window.hasTwitterEmbed) {
@@ -645,26 +617,6 @@
     
 <script src="/js/html2canvas.min.js"></script>
 <script src="/js/post.js"></script>
-
-
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script>
-
-  
-
-  <script>
-  hljs.initHighlightingOnLoad()
-  setHighlightTheme()
-
-  function setHighlightTheme() {
-    var isDark = localStore.getItem('hugo-theme-dream-is-dark')
-    var lightTheme =  null 
-    var darkTheme =  null 
-    var theme = isDark ? darkTheme : lightTheme
-
-    $('link[data-highlight]').attr('href', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/' + theme + '.min.css')
-    $('pre').css('background', isDark ? '#333' : '')
-  }
-</script>
 
 
 
