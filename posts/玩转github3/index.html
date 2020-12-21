@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>玩转Github（3） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/" />
+
+
+<meta property="og:title" content="玩转Github（3）" />
+<meta property="og:description" content="本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/" />
+<meta property="article:published_time" content="2020-12-21T14:52:04+08:00" />
+<meta property="article:modified_time" content="2020-12-21T14:52:04+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="玩转Github（3）"/>
+<meta name="twitter:description" content="本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          玩转Github（3）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Dec 21, 2020
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Monday, Dec 21, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。</p>
+<h1 id="git基本操作历史记录版本前进和后退找回文件文件内容比较">Git基本操作(历史记录、版本前进和后退、找回文件、文件内容比较)</h1>
+<h3 id="1--查看当前工作状态">1.  查看当前工作状态</h3>
+<p>查看当前工作状态命令为： <code>git status</code></p>
+<p>(1) 当文件被修改，没有提交到暂存区时，使用命令：<code>git status</code> ，结果如下图所示，提示一个文件未被追踪，表示当前修改的文件未被提交到暂存区。</p>
+<p><img src="/textImgs/20200513195451821.png" alt="在这里插入图片描述"></p>
+<p>(2) 当文件提交到暂存区后，使用命令：<code>git status</code> ，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195534123.png" alt="在这里插入图片描述"></p>
+<p>(3) 文件从暂存区提交到Git仓库后，使用命令：<code>git status</code> ，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195545960.png" alt="在这里插入图片描述"></p>
+<h3 id="2--查看历史结交记录">2 . 查看历史结交记录</h3>
+<p>查看Git历史结交记录命令为： <code>git log</code> ，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195603614.png" alt="在这里插入图片描述"></p>
+<p>通过命令：<code>git log --pretty=oneline</code> 可以查看简约版历史提交记录，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195617200.png" alt="在这里插入图片描述"></p>
+<p>也可以通过命令：<code>git log --oneline</code> 可以查看简约版历史提交记录，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195655113.png" alt="在这里插入图片描述"></p>
+<p>也可以通过命令： <code>git reflog</code> 查看历史记录，如下图所示，可以看到有 <code>HEAD@{0}</code> 和 <code>HEAD@{1}</code> 信息，其作用时方便后退到某一个版本，数字表示后退到当前版本需要多少步。</p>
+<p><img src="/textImgs/20200513195747404.png" alt="在这里插入图片描述"></p>
+<h3 id="3--版本的前进和后退">3 . 版本的前进和后退</h3>
+<p>首先查看版本提交记录，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195814592.png" alt="在这里插入图片描述"></p>
+<p>为了方便进行版本的前进和后退操作，对 <code>README.md</code> 文件多进行几次修改、提交操作。</p>
+<p>第一次修改后提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195836809.png" alt="在这里插入图片描述"></p>
+<p>接下来与上面的步骤相同，第二次修改后提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195848577.png" alt="在这里插入图片描述"></p>
+<p>第三次修改后提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195859800.png" alt="在这里插入图片描述"></p>
+<p>第四次修改后提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200513195908740.png" alt="在这里插入图片描述"></p>
+<p>通过命令 <code>git reflog</code> 查看历史提交记录，结果如下：</p>
+<p><img src="/textImgs/20200513195925715.png" alt="在这里插入图片描述"></p>
+<p><strong>版本的前进和后退需要通过</strong> <strong>指针 HEAD</strong> <strong>来进行控制</strong>。</p>
+<p><strong>HEAD控制的方式有三种：</strong></p>
+<p><strong>(1) 使用版本号进行操作(常用)：</strong>
+命令格式为：<code>git reset --hard 版本号</code></p>
+<p><strong>(2) 使用^符号进行操作，只能后退：</strong>
+命令： <code>git reset --hard HEAD^</code> 表示后退一个版本</p>
+<p>命令： <code>git reset --hard HEAD^^</code> 表示后退两个版本</p>
+<p><strong>(3) 使用~符号进行操作，只能后退：</strong>
+命令： <code>git reset --hard HEAD~</code> 表示后退一个版本；</p>
+<p>命令： <code>git reset --hard HEAD~~</code> 表示后退两个版本；</p>
+<p>命令： <code>git reset --hard HEAD~5</code> 表示后退5个版本；</p>
+<p>命令： <code>git reset --hard HEAD~n</code> 表示后退n个版本；</p>
+<p>注：命令参数有<strong>soft</strong>, <strong>mixed</strong>, <strong>hard</strong> 三种类型：</p>
+<p>(1) 参数 <strong>soft</strong> 表示本地Git仓库移动<strong>HEAD指针</strong>。</p>
+<p>(2) 参数 <strong>mixed</strong> 表示本地Git仓库移动<strong>HEAD指针</strong>，<strong>重置暂存区</strong>。</p>
+<p>(3) 参数 <strong>hard</strong> 表示表示本地Git仓库移动<strong>HEAD指针</strong>，<strong>重置暂存区，重置工作区</strong>。</p>
+<p><strong>下面举例说明版本后退和前进。</strong></p>
+<p>使用版本号进行操作，其命令格式为：<code>git reset --hard 版本号</code></p>
+<p><strong>后退</strong>到版本号为：1217f11的版本，命令为：<code>git reset --hard 1217f11</code>，结果如下图所示：</p>
+<p><img src="/textImgs/20200513200452536.png" alt="在这里插入图片描述"></p>
+<p>当然也可以<strong>前进</strong>到刚才的版本：命令为：<code>git reset --hard 4786d84</code>，结果如下图所示：</p>
+<p><img src="/textImgs/2020051320053668.png" alt="在这里插入图片描述"></p>
+<h3 id="4-删除文件后找回文件">4 删除文件后找回文件</h3>
+<h4 id="4-1-git仓库本地库删除文件后找回文件">4 .1 Git仓库(本地库)删除文件后找回文件</h4>
+<p>假设新建一个 <code>d123.txt</code> 文件后提交到Git仓库，然后仓库需要删除该文件，其步骤为：
+删除工作区 <code>d123.txt</code> 文件 ——&gt; 提交到暂存区 ——&gt; 提交到仓库</p>
+<p>(1) 新建 <code>d123.txt</code> 文件后提交到Git仓库，如下图所示：</p>
+<p><img src="/textImgs/2020051320063556.png" alt="在这里插入图片描述"></p>
+<p>(2) 删除Git仓库的 <code>d123.txt</code> 文件</p>
+<p><img src="/textImgs/20200513200735277.png" alt="在这里插入图片描述"></p>
+<p><strong>那么问题来了，工作区、暂存区和仓库中的 d123.txt 文件均被删除，该如何找回删除的文件？</strong>
+<strong>此时就需要版本的后退，即可找回文件。</strong></p>
+<p>首先查看版本提交记录，然后退回到指定版本即可。如下图所示：</p>
+<p><img src="/textImgs/2020051320083596.png" alt="在这里插入图片描述"></p>
+<h4 id="42-暂存区删除文件后找回文件">4.2 暂存区删除文件后找回文件</h4>
+<p>假设新建一个 <code>d456.txt</code> 文件后提交到Git仓库，然后删除文件提交到暂存区后，突然想找回该文件，此时仓库的文件并没有本删除，只需要将<strong>指针HEAD</strong>后退到提交 <code>d456.txt</code> 文件对应的版本即可，本质就是将调整<strong>指针HEAD</strong>的方向。</p>
+<p>(1) 新建 <code>d456.txt</code> 文件后提交到Git仓库</p>
+<p><img src="/textImgs/20200513200918202.png" alt="在这里插入图片描述"></p>
+<p>(2) 删除暂存区的 <code>d123.txt</code> 文件</p>
+<p><img src="/textImgs/20200513200937321.png" alt="在这里插入图片描述"></p>
+<p>(3) 找回文件
+步骤：通过提交记录，查询提交 <code>d456.txt</code> 文件至仓库的版本号，后退到该版本即可。结果如下图所示：</p>
+<p><img src="/textImgs/20200513201011543.png" alt="在这里插入图片描述"></p>
+<h3 id="5--版本中的文件内容比较">5 . 版本中的文件内容比较</h3>
+<p>对于版本之间同样文件内容比较可以使用命令 <code>git diff</code> 进行操作</p>
+<p><strong>比较文件的差异有多种情况：</strong></p>
+<ol>
+<li>第一种：<strong>工作区</strong>和<strong>暂存区</strong>文件比较，命令格式为： <code>git diff 文件名</code></li>
+<li>第二种：<strong>工作区</strong>和<strong>Git仓库</strong>文件比较，命令格式为：<code>git diff HEAD 文件名</code></li>
+<li>第三种：<strong>工作区</strong>和<strong>Git仓库</strong> 的 <strong>不同版本</strong>文件比较，命令格式为：<code>git diff 版本号 文件名</code></li>
+</ol>
+<p><strong>注：不添加文件名进行比较时，将自动比较多个相同文件名文件。</strong></p>
+<p><strong>举例说明：</strong>
+假设当前Git仓库有 <code>d123.txt</code> 和 <code>d456.txt</code> 文件，现在对工作区文件进行修改。</p>
+<p><strong>(1) 工作区文件修改，不提交到暂存区</strong></p>
+<p>使用命令：<code>git diff d123.txt</code> 进行工作区和暂存区文件比较</p>
+<p>使用命令：<code>git diff d456.txt</code> 进行工作区和暂存区文件比较</p>
+<p><img src="/textImgs/2020051320125047.png" alt="在这里插入图片描述"></p>
+<p>当不添加文件名时（<code>git diff</code>），自动比较多个文件，如下图所示：</p>
+<p><img src="/textImgs/20200513201301494.png" alt="在这里插入图片描述"></p>
+<p><strong>(2) 工作区文件修改，提交到暂存区，并未提交到仓库</strong></p>
+<p><img src="/textImgs/20200513201326701.png" alt="在这里插入图片描述"></p>
+<p>使用命令：<code>git diff d123.txt</code> 和 <code>git diff d456.txt</code> 将工作区文件和暂存区文件对比，如下图所示，工作区和暂存区没有区别，因为工作区文件被提交到暂存区了。</p>
+<p><img src="/textImgs/2020051320134944.png" alt="在这里插入图片描述"></p>
+<p>使用命令：<code>git diff HEAD d123.txt</code> 和 <code>git diff HEAD d456.txt</code> 将工作区文件(工作区文件和暂存区相同，因为工作区文件被提交到暂存区了) 和仓库文件对比，如下图所示，发现有区别了。</p>
+<p><img src="/textImgs/20200513201424203.png" alt="在这里插入图片描述"></p>
+<p><strong>(3) 工作区文件修改，提交到Git仓库</strong></p>
+<p>使用命令 <code>git diff HEAD d123.txt</code> 和 <code>git diff HEAD d456.txt</code> 分别将工作区文件和仓库文件比较，结果如下图所示，发现没有区别。</p>
+<p><img src="/textImgs/20200513201454936.png" alt="在这里插入图片描述"></p>
+<p>可以通过命令： <code>git diff 版本号 文件名</code> 查询工作区和其他版本之间的文件比较，结果如下图所示：</p>
+<p><img src="/textImgs/20200513201616147.png" alt="在这里插入图片描述"></p>
+<p><strong>原文出处链接：</strong> <a href="https://xiongyiming.blog.csdn.net/article/details/106105282">https://xiongyiming.blog.csdn.net/article/details/106105282</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/git" title="Git">Git</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

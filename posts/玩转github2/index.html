@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>玩转Github（2） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/" />
+
+
+<meta property="og:title" content="玩转Github（2）" />
+<meta property="og:description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/" />
+<meta property="article:published_time" content="2020-12-21T14:38:47+08:00" />
+<meta property="article:modified_time" content="2020-12-21T14:38:47+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="玩转Github（2）"/>
+<meta name="twitter:description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          玩转Github（2）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Dec 21, 2020
+              
+
+            | 1 minute read
+
+            | Update at
+              
+                Monday, Dec 21, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库</p>
+<h1 id="git的安装以及基本使用">Git的安装以及基本使用</h1>
+<ol>
+<li>
+<h3 id="下载git">下载Git</h3>
+<p>目的：通过git管理github托管项目代码</p>
+<p>Git官网下载：https://www.git.scm.com/download/win</p>
+<p>双击安装</p>
+</li>
+<li>
+<h3 id="git工作区域">Git工作区域</h3>
+<ol>
+<li><strong>Git Repostitory（Git 仓库）</strong></li>
+</ol>
+<p>最终确定的文件保存到仓库，成为一个新的版本，并且对他人可见</p>
+<ol start="2">
+<li><strong>暂存区</strong></li>
+</ol>
+<p>暂存已经修改的文件最后统一提交到git仓库中</p>
+<ol start="3">
+<li><strong>工作区（Working Directory）</strong></li>
+</ol>
+<p>添加、编辑、修改文件等动作</p>
+</li>
+<li>
+<h3 id="向仓库添加文件流程">向仓库添加文件流程</h3>
+<p><img src="/textImgs/image-20201221134221066.png" alt="image-20201221134221066"></p>
+</li>
+<li>
+<h3 id="初始化git本地操作工作区-暂存区">初始化git(本地操作)————（工作区-&gt;暂存区）</h3>
+<ol>
+<li>
+<p><strong>基本信息设置</strong></p>
+<ol>
+<li>
+<p>设置用户名</p>
+<p><code>git config --global user.name 'XXXXX'</code></p>
+</li>
+<li>
+<p>设置用户名邮箱</p>
+<p><code>git config --global user.email  '616316004@qq.com'</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>初始化一个新的git仓库</strong></p>
+<ol>
+<li>
+<p>创建文件夹</p>
+<p><code>mkdir 文件名</code></p>
+</li>
+<li>
+<p>在文件内初始化git（创建git仓库）</p>
+<p>进入目标文件夹：<code>cd 文件名</code></p>
+<p>初始化本地git仓库（暂存区）：<code>git init</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>向仓库添加文件</strong></p>
+<ol>
+<li>
+<p>添加到本地仓库（暂存区）：</p>
+<p><code>git add 文件名.后缀</code></p>
+</li>
+<li>
+<p>查看：</p>
+<p><code>git status</code></p>
+</li>
+<li>
+<p>将文件从暂存区提交到github仓库</p>
+<p><code>git commit -m '提交状态信息说明'</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>修改仓库文件</strong></p>
+<ol>
+<li>
+<p>将文件的内容修改</p>
+</li>
+<li>
+<p>重新进行第三个步骤</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>删除仓库文件</strong></p>
+<ol>
+<li>
+<p>删除文件</p>
+<p><code>rm 文件名.后缀</code></p>
+</li>
+<li>
+<p>从Git中删除文件</p>
+<p><code>git rm 文件名.后缀</code></p>
+</li>
+<li>
+<p>提交操作</p>
+<p><code>git commit -m '提交描述'</code></p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h3 id="git管理远程仓库暂存区-git-repository">Git管理远程仓库————（暂存区-&gt;Git Repository）</h3>
+<p>使用远程仓库的目的：备份，实现代码共享集中化管理</p>
+<p><img src="/textImgs/image-20201221140739178.png" alt="image-20201221140739178"></p>
+<ol>
+<li>
+<p><strong>Git克隆操作</strong></p>
+<p>目的：将远程仓库（github对应的项目）</p>
+<ol>
+<li>通过github仓库的<code>Clone or download</code>复制链接</li>
+</ol>
+<p><img src="/textImgs/image-20201221141317576.png" alt="image-20201221141317576"></p>
+<ol start="2">
+<li>
+<p>克隆：<code>git clone 复制的链接</code></p>
+<p>查看：<code>git config --list</code></p>
+<p><img src="/textImgs/image-20201221141732527.png" alt="image-20201221141732527"></p>
+</li>
+<li>
+<p>添加到本地仓库（暂存区）：</p>
+<p><code>git add 文件名.后缀</code></p>
+</li>
+<li>
+<p>将文件从暂存区提交到github仓库</p>
+<p><code>git commit -m '提交状态信息说明'</code></p>
+</li>
+<li>
+<p>将本地仓库同步到git远程仓库</p>
+<p><code>git push</code></p>
+</li>
+<li>
+<p>报错：The requested URL returned error:403 Forbidden while accessing或没有权限</p>
+<p>回答：是因为这是私有项目，没有权限，输入用户名密码，或者远程地址采用这种类型：</p>
+<pre><code>vi .git/config
+         
+# 将
+[remote &quot;origin&quot;]
+   url = https://github.com/用户名/仓库名.git
+修改为：
+[remote &quot;origin&quot;]
+   url = https://用户名:密码@github.com/用户名/仓库名.git
+</code></pre></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/git" title="Git">Git</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

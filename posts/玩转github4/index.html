@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>玩转Github（4） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/" />
+
+
+<meta property="og:title" content="玩转Github（4）" />
+<meta property="og:description" content="本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/" />
+<meta property="article:published_time" content="2020-12-21T14:52:09+08:00" />
+<meta property="article:modified_time" content="2020-12-21T14:52:09+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="玩转Github（4）"/>
+<meta name="twitter:description" content="本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          玩转Github（4）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Dec 21, 2020
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Monday, Dec 21, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。</p>
+<h1 id="git的分支管理创建分支切换分支合并分支删除分支">Git的分支管理(创建分支、切换分支、合并分支、删除分支)</h1>
+<h3 id="1-git的分支是什么"><strong>1. Git的分支是什么？</strong></h3>
+<p>顾名思义，分支就是从主线上分离出来进行另外的操作，而又不影响主线，主线又可以继续干它的事，是不是有点像线程，最后分支做完事后合并到主线上而分支的任务完成可以删掉了。这样是不是很方便，主线继续做它的事，分支用来解决临时需求，二者互不相干。</p>
+<p>git的分支功能特别的强大，它不需要将所有数据进行复制，只要重新创建一个分支的指针指向你需要从哪里开始创建分支的提交对象(commit)，然后进行修改再提交，那么新分支的指针就会指向你最新提交的这个commit对象，而原来分支的指针则指向你原来开发的位置，当你在哪个分支开发，HEAD就指向那个分支的最新提交对象commt。没弄清楚没关系，先有这么一个概念，后面慢慢就会弄清的。</p>
+<h3 id="2分支的新建与合并">2.分支的新建与合并</h3>
+<p>​    我们可以用命令git branch来查看我们的git仓库有几个分支，而我们目前工作处于那个分支，前面有个*号的就为我们目前所处的分支。我们可以通过命令git branch name来创建分支，而这个分支的指针就指向最新的commit对象，也就和HEAD指向同一对象。我们可以通过命令git checkout name来切换到目的分支，我们默认的主分支为master。在分支的创建和切换，其实只是简单的创建指针找指针而已，而根据找到的指针找到所指向的commit对象，然后将工作空间恢复成该commit对象所指的文件快照让我们来工作。当提交一次，指针就重新指向这个最新提交的对象，特别的简单。</p>
+<p><img src="/textImgs/20140417153927250" alt="img">					<img src="/textImgs/20140417154123578" alt="img"></p>
+<p>当我们建立分支teset之前，只有master一个主分支，如图一，我们所有的开发都是在这个分支上，而且HEAD是指向最近一次提交的commit对象c3，c3以前还有两次提交c1和c2，这时我们通过git branch test创建test分支，如图二，这时HEAD还是指向master分支最近一次提交的c3，当git checkout test切换到test分支后，HEAD就指向test分支的最近一次提交c3，这个时候其实在.git里面都是指向同样一份数据c3。</p>
+<p><img src="/textImgs/20140417154521609" alt="img"></p>
+<p>这个时候，当我们在test分支上进行了几次开发提交了c4和c5两个版本后，那么test和HEAD都指向test分支的最近一次提交c5，如图三，而master此时还没有变化，任然指向的是c3，如果这个时候将test分支合并到master分支，那么git根本不用做什么，只要将master移动，指向c5就可以了，这个过程称之为Fast-forward快进。如果此时test的任务完成，我们就可以通过git branch -d test将它删除掉，继续在主分支master上进行开发。如果是这样的话，那么test分支就白建了。</p>
+<p><img src="/textImgs/20140417154842937" alt="img"></p>
+<p>那么如果此时master分支上又进行另外的开发，提交了两个版本c6和c7，那么此时的master和HEAD指针都指向的是c7，如图四，可以看出在哪个分支上开发，那么HEAD就指向的是哪个分支上的commit，这个时候合并两个分支的话，就如下。</p>
+<p><img src="/textImgs/20140417155201890" alt="img"></p>
+<p>如图五，我们先切换到master分支，然后通过git merge test将test分支合并到master分支，这个时候，git就不是简单的移动指针了，因为两边都有开发，所以git就要对于两个分支的最新提交c5和c7还有两个分支共同的祖先commit对象c3来进行一次简单的三方合并，产生新的文件快照并用新的commit对象c8记录，这个合并的过程不需要太在意，如果产生了冲突，也就是两个分支对同一个文件进行了修改，那么git就会停下合并操作，让你处理好冲突后，再提交(c8)，然后再进行合并。这时master和HEAD都指向c8，但是test是没有移动的，此时还可以在test上继续开发，再合并到master，如果test已经没有利用价值了就可以删掉了。</p>
+<h3 id="3本地分支追踪分支和远程分支">3.本地分支，追踪分支和远程分支</h3>
+<p>​    这里有三个概念:</p>
+<p><strong>本地分支</strong>就是我们可以通过git branch查看到的分支，也就是我们自己git仓库所拥有的分支，我们都可以利用。</p>
+<p><strong>远程分支</strong>是对远程仓库的分支的索引，它其实也是本地分支，只是我们无法移动它，必须要在和中心服务器交互根据服务器更新到本地来的代码移动的，远程分支的作用就是我们上次和中心服务器交互更新得到的最新版本，它也是个指针。</p>
+<p><strong>追踪分支</strong>比较难理解，它也是一个本地分支，只是它对应了一个远程分支，如果我们本地的某个分支对应了一个特定的远程分支，那么它就是追踪分支，比如我们最初的master分支就是一个追踪分支，它对应远程分支origin/master，这里origin是远程仓库名，当我们在master分支里执行更新(fetch，pull)或是推送(push)，在不指定分支的情况下，<strong>默认就是从origin/master分支更新来或者提交到origin/mster分支</strong>。</p>
+<p><img src="/textImgs/20140417173314046" alt="img"></p>
+<p><img src="/textImgs/20140417173323859" alt="img"></p>
+<p>​    从图七和图八很容易看出来，和我们本地创建分支很相似，只是origin/master远程分支只有在连接服务器并更新服务器代码到本地后才会移动，如下图九：</p>
+<p><img src="/textImgs/20140417173818171" alt="img"></p>
+<p>更新远程代码到本地有两个命令，fetch和pull，fetch是将远程代码更新到本地，但是不会执行合并操作，需要自己查看，解决冲突什么的，然后自己再执行merge将更新来的代码合并到我们自己制定的分支，但是pull就将这两个操作合成了一步，直接更新服务器代码更新并合并到到本地指定分支，当然遇到冲突也必须要自己解决。所以我们一般都使用fetch来实现更新，虽然麻烦了点，但是不容易出问题。</p>
+<p>将本地代码推送到远程仓库，也就是中心服务器，一般我们推送数据都是git push origin master:master，这里指定远程仓库名，本地分支名和远端分支，也就是将我们本地master分支的数据推送到远程仓库origin的master分支。如果本地的master分支是追踪分支，那么在不指定的情况下，它会自己找到远程仓库中对应的分支来推送数据。或者我们直接进行git push origin操作，只指定远程仓库名，那么git会根据我们目前所在分支和它所对应的远程仓库的分支来实现数据推送，前提是我们目前所在分支必须是追踪分支。当然如果是git push origin :master，这里本地分支名是空的，这个操作就是将空分支推送到远程仓库的master分支，结果就是将master分支删除。</p>
+<p>既然追踪分支这么好用，那么我们怎么建立追踪分支呢，有两种方式，第一种方式是根绝远程分支创建追踪分支，如果不指定该追踪分支的名字，默认和远程仓库的分支名字一样：git checkout &ndash;track origin/test，这样我们就建立了一个名为test的追踪分支，如果重新指定追踪分支的名字：git checkout -b name origin/test，这样我们就创建了一个名为name的追踪分支，它对应远程仓库的test分支。第二种方式是已经存在某个本地分支，要让它来对应某个远程分支来成为追踪分支，也有两个命令可以用，git branch &ndash;set-upstream test origin/test 或者git branch -f &ndash;track test origin/test 这里我们就让我们本地已经存在的test分支来追踪远程的test分支。</p>
+<hr>
+<h3 id="1--创建分支与查看分支">1 . 创建分支与查看分支</h3>
+<p><strong>创建分支</strong>命令格式：<code>git branch 分支名</code></p>
+<p><strong>查看分支</strong>命令格式：<code>git branch -v</code></p>
+<p>也可以通过命令：<code>git log --decorate --all --oneline --graph</code> 对各个分支进行图形化显示。</p>
+<p>假设目前工作区和仓库有 <code>d123.txt</code> , <code>d456.txt</code> , <code>hello_world.cpp</code> , <code>README.md</code> 四个文件，现在需要建立分支 feature_sum ， 然后查看该分支。</p>
+<p>创建分支，使用命令：<code>git branch feature_sum</code> ，然后通过命令：<code>git branch -v</code> 查看该分支，也可以通过命令：<code>git log --decorate --all --oneline --graph</code> 图形化显示分支，结果如下图所示：</p>
+<p><img src="/textImgs/2020051419291077.png" alt="在这里插入图片描述"></p>
+<h3 id="2--切换分支">2 . 切换分支</h3>
+<p><strong>切换分支</strong>命令格式：<code>git checkout 分支名</code></p>
+<p>例如，前面的例子已经创建了 feature_sum 分支，接下来切换到该分支(命令： <code>git checkout feature_sum</code> )，结果图下图所示，发现<strong>指针HEAD</strong>指向了分支 feature_sum 。</p>
+<p><img src="/textImgs/20200514192941807.png" alt="在这里插入图片描述"></p>
+<p>然后在 feature_sum 分支下添加 <code>test_sum.cpp</code> 文件并提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200514192949651.png" alt="在这里插入图片描述"></p>
+<h3 id="3--合并分支">3 . 合并分支</h3>
+<p>假设需要将其他分支合并到master分支上，则合并分支前，首先切换到master分支上，然后将其他分支合并到master分支上即可。
+<strong>合并分支</strong>命令格式：<code>git merge 分支名</code></p>
+<p>例如：
+由前面的操作可知，当前分支 feature_sum 下增加了 <code>test_sum.cpp</code> 文件，可以通过切换分支查看master分支下的文件是否发生变化。</p>
+<p><img src="/textImgs/20200514193037638.png" alt="在这里插入图片描述"></p>
+<p><img src="/textImgs/20200514193041548.png" alt="在这里插入图片描述"></p>
+<p>由上图可知，master分支下并未增加 <code>test_sum.cpp</code> 文件，这时通过合并分支操作就可以增加feature_sum分支下的 <code>test_sum.cpp</code> 文件。
+<strong>注意：</strong> 若将 feature_sum 分支合并到master分支，此时当前分支状态需要在master分支下。</p>
+<p>使用合并分支命令：<code>git merge feature_sum</code> ，结果如下图所示，可以发现master分支下增加了<code>test_sum.cpp</code>文件，表示合并分支操作成功。</p>
+<p><img src="/textImgs/20200514193121306.png" alt="在这里插入图片描述"></p>
+<h3 id="4--解决合并分支产生的冲突">4 . 解决合并分支产生的冲突</h3>
+<p><strong>合并分支</strong>的时候可能会产生冲突，下面举一个例子进行说明：
+上一个操作合并分支，则master分支下的文件和feature_sum分支下的文件相同。假设用户A对master分支下 <code>test_sum.cpp</code> 文件进行修改然后提交到仓库，用户B对feature_sum分支<code>test_sum.cpp</code>文件进行修改然后提交到仓库。用户A和用户B对同一个文件进行修改，那么修改的文件内容在合并时会产生冲突，系统不知道该如何操作，则会出现报错，此时就需要人工修改文件来解决冲突。</p>
+<p>下面通过实际操作来说明解决冲突。</p>
+<p>(1) master分支下修改 <code>test_sum.cpp</code> 文件，然后提交到仓库，结果如下图所示：</p>
+<p><img src="/textImgs/20200514193201276.png" alt="在这里插入图片描述"></p>
+<p>(2) feature_sum分支下修改<code>test_sum.cpp</code>文件，然后提交到仓库</p>
+<p><img src="/textImgs/20200514193216653.png" alt="在这里插入图片描述"></p>
+<p>(3) 合并分支(feature_sum分支合并到master分支)</p>
+<p><img src="/textImgs/2020051419322628.png" alt="在这里插入图片描述"></p>
+<p>如上图所示，合并分支时出现冲突，提示 <code>test_sum.cpp</code> 文件出现冲突，并且此时还处于合并状态，这是需要解决冲突，通过命令： <code>vim test_sum.cpp</code> 打开该文件查看冲突，如下图所示：</p>
+<p><img src="/textImgs/20200514193243949.png" alt="在这里插入图片描述"></p>
+<p>将 <code>test_sum.cpp</code> 文件中 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> 提示符 、<code>======</code> 分隔符和 <code>&gt;&gt;&gt;&gt;&gt;&gt; feature_sum</code>提示符 删除，然后修改内容，如下图所示：</p>
+<p><img src="/textImgs/2020051419330633.png" alt="在这里插入图片描述"></p>
+<p>接着，<strong>修改文件后保存退出</strong> ——&gt; <strong>解决冲突后的文件提交到暂存区</strong> ——&gt; <strong>解决冲突后的文件提交到仓库</strong>，结果如下图所示：</p>
+<p><img src="/textImgs/20200514193318404.png" alt="在这里插入图片描述"></p>
+<p>由上图可以看出，合并时出现冲突时，系统处于合并状态，此时需要查看冲突文件，然后修改冲突，将文件提交到暂存区，然后提交到仓库即可完成合并。</p>
+<p><strong>下面对解决合并冲突进行总结：</strong></p>
+<p><strong>解决冲突的步骤(当前一直处于合并状态)：</strong></p>
+<ol>
+<li>第一步：编辑文件，删除/修改冲突部分，保存退出；</li>
+<li>第二步：重新提交文件至暂存区： <code>git add 文件名</code></li>
+<li>第三步：重新提交文件至仓库： <code>git commit -m “提交描述”</code>
+<strong>注意：</strong> 此时commit后不能带具体的文件名，因为当前一直处在合并状态，默认提交的是当前冲突的文件。</li>
+</ol>
+<h3 id="5--删除分支">5 . 删除分支</h3>
+<p>合并分支结束后，可以删除分支，<strong>删除分支</strong>命令格式：<code>git branch -d 分支名</code> 。</p>
+<p>如下图所示，使用命令：<code>git branch -d feature_sum</code> 删除 feature_sum 分支，结果如下图所示：</p>
+<p><img src="/textImgs/20200514193448662.png" alt="在这里插入图片描述"></p>
+<h3 id="6--小结">6 . 小结</h3>
+<p>分支管理中常用的命令如下：</p>
+<ol>
+<li><strong>创建分支</strong>命令格式：<code>git branch 分支名</code></li>
+<li><strong>查看分支</strong>命令格式：<code>git branch -v</code></li>
+<li><strong>切换分支</strong>命令格式：<code>git checkout 分支名</code></li>
+<li><strong>合并分支</strong>命令格式：<code>git merge 分支名</code>
+<strong>注： 需要注意当前所在分支</strong></li>
+<li><strong>删除分支</strong>命令格式：<code>git branch -d 分支名</code></li>
+</ol>
+<hr>
+<h3 id="参考资料">参考资料</h3>
+<p>[1] <a href="https://xiongyiming.blog.csdn.net/article/details/106126916">https://xiongyiming.blog.csdn.net/article/details/106126916</a></p>
+<p>[2] <a href="https://blog.csdn.net/susu_xi/article/details/82025379">https://blog.csdn.net/susu_xi/article/details/82025379</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/git" title="Git">Git</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

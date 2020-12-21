@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>玩转Github（1） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/" />
+
+
+<meta property="og:title" content="玩转Github（1）" />
+<meta property="og:description" content="本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/" />
+<meta property="article:published_time" content="2020-12-21T14:37:53+08:00" />
+<meta property="article:modified_time" content="2020-12-21T14:37:53+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="玩转Github（1）"/>
+<meta name="twitter:description" content="本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          玩转Github（1）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Dec 21, 2020
+              
+
+            | 1 minute read
+
+            | Update at
+              
+                Monday, Dec 21, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github</p>
+<h1 id="github的了解以及使用">Github的了解以及使用</h1>
+<ol>
+<li>
+<h3 id="为什么要使用github-">为什么要使用Github ？</h3>
+<p>借助Github方便托管项目代码。</p>
+</li>
+<li>
+<h3 id="基本概念">基本概念</h3>
+<p><strong>(1) 仓库 (Repository)</strong>
+仓库是用来存放项目代码，每一项目对应一个仓库，多个仓库则会有多个仓库。</p>
+<p><strong>(2) 收藏 (Star)</strong>
+收藏别人的仓库，方便自己查找</p>
+<p><strong>(3) 复制/克隆项目 (Fork)</strong>
+别人仓库的代码可以克隆到自己的账号下的中，可以对仓库进行更改。自己在仓库中对bug进行更改不会影响原作者的仓库，但可以通过向原作者发起请求 (Pull Request)来更新原作者的仓库。
+Fork也可以理解为分叉。</p>
+<p><strong>(4) 关注(Watch)</strong>
+使用Watch功能关注了其他作者的仓库，如果作者的仓库发生更新，会发送通知到自己的账户上(类似于关注了别人就可以关注别人的动态)。</p>
+<p><strong>(5) 事物卡片(Issue)</strong>
+发现别人的仓库代码出现Bug或有疑问时，可以通过Issue来和代码的作者进行咨询和讨论。然后作者可以收到别人的提问，然后可以回复。回复完成可以关闭当前的Issue。</p>
+<p><strong>(6)Github主页</strong></p>
+<p>账号创建成功或点击网址导航栏github图标都可以进入github主页，该页左侧主要显示用户动态以及关注用户或关注仓库的动态；右侧显示所有的git仓库</p>
+<p><strong>(7) 仓库主页</strong></p>
+<p>仓库主页主要显示项目的信息，如：项目代码，版本，收藏/关注/fork情况等</p>
+<p><strong>(8) 个人主页</strong></p>
+<p>个人信息：头像，个人简介，关注我的人，我关注的人，我关注的git仓库，我的开源项目，我贡献的开源项目等信息</p>
+</li>
+<li>
+<h3 id="注册github">注册github</h3>
+</li>
+<li>
+<h3 id="创建仓库常见新项目">创建仓库/常见新项目</h3>
+<p>说明：一个git库对应一个开源项目，通过git管理git库</p>
+<p><strong>创建页面：</strong></p>
+<p><img src="/textImgs/image-20201221104525484.png" alt="image-20201221104525484"></p>
+<p><strong>仓库主页面：</strong></p>
+<p><img src="/textImgs/image-20201221104702724.png" alt="image-20201221104702724"></p>
+<p><strong>创建文件：</strong></p>
+<p><img src="/textImgs/image-20201221110018881.png" alt="image-20201221110018881"></p>
+<p><strong>上传文件：</strong></p>
+<p><img src="/textImgs/image-20201221110754715.png" alt="image-20201221110754715"></p>
+<p><strong>查找文件：</strong></p>
+<p>快捷键（t）</p>
+</li>
+<li>
+<h3 id="创建一个issue">创建一个issue</h3>
+<p>说明：当发现原作者code库有问题时，可以通过创建issue告诉原作者反应问题</p>
+<p><strong>创建issue：</strong></p>
+<p><img src="/textImgs/image-20201221113250338.png" alt="image-20201221113250338"></p>
+</li>
+<li>
+<h3 id="基本概念的实战操作介绍">基本概念的实战操作介绍</h3>
+<p><strong>Github主页：</strong></p>
+<p><img src="/textImgs/image-20201221113538717.png" alt="image-20201221113538717"></p>
+<p><strong>个人主页：</strong></p>
+<p><img src="/textImgs/image-20201221113721437.png" alt="image-20201221113721437"></p>
+<p><strong>仓库主页：</strong></p>
+<p><img src="/textImgs/image-20201221113915767.png" alt="image-20201221113915767"></p>
+<p><strong>Fork功能：</strong></p>
+<p><img src="/textImgs/image-20201221114317778.png" alt="image-20201221114317778"></p>
+<p><strong>发出请求（Pull Request）：</strong></p>
+<p><img src="/textImgs/image-20201221114549428.png" alt="image-20201221114549428"></p>
+<p><img src="/textImgs/image-20201221114609469.png" alt="image-20201221114609469"></p>
+</li>
+<li>
+<h3 id="开源项目贡献流程">开源项目贡献流程</h3>
+<ol>
+<li><strong>新建Issue</strong></li>
+</ol>
+<p>提出使用问题或建议或者想法</p>
+<ol>
+<li><strong>Pull Request</strong></li>
+</ol>
+<p>步骤：</p>
+<ol>
+<li>fork项目</li>
+<li>修改自己的仓库项目代码</li>
+<li>新建pull request</li>
+<li>等待作者操作审核</li>
+</ol>
+</li>
+</ol>
+<h3 id="脚下留心">脚下留心：</h3>
+<ol>
+<li>因为github在国外服务器，所以访问较慢或者无法访问，推荐一个翻墙软件（Shadowsocks），利用github搜索。</li>
+<li>私有仓库只能自己或者指定的朋友才有权限操作（私有仓库是收费的）。</li>
+<li>新注册的用户<strong>必须验证邮箱</strong>后才可以创建git仓库。</li>
+</ol>
+<p><strong>原文出处链接：</strong> <a href="https://xiongyiming.blog.csdn.net/article/details/106033435">https://xiongyiming.blog.csdn.net/article/details/106033435</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/git" title="Git">Git</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>
