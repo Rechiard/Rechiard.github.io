@@ -6,7 +6,17 @@
     <description>Recent content on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Mon, 21 Dec 2020 14:52:09 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Dec 2020 12:21:09 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jpa和MyBatis的对比学习总结</title>
+      <link>https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Mon, 28 Dec 2020 12:21:09 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</guid>
+      <description>&lt;p&gt;通过对SpringBoot的学习过程中，发现了两个&lt;/p&gt;
+&lt;p&gt;MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>玩转Github（4）</title>
       <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</link>

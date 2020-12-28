@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Jpa和MyBatis的对比学习总结 | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="通过对SpringBoot的学习过程中，发现了两个
+MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" />
+
+
+<meta property="og:title" content="Jpa和MyBatis的对比学习总结" />
+<meta property="og:description" content="通过对SpringBoot的学习过程中，发现了两个
+MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" />
+<meta property="article:published_time" content="2020-12-28T12:21:09+08:00" />
+<meta property="article:modified_time" content="2020-12-28T12:21:09+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Jpa和MyBatis的对比学习总结"/>
+<meta name="twitter:description" content="通过对SpringBoot的学习过程中，发现了两个
+MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          Jpa和MyBatis的对比学习总结
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Dec 28, 2020
+              
+
+            | 3 minute read
+
+            | Update at
+              
+                Monday, Dec 28, 2020
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>通过对SpringBoot的学习过程中，发现了两个</p>
+<p>MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射</p>
+<h1 id="spirng-data-jpa">Spirng Data JPA</h1>
+<h3 id="什么是jpa">什么是JPA？</h3>
+<p><a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>：JPA（Java Persistence API，Java持久化API）是一个Java应用程序接口规范，描述了使用Java标准平台（Java SE）和Java企业版平台（Java EE）的应用中的关系数据的管理。</p>
+<p><a href="https://segmentfault.com/a/1190000015047290">Spring Data JPA 全面解析</a>：JPA (Java Persistence API) 是 Sun 官方提出的 Java 持久化规范。它为 Java 开发人员提供了一种对象/关联映射工具来管理 Java 应用中的关系数据。他的出现主要是为了简化现有的持久化开发工作和整合 ORM 技术，结束现在 Hibernate，TopLink，JDO 等 ORM 框架各自为营的局面。值得注意的是，JPA 是在充分吸收了现有 Hibernate，TopLink，JDO 等ORM框架的基础上发展而来的，具有易于使用，伸缩性强等优点。从目前的开发社区的反应上看，JPA 受到了极大的支持和赞扬，其中就包括了 Spring 与 EJB3.0 的开发团队</p>
+<p><strong>JPA</strong>所维护的核心是实体（Entity Bean），而它是通过一个持久化上下文（Persistence Context）来使用的。持久化上下文包含了以前3个部分：</p>
+<ul>
+<li>对象关系映射（Object Relational Mapping，简称ORM）描述，JPA支持注解或XML两种形式的描述。</li>
+<li>实体操作API，内置通用CRUD操作，来完成对象的持久化与查询。</li>
+<li>查询语言，约定了面向对象的查询语句JPQL。</li>
+</ul>
+<p>简单来说，JPA就是一种接口规范，一种定义了对象关系映射（ORM）以及实体对象的持久化接口标准的规范，并不是一套直接可用的产品（如：Hibernate）。</p>
+<h3 id="jpa具有的优势">Jpa具有的优势</h3>
+<ol>
+<li>
+<p><strong>标准化 ：</strong> JPA 是 JCP 组织发布的 Java EE 标准之一，因此任何声称符合 JPA 标准的框架都遵循同样的架构，提供相同的访问API，这保证了基于JPA开发的企业应用能够经过少量的修改就能够在不同的JPA框架下运行。</p>
+</li>
+<li>
+<p><strong>容器级特性的支持：</strong> JPA框架中支持大数据集、事务、并发等容器级事务，这使得 JPA 超越了简单持久化框架的局限，在企业应用发挥更大的作用。</p>
+</li>
+<li>
+<p><strong>简单方便 ：</strong> JPA的主要目标之一就是提供更加简单的编程模型：在JPA框架下创建实体和创建Java 类一样简单，没有任何的约束和限制，只需要使用 javax.persistence.Entity进行注释，JPA的框架和接口也都非常简单，没有太多特别的规则和设计模式的要求，开发者可以很容易的掌握。JPA基于非侵入式原则设计，因此可以很容易的和其它框架或者容器集成。</p>
+</li>
+<li>
+<p><strong>查询能力：</strong> JPA的查询语言是面向对象而非面向数据库的，它以面向对象的自然语法构造查询语句，可以看成是Hibernate HQL的等价物。JPA定义了独特的JPQL（Java Persistence Query Language），JPQL是EJB QL的一种扩展，它是针对实体的一种查询语言，操作对象是实体，而不是关系数据库的表，而且能够支持批量更新和修改、JOIN、GROUP BY、HAVING 等通常只有 SQL 才能够提供的高级查询特性，甚至还能够支持子查询。</p>
+</li>
+<li>
+<p><strong>高级特性：</strong> JPA 中能够支持面向对象的高级特性，如类之间的继承、多态和类之间的复杂关系，这样的支持能够让开发者最大限度的使用面向对象的模型设计企业应用，而不需要自行处理这些特性在关系数据库的持久化。</p>
+</li>
+</ol>
+<hr>
+<h3 id="可以从一个简单的user的model中了解jpa注解的使用">可以从一个简单的user的model中了解JPA注解的使用：</h3>
+<p><strong>简单解释：</strong></p>
+<ol>
+<li>@Entity
+该注解用于表明这个类是一个实体类，会为这个类<strong>自动生成一张对应的数据表</strong>。</li>
+<li>@Table(name = “table_name”)
+该注解主要用于修改表名，name的值就是修改的<strong>数据表的名称</strong>。</li>
+<li>@Id
+该注解用于声明主键，标在哪个属性上面对应的哪个字段就是<strong>主键</strong></li>
+<li>@GeneratedValue(strategy = GenerationType.IDENTITY)
+该注解的strategy属性<strong>主要用于设置主键的增长方式</strong>，IDENTITY表示主键由数据库自己生成，从1开始单调递增。</li>
+<li>@Column(name = “column_name”)
+该注解的name属性用于<strong>更改数据表的列名</strong>，如果不想用默认的就用这个属性改吧</li>
+<li>@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+这个注解得上是本项目得核心了，它声明了实体之间的多对多关系，使两张数据表关联关联起来，<strong>一般是通过生成一张映射表来实现这种映射关系</strong>。关于上面的cascade属性和fetch属性，有兴趣的读者可以查资料了解。</li>
+<li><strong>@JoinTable</strong>
+这个注解是配套@ManyToMany使用的，一般在多对多关系的维护端标注，用于生成上面提到的映射表。一般该注解常用三个属性：name属性表示生成的数据表的名称，<strong>joinColumns属性表示关系维护端的主键，inverseJoinColumns则表示关系被维护端的主键</strong>。关于嵌套在里面的@JoinColumn注解，在这里主要用于配置映射表的外键，一般有两个属性：name用于配置外键在映射表中的名称，referencedColumnName 用于表明外键在原表中的字段名称。</li>
+<li>@JsonBackReference
+关于这个注解，建议先去掉试试然后再加上，对比一下效果。<strong>它主要可以使标注属性避免被json序列化</strong>，进而避免多对多关系的查询中出现死循环的情况。但是加上了这注解后，就不能进行反向查询了（也就是说不能利用权限名查询拥有这个权限的角色了）</li>
+</ol>
+<p><strong>model层具体代码如下：</strong></p>
+<pre><code>@Entity
+@Data
+@Table(name = &quot;lab_user&quot;)
+public class User {
+
+    @Id
+    //该注解的strategy属性主要用于设置主键的增长方式，IDENTITY表示主键由数据库自己生成，从1开始单调递增。
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;user_id&quot;)
+    private Integer userId;
+
+    @Column(name = &quot;user_name&quot;)
+    private String userName;
+
+    @Column(name = &quot;password&quot;)
+    private String passWord;
+
+    @Column(name = &quot;role_id&quot;)
+    /*
+    cascade的注解作用是：group对象的增删改关联到user对象
+    fetch是读取查询关联,一对多，一的一方，FetchType默认是LAZY, 多的一方FetchType默认是EAGER
+    */
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = &quot;user_role&quot;, //name是表名
+
+            //joinColumns设置的是entity中属性在关系表的映射名称，name是映射表中的字段名
+            joinColumns = {@JoinColumn(name = &quot;user_id&quot;)},
+
+            //inverseJoinColumns,name是关系实体Role的id在关系表中的名称
+            inverseJoinColumns = {@JoinColumn(name = &quot;role_id&quot;)}
+    )
+    private List&lt;Role&gt; roles;
+}
+</code></pre><p>在JPA的接口中声明的方法不用我们去实现，只要满足命名规则JpaRepository类会自动帮我们生成相应的sql语句</p>
+<p><strong>dao层具体代码：</strong></p>
+<pre><code>public interface UserRepository extends JpaRepository&lt;User,Integer&gt; {
+
+    //根据userId查找所有信息
+    public List&lt;User&gt; findAllUsersByUserId(int userId);
+
+    //根据用户username查找所有信息
+    public List&lt;User&gt; findAllByUserName(String userName);
+
+    //根据用户userId删除用户
+    public void deleteByUserName(String userName);
+
+}
+</code></pre><p><strong>最后附上Spring Data JPA需要的依赖：</strong></p>
+<pre><code>&lt;!--整合SpringData JPA--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><h1 id="mybatis">MyBatis</h1>
+<h3 id="什么是mybatis">什么是MyBatis？</h3>
+<p><a href="https://mybatis.org/mybatis-3/zh/index.html">Mybatis</a>：Mybatis是一款优秀的持久层框架，他支持自定义SQL、存储过程以及高级映射。Mybatis免除了几乎所有的JDBC代码以及设置参数和获取结果集的工作。Mybatis可以通过简单的XML或注解来配置和映射原始类型、接口和Java POJO（Plain Old Java Objects，普通老式Java对象）为数据库中的记录。</p>
+<p>Mybatis的关注点在于：</p>
+<ul>
+<li>SQL与POJO的映射，或者说查询结果集与POJO的映射</li>
+<li>数据的高效存储于读写</li>
+<li>可定制化SQL，支持原生SQL</li>
+</ul>
+<p>虽然一直都在使用Mybatis作为项目中的orm框架，但是始终没有深入的去了解。Mybatis就是一个ORM框架，是一个半自动的ORM框架，是一个面向查询结果集的ORM框架，一个关注实体与查询结果集之间的映射关系的ORM框架，且支持自定义SQL、存储过程、高级映射。在此基础上存在二次开发的开源产品：Mybatis-Plus，其在Mybatis的基础上进行了增强。</p>
+<h3 id="mybatis具有的优势">MyBatis具有的优势：</h3>
+<ol>
+<li>
+<p>与JDBC相比，减少了50%以上的代码量。</p>
+</li>
+<li>
+<p>MyBatis是最简单的持久化框架，小巧并且简单易学。</p>
+</li>
+<li>
+<p>MyBatis相当灵活，不会对应用程序或者数据库的现有设计强加任何影响，SQL写在XML里，从程序代码中彻底分离，降低耦合度，便于统一管理和优化，并可重用。</p>
+</li>
+<li>
+<p>提供XML标签，支持编写动态SQL语句。</p>
+</li>
+<li>
+<p>提供映射标签，支持对象与<a href="http://lib.csdn.net/base/mysql">数据库</a>的ORM字段关系映射。</p>
+</li>
+</ol>
+<p><strong>MyBatis的缺点：</strong></p>
+<ol>
+<li>
+<p>SQL语句的编写工作量较大，尤其是字段多、关联表多时，更是如此，对开发人员编写SQL语句的功底有一定要求。</p>
+</li>
+<li>
+<p>SQL语句依赖于数据库，导致数据库移植性差，不能随意更换数据库。</p>
+</li>
+</ol>
+<p><strong>MyBatis框架适用场合：</strong></p>
+<ol>
+<li>
+<p>MyBatis专注于SQL本身，是一个足够灵活的DAO层解决方案。</p>
+</li>
+<li>
+<p>对性能的要求很高，或者需求变化较多的项目，如互联网项目，MyBatis将是不错的选择。</p>
+</li>
+</ol>
+<hr>
+<h3 id="通过一个简单的springboot整合mybatis自动注入的例子了解mybatis的使用">通过一个简单的SpringBoot整合Mybatis自动注入的例子了解Mybatis的使用：</h3>
+<ol>
+<li>首先通过对SpringBoot项目中的application.yaml文件中添加Mybatis的自动注入:</li>
+</ol>
+<p><strong>具体实现如下：</strong></p>
+<pre><code>#mybatis的配置
+mybatis:
+  #config-location: classpath:sqlMapConfig.xml   #设置配置文件的位置（可以省略)
+  mapper-locations: classpath:mapper/*.xml    #当前mapper下的所有xml都作为映射文件
+  configuration:
+    map-underscore-to-camel-case: true      #针对于解决 model数据模型编写的驼峰方式 和 数据库的模型编写的下划线方式 的匹配问题
+  type-aliases-package: sboot.model         #可以在model中的peron和Person都映射为一个相同的文件
+</code></pre><p><strong>根据mybatis自动配置的源码学习：</strong></p>
+<p>mybatis的配置将Mapper包下的PersonMapper是根据MapperFactoryBean来创建代理对象的，并且实例化sqlsessionFactory来创建到sessionTemplate对象对数据库的每一次的操作的开启和关闭等操作进行持久化支持。</p>
+<p>而在mybatis自动配置中，我们不需要再创建MapperFactoryBean 和 sqlsessionFactory来对我们自定义PersonMapper进行动态代理，而是根据注解 <code>@MapperScan</code> 来进行自动配置。</p>
+<p><strong><code>@MapperScan(&quot;sboot.mapper&quot;):</code></strong> 此注解用于扫描sboot.mapper包下所有文件的Mapper，在主程序中写入此注解可以在Mapper的接口中省略@Mapper注解。</p>
+<p>源码中MybatisAutoConfiguration类中明确说到，在MapperScan找不到的情况下，会生成一个一个Scan来扫描根路径下所有带有@Mapper的接口。所以，当拥有@MapperScan注解的时候，上述方法则不会被调用，也就是说@Mapper注解可以省略。</p>
+<p>综上所述，可以明确的得知不需要再对每一个具体的Mapper类注入<code>@Mapper</code>注解了，而是在主程序中直接写入<code>@MapperScan(xxx.mapper)</code>即可。</p>
+<p><strong>然后Dao层的编写如下：</strong></p>
+<pre><code>public interface PersonMapper {
+
+    public Person selectById(int pid);
+
+    public List&lt;Person&gt; selectAll();
+
+    public void insert(Person p);
+
+    public void delete(int pid);
+}
+</code></pre><ol start="2">
+<li>如此简单的编写之后，Mybatis把sql语句集体放在了resources的Mapper的xml配置文件中：</li>
+</ol>
+<p><img src="/textImgs/image-20201228135316873.png" alt="image-20201228135316873"></p>
+<p><strong>具体实现代码如下：</strong></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;mapper namespace=&quot;sboot.mapper.PersonMapper&quot;&gt;
+    &lt;select id=&quot;selectById&quot; resultType=&quot;Person&quot;&gt;
+        select * from person t where t.pid = #{pid}
+    &lt;/select&gt;
+    &lt;select id=&quot;selectAll&quot; resultType=&quot;Person&quot;&gt;
+        select * from person
+    &lt;/select&gt;
+    &lt;insert id=&quot;insert&quot; parameterType=&quot;person&quot;&gt;
+        /*pid自增*/
+        &lt;selectKey keyProperty=&quot;pid&quot; resultType=&quot;int&quot; order=&quot;BEFORE&quot;&gt;
+            select  last_insert_id()
+        &lt;/selectKey&gt;
+        insert into person(pid, pname, addr, gender, birth)values(#{pid},#{pname},#{addr},#{gender},#{birth} )
+    &lt;/insert&gt;
+    &lt;delete id=&quot;delete&quot; parameterType=&quot;int&quot; &gt;
+        delete  from person  where pid = #{pid}
+    &lt;/delete&gt;
+&lt;/mapper&gt;
+</code></pre><h1 id="spring-data-jpa-和-mybatis的对比">Spring Data JPA 和 MyBatis的对比:</h1>
+<p><strong>Mybatis优势：</strong></p>
+<p>1）SQL语句可以自由控制，更零活，性能更好</p>
+<p>2）SQL与代码分离，易与阅读和维护</p>
+<p>3）提供XML标签，支持编写动态SQL语句</p>
+<p><strong>Mybatis劣势：</strong></p>
+<p>1）简单操作还需要编写SQL语句</p>
+<p>2）XML有大量的SQL需要维护</p>
+<p>3）Mybatis自身的功能有限，但支持Plugin</p>
+<p><strong>JPA优势：</strong></p>
+<p>1）JPA移植性更好（JPQL）</p>
+<p>2）提供很多CRUD方法，开发效率更高</p>
+<p>3）对像化程度更高</p>
+<p><strong>JPA劣势：</strong></p>
+<p>1）由于非常新，JPA 规范可能还需要进过重要发展才会变得很稳定。</p>
+<p>2）JPA 是一个规范而不是一个产品。需要提供商提供一个实施，才能获得这些基于标准的 API 的优势。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>序号</strong></th>
+<th style="text-align:left"><strong>功能项</strong></th>
+<th style="text-align:left"><strong>Spring Data JPA</strong></th>
+<th style="text-align:left"><strong>Mybatis</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>1</strong></td>
+<td style="text-align:left">启动配置</td>
+<td style="text-align:left">数据库连接+JPA相关配置</td>
+<td style="text-align:left">数据库连接+Mybatis相关配置</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>2</strong></td>
+<td style="text-align:left">映射关系</td>
+<td style="text-align:left">注解方式实现<strong>POJO与数据表</strong>之间的映射</td>
+<td style="text-align:left">XML配置结合自动映射（或驼峰映射），实现<strong>POJO与SQL</strong>之间的映射</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>3</strong></td>
+<td style="text-align:left">类型转换</td>
+<td style="text-align:left">Convert，多用于如枚举值的存取</td>
+<td style="text-align:left">TypeHandle，多用于枚举类型数据存储</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>4</strong></td>
+<td style="text-align:left">读写接口</td>
+<td style="text-align:left">内置提供CRUD、分页、排序、 Example等基础接口，可自我拓展</td>
+<td style="text-align:left">默认不提供实现，由使用者实现，但是Mybatis-Plus提供通用mapper、分页</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>5</strong></td>
+<td style="text-align:left">查询语言</td>
+<td style="text-align:left">提供约定的查询语言JPQL，同时支持原生SQL</td>
+<td style="text-align:left">支持原生SQL，支持动态SQL</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>6</strong></td>
+<td style="text-align:left">其他</td>
+<td style="text-align:left">1、支持对象模型正向创建数据库模型；2、提供缓存机制；3、提供乐观锁指定</td>
+<td style="text-align:left">1、提供Interceptor，可以拦截SQL进行一定的处理；2、Mybatis-Plus提供代码生成器、支持数据库模型逆向生成对象模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="理论分析">理论分析：</h3>
+<ul>
+<li>Spring Data JPA与Mybatis的设计原理不一样，前置根据领域设计进行建模，提倡面向对象思想，但是为了提供兼容性，提供自定义查询方法，可接入其他ORM框架；后者根据数据设计进行建模，多数实现为贫血模型。</li>
+<li>Spring Data JPA：先有对象关系，后有数据表关系；</li>
+<li>Mybatis：先有数据表关系，后有对象关系。</li>
+<li>Spring Data JPA（面向对象设计）：强调对象，以及对象的特性（如：封装），考虑的是对象的整个生命周期（包括对象的创建、持久化、状态的变更和行为等），对象的持久化只是对象的一种状态，所有操作皆由对象来完成，是对象的行为引发状态的改变，从而引起持久化状态数据的变化。</li>
+<li>Mybatis（面向关系设计）：强调数据的高效存取，开放数据表的操作，并不受实体的限制，可以随意进行表的关联，持久化的数据类似于某个事物的快照，事物状态的变化后引发对于快照的修改，有点直接面向数据库开发的感觉。</li>
+<li>Spring Data JPA：SQL为动态创建，创建后存在SQL缓存</li>
+<li>Mybatis：SQL为静态文件。</li>
+</ul>
+<h2 id="参考链接">参考链接：</h2>
+<p><a href="https://www.cnblogs.com/threadj/p/13304870.html">https://www.cnblogs.com/threadj/p/13304870.html</a></p>
+<p><a href="https://www.cnblogs.com/cuiqq/p/11131989.html">https://www.cnblogs.com/cuiqq/p/11131989.html</a></p>
+<p><a href="https://blog.csdn.net/wujiaqi0921/article/details/78789087">https://blog.csdn.net/wujiaqi0921/article/details/78789087</a></p>
+<p><a href="https://blog.csdn.net/u014788653/article/details/68489301/">https://blog.csdn.net/u014788653/article/details/68489301/</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/spring" title="Spring">Spring</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%88%B1%E6%83%85/" title="爱情">
+        爱情
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>
