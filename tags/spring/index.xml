@@ -13,8 +13,8 @@
       <pubDate>Mon, 28 Dec 2020 12:21:09 +0800</pubDate>
       
       <guid>https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</guid>
-      <description>&lt;p&gt;通过对SpringBoot的学习过程中，发现了两个&lt;/p&gt;
-&lt;p&gt;MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射&lt;/p&gt;</description>
+      <description>&lt;p&gt;MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。&lt;/p&gt;
+&lt;p&gt;JPA是一个Java应用程序接口规范，描述了使用Java标准平台和Java企业版平台的应用中的关系数据的管理。&lt;/p&gt;</description>
     </item>
     
     <item>
