@@ -6,7 +6,25 @@
     <description>Recent content in Java核心 on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Thu, 07 Jan 2021 18:21:15 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/categories/java%E6%A0%B8%E5%BF%83/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Jan 2021 09:35:01 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/categories/java%E6%A0%B8%E5%BF%83/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对Java核心——Java多线程并发的理解（1）</title>
+      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <pubDate>Fri, 15 Jan 2021 09:35:01 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>对Java核心——垃圾回收与算法</title>
+      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 12 Jan 2021 11:53:02 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
+      <description>&lt;p&gt;JVM GC：Gabage Collection，指JVM堆内存区域的垃圾回收。里面涉及到了一些对垃圾的标记以及回收垃圾的算法。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>MyBatis源码级别核心理解</title>
       <link>https://Rechiard.github.io/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/</link>
