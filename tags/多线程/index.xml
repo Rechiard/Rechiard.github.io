@@ -6,14 +6,35 @@
     <description>Recent content in 多线程 on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Fri, 15 Jan 2021 09:35:01 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Jan 2021 13:45:11 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对Java核心——Java多线程并发的理解（3）</title>
+      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</link>
+      <pubDate>Mon, 18 Jan 2021 13:45:11 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</guid>
+      <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
+&lt;p&gt;本文主要讲述：Java阻塞队列知识点与理解&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>对Java核心——Java多线程并发的理解（2）</title>
+      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</link>
+      <pubDate>Mon, 18 Jan 2021 13:45:05 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</guid>
+      <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
+&lt;p&gt;本文主要讲述：Java锁的理解与知识普及&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>对Java核心——Java多线程并发的理解（1）</title>
       <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</link>
       <pubDate>Fri, 15 Jan 2021 09:35:01 +0800</pubDate>
       
       <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
-      <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;</description>
+      <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
+&lt;p&gt;本文主要讲述：JAVA线程实现的四种方式、线程池、线程的生命周期、线程的基本方法、后台线程&lt;/p&gt;</description>
     </item>
     
   </channel>

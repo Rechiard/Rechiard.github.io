@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>对Java核心——Java多线程并发的理解（2） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java锁的理解与知识普及
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/" />
+
+
+<meta property="og:title" content="对Java核心——Java多线程并发的理解（2）" />
+<meta property="og:description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java锁的理解与知识普及" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/" />
+<meta property="article:published_time" content="2021-01-18T13:45:05+08:00" />
+<meta property="article:modified_time" content="2021-01-18T13:45:05+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对Java核心——Java多线程并发的理解（2）"/>
+<meta name="twitter:description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java锁的理解与知识普及"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          对Java核心——Java多线程并发的理解（2）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Jan 18, 2021
+              
+
+            | 4 minute read
+
+            | Update at
+              
+                Monday, Jan 18, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。</p>
+<p>本文主要讲述：Java锁的理解与知识普及</p>
+<h3 id="为什么要用锁">为什么要用锁？</h3>
+<p>　　在了解为什么要用锁之前需要了解两个概念，线程安全和线程不安全：</p>
+<p>　　<strong>线程安全</strong>指的是多个线程对共享变量访问时的结果和单线程下顺序对共享变量访问的结果是一致的，是符合预期的；</p>
+<p>　　<strong>线程不安全</strong>指的是多个线程对共享变量访问的结果每次都是不确定的。为了保证线程安全这里又几种方法：</p>
+<p>　　<strong>第一个不用共享变量</strong>，各自用各自的变量就不会有线程安全的问题；</p>
+<p>　　<strong>第二采用加锁机制</strong>，synchronized和Lock接口下的各种锁；</p>
+<p>　　<strong>第三就是采用JUC下面的一些并发容器</strong>，其实还是用锁实现的。所以用锁的目的就是保证线程安全。</p>
+<blockquote>
+<p>根据分类标准我们把锁分为以下 7 大类别，分别是：</p>
+<ul>
+<li>悲观锁/乐观锁；</li>
+<li>共享锁/独占锁；</li>
+<li>公平锁/非公平锁；</li>
+<li>自旋锁/适应性自旋锁；</li>
+<li>可中断锁/不可中断锁。</li>
+<li>偏向锁/轻量级锁/重量级锁；</li>
+<li>可重入锁/非可重入锁；</li>
+</ul>
+</blockquote>
+<p>========================================================================================================================</p>
+<h1 id="各种锁的概念">各种锁的概念</h1>
+<p>　　锁从宏观上分类，分为<strong>悲观锁</strong>与<strong>乐观锁</strong>。</p>
+<h3 id="1-乐观锁和悲观锁">1. 乐观锁和悲观锁</h3>
+<h4 id="11-乐观锁"><strong>1.1 乐观锁</strong></h4>
+<p>　　是一种乐观思想，即认为<strong>读多写少</strong>，遇到并发写的可能性低，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是<strong>在更新的时候会判断一下在此期间别人有没有去更新这个数据，采取在写时先读出当前版本号，然后加锁操作</strong>（比较跟上一次的版本号，如果一样则更新），如果失败则要重复读-比较-写的操作。</p>
+<p>java 中的乐观锁基本都是通过 CAS 操作实现的，CAS 是一种更新的原子操作，<strong>比较当前值跟传入值是否一样，一样则更新，否则失败。</strong></p>
+<h4 id="12悲观锁"><strong>1.2悲观锁</strong></h4>
+<p>　　就是悲观思想，即<strong>认为写多</strong>，遇到并发写的可能性高，每次去拿数据的时候都认为别人会修改，所以每次在读写数据的时候都会上锁，这样别人想读写这个数据就会 block 直到拿到锁。java中的悲观锁就是<strong>Synchronized</strong>,AQS框架下的锁则是先尝试cas乐观锁去获取锁，获取不到，才会转换为悲观锁，如 RetreenLock。</p>
+<h3 id="2--独占锁和共享锁">2.  独占锁和共享锁</h3>
+<h4 id="21-独享锁"><strong>2.1 独享锁</strong></h4>
+<p>　　<strong>是指该锁一次只能被一个线程所持有。</strong> 独占锁模式下，每次只能有一个线程能持有锁，ReentrantLock 就是以独占方式实现的互斥锁。独占锁是一种悲观保守的加锁策略，它避免了读/读冲突，如果某个只读线程获取锁，则其他读线程都只能等待，这种情况下就限制了不必要的并发性，因为读操作并不会影响数据的一致性。</p>
+<h4 id="22-共享锁"><strong>2.2 共享锁</strong></h4>
+<p>　　<strong>共享锁是指该锁可被多个线程所持有。</strong> 共享锁则允许多个线程同时获取锁，并发访问 共享资源，如：ReadWriteLock。共享锁则是一种乐观锁，它放宽了加锁策略，允许多个执行读操作的线程同时访问共享资源。</p>
+<ol>
+<li>
+<p>AQS 的内部类 Node 定义了两个常量 SHARED 和 EXCLUSIVE，他们分别标识 AQS 队列中等待线程的锁获取模式。</p>
+</li>
+<li>
+<p>java 的并发包中提供了 ReadWriteLock，读-写锁。它允许一个资源可以被多个读操作访问，或者被一个 写操作访问，但两者不能同时进行。</p>
+</li>
+</ol>
+<h3 id="3-公平锁和非公平锁">3. 公平锁和非公平锁</h3>
+<h4 id="31-公平锁"><strong>3.1 公平锁</strong></h4>
+<p>　　指的是锁的分配机制是公平的，通常先对锁提出获取请求的线程会先被分配到锁，<strong>ReentrantLock</strong> 在构造函数中提供了是否公平锁的初始化方式来定义公平锁。</p>
+<p>　　加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得。</p>
+<h4 id="32-非公平锁"><strong>3.2 非公平锁</strong></h4>
+<p>　　JVM 按随机、就近原则分配锁的机制则称为不公平锁，<strong>ReentrantLock</strong> 在构造函数中提供了是否公平锁的初始化方式，默认为非公平锁。非公平锁实际执行的效率要远远超出公平锁，除非程序有特殊需要，否则最常用非公平锁的分配机制。</p>
+<p>　　加锁时不考虑排队等待问题，直接尝试获取锁，获取不到自动到队尾等待：</p>
+<ol>
+<li><strong>非公平锁性能比公平锁高 5~10 倍，因为公平锁需要在多核的情况下维护一个队列</strong>。</li>
+<li>Java 中的 <strong>synchronized 是非公平锁</strong>，<strong>ReentrantLock 默认的 lock()方法采用的是非公平锁</strong>。</li>
+</ol>
+<h3 id="4-自旋锁和适应性自旋锁">4. 自旋锁和适应性自旋锁</h3>
+<h4 id="41-自旋锁"><strong>4.1 自旋锁</strong></h4>
+<p>　　自旋锁原理非常简单，<strong>如果持有锁的线程能在很短时间内释放锁资源，那么那些等待竞争锁的线程就不需要做内核态和用户态之间的切换进入阻塞挂起状态，它们只需要等一等（自旋），等持有锁的线程释放锁后即可立即获取锁，这样就避免用户线程和内核的切换的消耗。</strong></p>
+<p>　　线程自旋是需要消耗 cup 的，说白了就是让 cup 在做无用功，如果一直获取不到锁，那线程也不能一直占用 cup 自旋做无用功，所以需要设定一个自旋等待的最大时间。</p>
+<p>　　如果持有锁的线程执行的时间超过自旋等待的最大时间扔没有释放锁，就会导致其它争用锁的线程在最大等待时间内还是获取不到锁，这时争用线程会停止自旋进入阻塞状态。</p>
+<h4 id="42-适应性自旋锁"><strong>4.2 适应性自旋锁</strong></h4>
+<p>　　JDK 1.6引入了更加聪明的自旋锁，叫做<strong>自适应自旋锁</strong>。他的自旋次数是会变的，用大白话来讲一下，就是线程如果上次自旋成功了，那么这次自旋的次数会更加多，因为虚拟机认为既然上次成功了，那么这次自旋也很有可能会再次成功。反之，如果某个锁很少有自旋成功，那么以后的自旋的次数会减少甚至省略掉自旋过程，以免浪费处理器资源。</p>
+<h3 id="5-可中断锁和不可中断锁">5. 可中断锁和不可中断锁</h3>
+<p>　　ReentrantLock中的lockInterruptibly()方法使得线程可以在被阻塞时响应中断，比如一个线程t1通过lockInterruptibly()方法获取到一个可重入锁，并执行一个长时间的任务，另一个线程通过interrupt()方法就可以立刻打断t1线程的执行，来获取t1持有的那个可重入锁。而通过ReentrantLock的lock()方法或者Synchronized持有锁的线程是不会响应其他线程的interrupt()方法的，直到该方法主动释放锁之后才会响应interrupt()方法。</p>
+<h3 id="6-无锁偏向锁轻量级锁重量级锁">6. 无锁、偏向锁、轻量级锁、重量级锁</h3>
+<p>　　锁的状态总共有四种：无锁状态、偏向锁、轻量级锁和重量级锁。</p>
+<p>　　这四种锁是指锁的状态，并且是针对<code>Synchronized</code>。在Java 5通过引入锁升级的机制来实现高效<code>Synchronized</code>。这四种锁的状态是通过对象监视器在对象头中的字段来表明的。</p>
+<p>　　随着锁的竞争，锁可以从偏向锁升级到轻量级锁，再升级的重量级锁（但是锁的升级是单向的，也就是说只能从低到高升级，不会出现锁的降级）。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">锁状态</th>
+<th style="text-align:left">存储内容</th>
+<th style="text-align:left">标志位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">无锁</td>
+<td style="text-align:left">对象的hashCode、对象分代年龄、是否是偏向锁（0）</td>
+<td style="text-align:left">01</td>
+</tr>
+<tr>
+<td style="text-align:left">轻量级</td>
+<td style="text-align:left">指向栈中锁记录的指针</td>
+<td style="text-align:left">00</td>
+</tr>
+<tr>
+<td style="text-align:left">重量级</td>
+<td style="text-align:left">指向互斥量（重量级锁）的指针</td>
+<td style="text-align:left">10</td>
+</tr>
+<tr>
+<td style="text-align:left">偏向锁</td>
+<td style="text-align:left">偏向线程ID、偏向时间戳、对象分代年龄、是否是偏向锁（1）</td>
+<td style="text-align:left">01偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁。降低获取锁的代价。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="61-偏向锁"><strong>6.1 偏向锁</strong></h4>
+<p>　　Hotspot 的作者经过以往的研究发现大多数情况下锁不仅不存在多线程竞争，而且总是由同一线程多次获得。<strong>偏向锁的目的是在某个线程获得锁之后，消除这个线程锁重入（CAS）的开销，看起来让这个线程得到了偏护</strong>。引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次 CAS 原子指令，<strong>而偏向锁只需要在置换ThreadID 的时候依赖一次 CAS 原子指令</strong>（由于一旦出现多线程竞争的情况就必须撤销偏向锁，所以偏向锁的撤销操作的性能损耗必须小于节省下来的 CAS 原子指令的性能消耗）。上面说过，<strong>轻量级锁是为了在线程交替执行同步块时提高性能，而偏向锁则是在只有一个线程执行同步块时进一步提高性能。</strong></p>
+<h4 id="62-轻量级锁"><strong>6.2 轻量级锁</strong></h4>
+<p>　　“轻量级”是相对于使用操作系统互斥量来实现的传统锁而言的。但是，首先需要强调一点的是，轻量级锁并不是用来代替重量级锁的，它的本意是在没有多线程竞争的前提下，减少传统的重量级锁使用产生的性能消耗。在解释轻量级锁的执行过程之前，先明白一点，<strong>轻量级锁所适应的场景是线程交替执行同步块的情况，如果存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁。</strong></p>
+<h4 id="63-重量级锁"><strong>6.3 重量级锁</strong></h4>
+<p>　　Synchronized 是通过对象内部的一个叫做监视器锁（monitor）来实现的。但是监视器锁本质又是依赖于底层的操作系统的 Mutex Lock 来实现的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么Synchronized 效率低的原因。因此，<strong>这种依赖于操作系统 Mutex Lock 所实现的锁我们称之为“重量级锁”</strong>。JDK 中对 Synchronized 做的种种优化，其核心都是为了减少这种重量级锁的使用。JDK1.6 以后，为了减少获得锁和释放锁所带来的性能消耗，提高性能，引入了“轻量级锁”和“偏向锁”。</p>
+<h3 id="7-可重入锁递归锁和不可重入锁">7. 可重入锁（递归锁）和不可重入锁</h3>
+<p>​	<strong>7.1 可重入锁</strong></p>
+<p>　　本文里面讲的是广义上的可重入锁，而不是单指 JAVA 下的 ReentrantLock。可重入锁，也叫做递归锁，指的是同一线程 外层函数获得锁之后 ，内层递归函数仍然有获取该锁的代码，但不受影响。在 JAVA 环境下 ReentrantLock 和 synchronized 都是 可重入锁。</p>
+<pre><code>// 此处用代码演示了可重入锁的代码层意思
+
+//因为获取了setA()的锁（即获取了方法外层的锁）
+//此时调用setB()将会自动获取setB()的锁，如果不自动获取的话方法B将不会执行
+
+synchronized void setA() throws Exception{   
+    Thread.sleep(1000);
+    setB();   
+}
+
+synchronized void setB() throws Exception{
+    Thread.sleep(1000);
+}
+</code></pre><p>​	<strong>7.2 不可重入锁</strong></p>
+<p>　　所谓不可重入锁，即若当前线程执行某个方法已经获取了该锁，那么在方法中尝试再次获取锁时，就会获取不到被阻塞。我们尝试设计一个不可重入锁：</p>
+<pre><code>public class Lock{
+    private boolean isLocked = false;
+    public synchronized void lock() throws InterruptedException{
+        while(isLocked){    
+            wait();
+        }
+        isLocked = true;
+    }
+    public synchronized void unlock(){
+        isLocked = false;
+        notify();
+    }
+}
+</code></pre><pre><code>public class Count{
+    Lock lock = new Lock();
+    public void print(){
+        lock.lock();
+        doAdd();
+        lock.unlock();
+    }
+    public void doAdd(){
+        lock.lock();
+        //do something
+        lock.unlock();
+    }
+}
+</code></pre><p>　　当前线程执行print()方法首先获取lock，接下来执行doAdd()方法就无法执行doAdd()中的逻辑，必须先释放锁。这个例子很好的说明了不可重入锁。</p>
+<p>========================================================================================================================</p>
+<h3 id="readwritelock读写锁lock接口">ReadWriteLock读写锁(Lock接口)</h3>
+<p>　　读写锁其实是一对锁，<strong>一个读锁（共享锁）和一个写锁（互斥锁、排他锁）</strong>。</p>
+<p>　　在 Java 中， <strong>ReadWriteLock 接口</strong>只规定了两个方法，一个返回读锁，一个返回写锁。</p>
+<pre><code>public interface ReadWriteLock {
+    /**
+     * Returns the lock used for reading.
+     *
+     * @return the lock used for reading
+     */
+    Lock readLock();
+
+    /**
+     * Returns the lock used for writing.
+     *
+     * @return the lock used for writing
+     */
+    Lock writeLock();
+}
+</code></pre><p>　　为了提高性能，Java 提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，如果没有写锁的情况下，读是无阻塞的,在一定程度上提高了程序的执行效率。读写锁分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，这是由 jvm 自己控制的，你只要上好相应的锁即可。</p>
+<p>​	<strong>7.1 读锁</strong></p>
+<p>​	　　如果你的代码只读数据，可以很多人同时读，但不能同时写，那就上读锁</p>
+<p>​	<strong>7.2 写锁</strong></p>
+<p>​	　　如果你的代码修改数据，只能有一个人在写，且不能同时读取，那就上写锁。总之，读的时候上读锁，写的时候上写锁！</p>
+<h3 id="互斥锁">互斥锁</h3>
+<p>　　字面意思是线程之间互相排斥的锁，也就是表明锁只能被一个线程拥有。在 Java 中， ReentrantLock、synchronized 锁都是互斥锁。</p>
+<p><strong>实现互斥锁（计数器为1）</strong></p>
+<p>　　我们也可以创建计数为 1 的 Semaphore，将其作为一种类似互斥锁的机制，这也叫二元信号量，表示两种互斥状态。</p>
+<p><strong>代码实现</strong>:</p>
+<pre><code>// 创建一个计数阈值为 5 的信号量对象
+// 只能 5 个线程同时访问
+Semaphore semp = new Semaphore(5);
+	try { // 申请许可
+		semp.acquire();
+			try {
+			// 业务逻辑
+			} catch (Exception e) {
+			
+			} finally {
+			// 释放许可
+			semp.release();
+			}
+			} catch (InterruptedException e) {}
+</code></pre><h3 id="分段锁">分段锁</h3>
+<p>　　分段锁其实是一种锁的设计，并不是具体的一种锁，对于<code>ConcurrentHashMap</code>而言，其并发的实现就是通过分段锁的形式来实现高效的并发操作。
+　　我们以<code>ConcurrentHashMap</code>来说一下分段锁的含义以及设计思想，<code>ConcurrentHashMap</code>中的分段锁称为Segment，它即类似于HashMap（JDK7与JDK8中HashMap的实现）的结构，即内部拥有一个Entry数组，数组中的每个元素又是一个链表；同时又是一个ReentrantLock（Segment继承了ReentrantLock)。
+当需要put元素的时候，并不是对整个hashmap进行加锁，而是先通过hashcode来知道他要放在那一个分段中，然后对这个分段进行加锁，所以当多线程put的时候，只要不是放在一个分段中，就实现了真正的并行的插入。
+但是，在统计size的时候，可就是获取hashmap全局信息的时候，就需要获取所有的分段锁才能统计。
+分段锁的设计目的是细化锁的粒度，当操作不需要更新整个数组的时候，就仅仅针对数组中的一项进行加锁操作。</p>
+<h3 id="同步锁和死锁">同步锁和死锁</h3>
+<h4 id="同步锁">同步锁</h4>
+<p>　　当多个线程同时访问同一个数据时，很容易出现问题。为了避免这种情况出现，我们要<strong>保证线程同步互斥，就是指并发执行的多个线程</strong>，在同一时间内只允许一个线程访问共享数据。 Java 中可以使用 synchronized 关键字来取得一个对象的同步锁。</p>
+<h4 id="死锁">死锁</h4>
+<p>　　何为死锁，就是多个线程同时被阻塞，它们中的一个或者全部都在等待某个资源被释放。</p>
+<p>========================================================================================================================</p>
+<h1 id="synchronized-同步锁和reentrantlock">Synchronized 同步锁和ReentrantLock</h1>
+<p>　　Java 中两种实现加锁的方式：一种是使用 synchronized 关键字，另一种是使用 Lock 接口的实现类。</p>
+<h3 id="synchronized-同步锁">Synchronized 同步锁</h3>
+<p>　　synchronized 它可以把任意一个非 NULL 的对象当作锁。他属于独占式的悲观锁，同时属于可重入锁。</p>
+<p>　　在一篇文章中看到一个好的对比，非常形象，synchronized 关键字就像是<strong>自动挡</strong>，可以满足一切的驾驶需求。但是如果你想要做更高级的操作，比如玩漂移或者各种高级的骚操作，那么就需要<strong>手动挡</strong>，也就是 Lock 接口的实现类。</p>
+<p>　　而 synchronized 在经过 Java 每个版本的各种优化后，效率也变得很高了。只是使用起来没有 Lock 接口的实现类那么方便。</p>
+<h5 id="synchronized-锁升级过程就是其优化的核心偏向锁---轻量级锁---重量级锁">　　synchronized 锁升级过程就是其优化的核心：偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</h5>
+<p>​	例如:</p>
+<pre><code>class Test{
+    private static final Object object = new Object(); 
+    
+    public void test(){
+        synchronized(object) {
+            // do something        
+        }   
+    }
+    
+}
+</code></pre><ol>
+<li>
+<p>字锁住某个代码块的时候，一开始锁对象（就是上述代码中的 object）并不是<strong>重量级锁</strong>，而是偏向锁。偏向锁的字面意思就是&quot;偏向于第一个获取它的线程&quot;的锁。线程执行完同步代码块之后，并不会<strong>主动释放偏向锁</strong>。当第二次到达同步代码块时，线程会判断此时持有锁的线程是否就是自己（持有锁的线程 ID 在对象头里存储），如果是则正常往下执行。<strong>由于之前没有释放，这里就不需要重新加锁</strong>，如果从头到尾都是一个线程在使用锁，很明显偏向锁几乎没有额外开销，性能极高。</p>
+</li>
+<li>
+<p>一旦有第二个线程加入<strong>锁竞争</strong>，偏向锁转换为<strong>轻量级锁（自旋锁）</strong>。锁竞争：如果多个线程轮流获取一个锁，但是每次获取的时候都很顺利，没有发生阻塞，那么就不存在锁竞争。只有当某线程获取锁的时候，发现锁已经被占用，需要等待其释放，则说明发生了锁竞争。</p>
+</li>
+<li>
+<p>在轻量级锁状态上继续锁竞争，没有抢到锁的线程进行<strong>自旋</strong>操作，即在一个循环中不停判断是否可以获取锁。获取锁的操作，就是通过 CAS 操作修改对象头里的锁标志位。先<strong>比较</strong>当前锁标志位是否为<strong>释放</strong>状态，如果是，将其设置为<strong>锁定</strong>状态，比较并设置是原子性操作，这个是 JVM 层面保证的。当前线程就算持有了锁，然后线程将当前锁的持有者信息改为自己。</p>
+</li>
+<li>
+<p>假如我们获取到锁的线程操作时间很长，比如会进行复杂的计算，数据量很大的网络传输等；那么其它等待锁的线程就会进入长时间的自旋操作，这个过程是非常耗资源的。其实这时候相当于只有一个线程在有效地工作，其它的线程什么都干不了，在白白地消耗 CPU，这种现象叫做<strong>忙等（busy-waiting）</strong>。所以如果多个线程使用<strong>独占锁</strong>，但是没有发生锁竞争，或者发生了很轻微的锁竞争，那么 synchronized 就是轻量级锁，允许短时间的忙等现象。这是一种择中的想法，<strong>短时间的忙等，换取线程在用户态和内核态之间切换的开销</strong>。</p>
+</li>
+<li>
+<p>显然，忙等是有限度的（JVM 有一个计数器记录自旋次数，默认允许循环 10 次，可以通过虚拟机参数更改）。如果锁竞争情况严重，达到某个最大自旋次数的线程，会将轻量级锁升级为重量级锁（依然是通过 CAS 修改锁标志位，但不修改持有锁的线程 ID）。当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起（而不是上面说的忙等，即不会自旋），等待释放锁的线程去唤醒。在 JDK1.6 之前， synchronized直接加重量级锁，很明显现在通过一系列的优化过后，性能明显得到了提升。</p>
+</li>
+<li>
+<p>JVM 中，synchronized 锁只能按照偏向锁、轻量级锁、重量级锁的顺序逐渐升级（也有把这个称为锁膨胀的过程），不允许降级。</p>
+</li>
+</ol>
+<p><strong>Synchronized</strong> <strong>作用范围</strong></p>
+<ol>
+<li>
+<p>作用于方法时，锁住的是对象的实例(this)；</p>
+</li>
+<li>
+<p>当作用于静态方法时，锁住的是Class实例，又因为Class的相关数据存储在永久带PermGen（jdk1.8 则是 metaspace），永久带是全局共享的，因此静态方法锁相当于类的一个全局锁，会锁所有调用该方法的线程；</p>
+</li>
+<li>
+<p>synchronized 作用于一个对象实例时，锁住的是所有以该对象为锁的代码块。它有多个队列，当多个线程一起访问某个对象监视器的时候，对象监视器会将这些线程存储在不同的容器中。</p>
+</li>
+</ol>
+<p><strong>Synchronized</strong> <strong>核心组件</strong></p>
+<p>​	1) Wait Set：哪些调用 wait 方法被阻塞的线程被放置在这里；</p>
+<p>​	2) Contention List：竞争队列，所有请求锁的线程首先被放在这个竞争队列中；</p>
+<p>​	3) Entry List：Contention List 中那些有资格成为候选资源的线程被移动到 Entry List 中；</p>
+<p>​	4) OnDeck：任意时刻，最多只有一个线程正在竞争锁资源，该线程被成为 OnDeck；</p>
+<p>​	5) Owner：当前已经获取到所资源的线程被称为 Owner；</p>
+<p>​	6) !Owner：当前释放锁的线程。</p>
+<p><strong>Synchronized 实现</strong></p>
+<p><img src="/textImgs/image-20210120191149212.png" alt="image-20210120191149212"></p>
+<ol>
+<li>
+<p>JVM 每次从队列的尾部取出一个数据用于锁竞争候选者（OnDeck），但是并发情况下，ContentionList 会被大量的并发线程进行 CAS 访问，为了降低对尾部元素的竞争，JVM 会将一部分线程移动到 EntryList 中作为候选竞争线程。</p>
+</li>
+<li>
+<p>Owner 线程会在 unlock 时，将 ContentionList 中的部分线程迁移到 EntryList 中，并指定EntryList 中的某个线程为 OnDeck 线程（一般是最先进去的那个线程）。</p>
+</li>
+<li>
+<p>Owner 线程并不直接把锁传递给 OnDeck 线程，而是把锁竞争的权利交给 OnDeck，OnDeck 需要重新竞争锁。这样虽然牺牲了一些公平性，但是能极大的提升系统的吞吐量，在JVM 中，也把这种选择行为称之为“竞争切换”。</p>
+</li>
+<li>
+<p>OnDeck 线程获取到锁资源后会变为 Owner 线程，而没有得到锁资源的仍然停留在 EntryList中。如果 Owner 线程被 wait 方法阻塞，则转移到 WaitSet 队列中，直到某个时刻通过 notify或者 notifyAll 唤醒，会重新进去 EntryList 中。</p>
+</li>
+<li>
+<p>处于 ContentionList、EntryList、WaitSet 中的线程都处于阻塞状态，该阻塞是由操作系统来完成的（Linux 内核下采用 pthread_mutex_lock 内核函数实现的）。</p>
+</li>
+<li>
+<p><strong>Synchronized 是非公平锁</strong>。 Synchronized 在线程进入 ContentionList 时，<strong>等待的线程会先尝试自旋获取锁，如果获取不到就进入 ContentionList</strong>，这明显对于已经进入队列的线程是不公平的，还有一个不公平的事情就是自旋获取锁的线程还可能直接抢占 OnDeck 线程的锁资源。参考：https://blog.csdn.net/zqz_zqz/article/details/70233767</p>
+</li>
+<li>
+<p>每个对象都有个 monitor 对象，<strong>加锁就是在竞争 monitor 对象</strong>，代码块加锁是在前后分别加上 monitorenter 和 monitorexit 指令来实现的，方法加锁是通过一个标记位来判断的</p>
+</li>
+<li>
+<p>synchronized <strong>是一个重量级操作，需要调用操作系统相关接口</strong>，性能是低效的，有可能给线程加锁消耗的时间比有用操作消耗的时间更多。</p>
+</li>
+<li>
+<p>Java1.6，synchronized 进行了很多的优化，<strong>有适应自旋、锁消除、锁粗化、轻量级锁及偏向锁等</strong>，效率有了本质上的提高。在之后推出的 Java1.7 与 1.8 中，均对该关键字的实现机理做了优化。引入了<strong>偏向锁和轻量级锁</strong>。都是在对象头中有标记位，不需要经过操作系统加锁。</p>
+</li>
+<li>
+<p><strong>锁可以从偏向锁升级到轻量级锁，再升级到重量级锁</strong>。这种升级过程叫做锁膨胀；</p>
+</li>
+<li>
+<p>JDK 1.6 中默认是开启偏向锁和轻量级锁，可以通过-XX:-UseBiasedLocking 来禁用偏向锁。</p>
+</li>
+</ol>
+<p>========================================================================================================================</p>
+<h3 id="reentrantlock">ReentrantLock</h3>
+<p>　　ReentantLock 继承接口 Lock 并实现了接口中定义的方法，他是一种可重入锁，除了能完成 synchronized 所能完成的所有工作外，还提供了<strong>诸如可响应中断锁、可轮询锁请求、定时锁等避免多线程死锁的方法</strong>。</p>
+<p><strong>Lock</strong> <strong>接口的主要方法</strong></p>
+<ol>
+<li>
+<p>void lock(): 执行此方法时, 如果锁处于空闲状态, 当前线程将获取到锁. 相反, 如果锁已经被其他线程持有, 将禁用当前线程, 直到当前线程获取到锁.</p>
+</li>
+<li>
+<p>boolean tryLock()：如果锁可用, 则获取锁, 并立即返回 true, 否则返回 false. 该方法和lock()的区别在于, tryLock()只是&quot;试图&quot;获取锁, 如果锁不可用, 不会导致当前线程被禁用, 当前线程仍然继续往下执行代码. 而 lock()方法则是一定要获取到锁, 如果锁不可用, 就一直等待, 在未获得锁之前,当前线程并不继续向下执行.</p>
+</li>
+<li>
+<p>void unlock()：执行此方法时, 当前线程将释放持有的锁. 锁只能由持有者释放, 如果线程并不持有锁, 却执行该方法, 可能导致异常的发生.</p>
+</li>
+<li>
+<p>Condition newCondition()：条件对象，获取等待通知组件。该组件和当前的锁绑定，当前线程只有获取了锁，才能调用该组件的 await()方法，而调用后，当前线程将缩放锁。</p>
+</li>
+<li>
+<p>getHoldCount() ：查询当前线程保持此锁的次数，也就是执行此线程执行 lock 方法的次数。</p>
+</li>
+<li>
+<p>getQueueLength（）：返回正等待获取此锁的线程估计数，比如启动 10 个线程，1 个线程获得锁，此时返回的是 9</p>
+</li>
+<li>
+<p>getWaitQueueLength：（Condition condition）返回等待与此锁相关的给定条件的线程估计数。比如 10 个线程，用同一个 condition 对象，并且此时这 10 个线程都执行了condition 对象的 await 方法，那么此时执行此方法返回 10</p>
+</li>
+<li>
+<p>hasWaiters(Condition condition)：查询是否有线程等待与此锁有关的给定条件(condition)，对于指定 contidion 对象，有多少线程执行了 condition.await 方法\9. hasQueuedThread(Thread thread)：查询给定线程是否等待获取此锁</p>
+</li>
+<li>
+<p>hasQueuedThreads()：是否有线程等待此锁</p>
+</li>
+<li>
+<p>isFair()：该锁是否公平锁</p>
+</li>
+<li>
+<p>isHeldByCurrentThread()： 当前线程是否保持锁锁定，线程的执行 lock 方法的前后分别是 false 和 true</p>
+</li>
+<li>
+<p>isLock()：此锁是否有任意线程占用</p>
+</li>
+<li>
+<p>lockInterruptibly（）：如果当前线程未被中断，获取锁</p>
+</li>
+<li>
+<p>tryLock（）：尝试获得锁，仅在调用时锁未被线程占用，获得锁</p>
+</li>
+<li>
+<p>tryLock(long timeout TimeUnit unit)：如果锁在给定等待时间内没有被另一个线程保持，则获取该锁。</p>
+</li>
+</ol>
+<p>　　ReentrantLock 通过方法 lock()与 unlock()来进行加锁与解锁操作，与 synchronized 会 被 JVM 自动解锁机制不同，ReentrantLock 加锁后需要手动进行解锁。为了避免程序出现异常而无法正常解锁的情况，使用 ReentrantLock 必须在 finally 控制块中进行解锁操作。</p>
+<p>　　ReentrantLock 相比 synchronized 的优势是可中断、公平锁、多个锁。这种情况下需要使用 ReentrantLock。</p>
+<p><strong>ReentrantLock</strong> <strong>实现</strong>:</p>
+<pre><code>    public class MyService {
+        private Lock lock = new ReentrantLock();
+        
+        //Lock lock=new ReentrantLock(true);//公平锁
+        
+        //Lock lock=new ReentrantLock(false);//非公平锁
+        
+        private Condition condition=lock.newCondition();//创建 Condition
+        
+        public void testMethod() {
+            try {
+                lock.lock();//lock 加锁
+                //1：wait 方法等待：
+                //System.out.println(&quot;开始 wait&quot;);
+                condition.await();
+                //通过创建 Condition 对象来使线程 wait，必须先执行 lock.lock 方法获得锁
+                 //:2：signal 方法唤醒
+                condition.signal();//condition 对象的 signal 方法可以唤醒 wait 线程
+                for (int i = 0; i &lt; 5; i++) {
+                    System.out.println(&quot;ThreadName=&quot; + Thread.currentThread().getName()+ (&quot; &quot; + (i + 1)));
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            finally
+            {
+                lock.unlock();
+            }
+        } 
+        
+    }
+</code></pre><p>========================================================================================================================</p>
+<h3 id="锁优化">锁优化</h3>
+<p><strong>减少锁持有时间：</strong></p>
+<p>　　只用在有线程安全要求的程序上加锁。</p>
+<p><strong>减小锁粒度：</strong></p>
+<p>　　将大对象（这个对象可能会被很多线程访问），拆成小对象，大大增加并行度，降低锁竞争。降低了锁的竞争，偏向锁，轻量级锁成功率才会提高。最最典型的减小锁粒度的案例就是ConcurrentHashMap。</p>
+<p><strong>锁分离：</strong></p>
+<p>**　　最常见的锁分离就是读写锁 ReadWriteLock**，根据功能进行分离成读锁和写锁，这样读读不互斥，读写互斥，写写互斥，即保证了线程安全，又提高了性能，具体也请查看[高并发 Java 五] JDK 并发包 1。读写分离思想可以延伸，只要操作互不影响，锁就可以分离。比如LinkedBlockingQueue 从头部取出，从尾部放数据</p>
+<p><strong>锁粗化：</strong></p>
+<p>　　通常情况下，为了保证多线程间的有效并发，会要求每个线程持有锁的时间尽量短，即在使用完公共资源后，应该立即释放锁。但是，凡事都有一个度，<strong>如果对同一个锁不停的进行请求、同步和释放，其本身也会消耗系统宝贵的资源，反而不利于性能的优化 。</strong></p>
+<p><strong>锁消除：</strong></p>
+<p>　　锁消除是在编译器级别的事情。在即时编译器时，如果发现不可能被共享的对象，则可以消除这些对象的锁操作，多数是因为程序员编码不规范引起。</p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://blog.csdn.net/weixin_34413103/article/details/90334792?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control">https://blog.csdn.net/weixin_34413103/article/details/90334792?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1.control</a></p>
+<p><a href="https://blog.csdn.net/qq_41181619/article/details/81407289">https://blog.csdn.net/qq_41181619/article/details/81407289</a></p>
+<p><a href="https://www.cnblogs.com/jyroy/p/11365935.html">https://www.cnblogs.com/jyroy/p/11365935.html</a></p>
+<p><a href="https://blog.csdn.net/zqz_zqz/article/details/70233767">https://blog.csdn.net/zqz_zqz/article/details/70233767</a></p>
+<p><a href="https://blog.csdn.net/sinat_19131703/article/details/107599447?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control">https://blog.csdn.net/sinat_19131703/article/details/107599447?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-3.control</a></p>
+<p><a href="https://blog.csdn.net/wanghao112956/article/details/102967308?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4.control">https://blog.csdn.net/wanghao112956/article/details/102967308?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4.control</a></p>
+<p><a href="https://www.jianshu.com/p/39628e1180a9">https://www.jianshu.com/p/39628e1180a9</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B" title="多线程">多线程</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+        多线程
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

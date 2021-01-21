@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>对Java核心——Java多线程并发的理解（3） | 🏹 Boo 的博客网站</title>
+
+    
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java阻塞队列知识点与理解
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/" />
+
+
+<meta property="og:title" content="对Java核心——Java多线程并发的理解（3）" />
+<meta property="og:description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java阻塞队列知识点与理解" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/" />
+<meta property="article:published_time" content="2021-01-18T13:45:11+08:00" />
+<meta property="article:modified_time" content="2021-01-18T13:45:11+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对Java核心——Java多线程并发的理解（3）"/>
+<meta name="twitter:description" content="J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。
+本文主要讲述：Java阻塞队列知识点与理解"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          对Java核心——Java多线程并发的理解（3）
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Jan 18, 2021
+              
+
+            | 4 minute read
+
+            | Update at
+              
+                Monday, Jan 18, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。</p>
+<p>本文主要讲述：Java阻塞队列知识点与理解</p>
+<h1 id="java-阻塞队列原理">JAVA 阻塞队列原理</h1>
+<p>阻塞队列，关键字是阻塞，先理解阻塞的含义，在阻塞队列中，线程阻塞有这样的两种情况：</p>
+<ol>
+<li>
+<p>当队列中没有数据的情况下，消费者端的所有线程都会被自动阻塞（挂起），直到有数据放入队列。</p>
+<p><img src="/textImgs/image-20210120201842952.png" alt="image-20210120201842952"></p>
+</li>
+<li>
+<p>当队列中填满数据的情况下，生产者端的所有线程都会被自动阻塞（挂起），直到队列中有空的位置，线程被自动唤醒。</p>
+<p><img src="/textImgs/image-20210120201906297.png" alt="image-20210120201906297"></p>
+</li>
+</ol>
+<h3 id="阻塞队列的主要方法">阻塞队列的主要方法</h3>
+<table>
+<thead>
+<tr>
+<th>方法类型</th>
+<th>抛出异常</th>
+<th>特殊值</th>
+<th>阻塞</th>
+<th>超时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插入</td>
+<td>add(e)</td>
+<td>offer(e)</td>
+<td>put(e)</td>
+<td>offer(e,time,unit)</td>
+</tr>
+<tr>
+<td>移除</td>
+<td>remove(e)</td>
+<td>poll(e)</td>
+<td>take(e)</td>
+<td>poll(e,time,unit)</td>
+</tr>
+<tr>
+<td>检查</td>
+<td>element(e)</td>
+<td>peek(e)</td>
+<td>不可用</td>
+<td>不可用</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>抛出异常：抛出一个异常；</li>
+<li>特殊值：返回一个特殊值（null 或 false,视情况而定）</li>
+<li>则塞：在成功操作之前，一直阻塞线程</li>
+<li>超时：放弃前只在最大的时间内阻塞</li>
+</ul>
+<h3 id="插入操作">插入操作</h3>
+<ol>
+<li>
+<p>public abstract boolean add(E paramE)：将指定元素插入此队列中（如果立即可行且不会违反容量限制），成功时返回 true，如果当前没有可用的空间，则抛出 IllegalStateException。如果该元素是 NULL，则会抛出 NullPointerException 异常。</p>
+</li>
+<li>
+<p>public abstract boolean offer(E paramE)：将指定元素插入此队列中（如果立即可行且不会违反容量限制），成功时返回 true，如果当前没有可用的空间，则返回 false。</p>
+</li>
+<li>
+<p>public abstract void put(E paramE) throws InterruptedException： 将指定元素插入此队列中，将等待可用的空间（如果有必要）</p>
+<pre><code>public void put(E paramE) throws InterruptedException {
+ checkNotNull(paramE);
+ ReentrantLock localReentrantLock = this.lock;
+     localReentrantLock.lockInterruptibly();
+     try{
+             while (this.count == this.items.length)
+             this.notFull.await();//如果队列满了，则线程阻塞等待
+             enqueue(paramE);
+             localReentrantLock.unlock();
+     } finally {
+             localReentrantLock.unlock();
+         }
+ }
+</code></pre></li>
+<li>
+<p>offer(E o, long timeout, TimeUnit unit)：可以设定等待的时间，如果在指定的时间内，还不能往队列中加入 BlockingQueue，则返回失败</p>
+</li>
+</ol>
+<h3 id="获取数据操作">获取数据操作</h3>
+<ol>
+<li>
+<p>poll(time):取走 BlockingQueue 里排在首位的对象,若不能立即取出,则可以等 time 参数规定的时间,取不到时返回 null;</p>
+</li>
+<li>
+<p>poll(long timeout, TimeUnit unit)：从 BlockingQueue 取出一个队首的对象，如果在指定时间内，队列一旦有数据可取，则立即返回队列中的数据。否则直到时间超时还没有数据可取，返回失败。</p>
+</li>
+<li>
+<p>take():取走 BlockingQueue 里排在首位的对象,若 BlockingQueue 为空,阻断进入等待状态直到 BlockingQueue 有新的数据被加入。</p>
+</li>
+<li>
+<p>drainTo():一次性从 BlockingQueue 获取所有可用的数据对象（还可以指定获取数据的个数），通过该方法，可以提升获取数据效率；不需要多次分批加锁或释放锁。</p>
+</li>
+</ol>
+<p>========================================================================================================================</p>
+<h1 id="java-阻塞队列">JAVA 阻塞队列</h1>
+<blockquote>
+<ul>
+<li>ArrayBlockingQueue ：由数组结构组成的有界阻塞队列。</li>
+<li>LinkedBlockingQueue ：由链表结构组成的有界阻塞队列。</li>
+<li>PriorityBlockingQueue ：支持优先级排序的无界阻塞队列。</li>
+<li>DelayQueue：使用优先级队列实现的无界阻塞队列。</li>
+<li>SynchronousQueue：不存储元素的阻塞队列。</li>
+<li>LinkedTransferQueue：由链表结构组成的无界阻塞队列。</li>
+<li>LinkedBlockingDeque：由链表结构组成的双向阻塞队列</li>
+</ul>
+</blockquote>
+<p><img src="/textImgs/image-20210121104052715.png" alt="image-20210121104052715"></p>
+<h3 id="一arrayblockingqueue公平非公平">一、ArrayBlockingQueue（公平、非公平）</h3>
+<p>　　<strong>用数组实现的有界阻塞队列</strong>。此队列按照先进先出（FIFO）的原则对元素进行排序。默认情况下不保证访问者公平的访问队列，所谓公平访问队列是指阻塞的所有生产者线程或消费者线程，当队列可用时，可以按照阻塞的先后顺序访问队列，即先阻塞的生产者线程，可以先往队列里插入元素，先阻塞的消费者线程，可以先从队列里获取元素。通常情况下为了保证公平性会降低吞吐量。我们可以使用以下代码创建一个公平的阻塞队列：</p>
+<pre><code>ArrayBlockingQueue fairQueue = new ArrayBlockingQueue(1000,true)
+</code></pre><h3 id="二linkedblockingqueue两个独立锁提高并发">二、LinkedBlockingQueue（两个独立锁提高并发）</h3>
+<p>　　<strong>基于链表的阻塞队列</strong>，同 ArrayListBlockingQueue 类似，此队列按照先进先出（FIFO）的原则对元素进行排序。而 LinkedBlockingQueue 之所以能够高效的处理并发数据，还因为其对于生产者端和消费者端分别采用了独立的锁来控制数据同步，这也意味着在高并发的情况下生产者和消费者可以并行地操作队列中的数据，以此来提高整个队列的并发性能。</p>
+<p>　　LinkedBlockingQueue 会默认一个类似无限大小的容量（Integer.MAX_VALUE）。</p>
+<h3 id="三priorityblockingqueuecompareto-排序实现优先">三、PriorityBlockingQueue（compareTo 排序实现优先）</h3>
+<p>　　是一个<strong>支持优先级的无界队列</strong>。默认情况下元素采取自然顺序升序排列。可以自定义实现compareTo()方法来指定元素进行排序规则，或者初始化 PriorityBlockingQueue 时，指定构造参数 Comparator 来对元素进行排序。需要注意的是不能保证同优先级元素的顺序。</p>
+<h3 id="四delayqueue缓存失效定时任务-">四、DelayQueue（缓存失效、定时任务 ）</h3>
+<p>　　是一个<strong>支持延时获取元素的无界阻塞队列</strong>。队列使用 PriorityQueue 来实现。队列中的元素必须实现 Delayed 接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。我们可以将 DelayQueue 运用在以下应用场景：</p>
+<ol>
+<li>
+<p>缓存系统的设计：可以用 DelayQueue 保存缓存元素的有效期，使用一个线程循环查询DelayQueue，一旦能从 DelayQueue 中获取元素时，表示缓存有效期到了。121623125152125125</p>
+</li>
+<li>
+<p>定时任务调度：使用 DelayQueue 保存当天将会执行的任务和执行时间，一旦从DelayQueue 中获取到任务就开始执行，从比如 TimerQueue 就是使用 DelayQueue 实现的。</p>
+</li>
+</ol>
+<h3 id="五synchronousqueue不存储数据可用于传递数据">五、SynchronousQueue（不存储数据、可用于传递数据）</h3>
+<p>　　是一个<strong>不存储元素的阻塞队列</strong>。每一个 put 操作必须等待一个 take 操作，否则不能继续添加元素。SynchronousQueue 可以看成是一个传球手，负责把生产者线程处理的数据直接传递给消费者线程。队列本身并不存储任何元素，非常适合于传递性场景,比如在一个线程中使用的数据，传递给另 外 一 个 线 程 使 用 ， SynchronousQueue 的 吞 吐 量 高 于 LinkedBlockingQueue 和ArrayBlockingQueue。</p>
+<h3 id="六linkedtransferqueue">六、LinkedTransferQueue</h3>
+<p>　　是 一 个 <strong>由 链 表 结 构 组 成 的 无 界 阻 塞 TransferQueue 队 列</strong> 。 相 对 于 其 他 阻 塞 队 列 ，LinkedTransferQueue 多了 tryTransfer 和 transfer 方法。</p>
+<ol>
+<li>
+<p>transfer 方法：如果当前有消费者正在等待接收元素（消费者使用 take()方法或带时间限制的poll()方法时），transfer 方法可以把生产者传入的元素立刻 transfer（传输）给消费者。如果没有消费者在等待接收元素，transfer 方法会将元素存放在队列的 tail 节点，并等到该元素被消费者消费了才返回。</p>
+</li>
+<li>
+<p>tryTransfer 方法。则是用来试探下生产者传入的元素是否能直接传给消费者。如果没有消费者等待接收元素，则返回 false。和 transfer 方法的区别是 tryTransfer 方法无论消费者是否接收，方法立即返回。而 transfer 方法是必须等到消费者消费了才返回。对于带有时间限制的 tryTransfer(E e, long timeout, TimeUnit unit)方法，则是试图把生产者传入的元素直接传给消费者，但是如果没有消费者消费该元素则等待指定的时间再返回，如果超时还没消费元素，则返回 false，如果在超时时间内消费了元素，则返回 true。</p>
+</li>
+</ol>
+<h3 id="七linkedblockingdeque">七、LinkedBlockingDeque</h3>
+<p>　　是一个<strong>由链表结构组成的双向阻塞队列</strong>。所谓双向队列指的你可以从队列的两端插入和移出元素。双端队列因为多了一个操作队列的入口，在多线程同时入队时，也就减少了一半的竞争。相比其他的阻塞队列，LinkedBlockingDeque 多了 addFirst，addLast，offerFirst，offerLast，peekFirst，peekLast 等方法，以 First 单词结尾的方法，表示插入，获取（peek）或移除双端队列的第一个元素。以 Last 单词结尾的方法，表示插入，获取或移除双端队列的最后一个元素。另外插入方法 add 等同于 addLast，移除方法 remove 等效于 removeFirst。但是 take 方法却等同于 takeFirst，不知道是不是 Jdk 的 bug，使用时还是用带有 First 和 Last 后缀的方法更清楚。在初始化 LinkedBlockingDeque 时可以设置容量防止其过渡膨胀。另外双向阻塞队列可以运用在“工作窃取”模式中。</p>
+<p>========================================================================================================================</p>
+<h1 id="阻塞队列vs非阻塞队列">阻塞队列vs非阻塞队列</h1>
+<p>　　之前接触的队列都是非阻塞队列，比如PriorityQueue、LinkedList（LinkedList是双向链表，它实现了Dequeue接口）。使用非阻塞队列的时候有一个很大问题就是：<strong>它不会对当前线程产生阻塞，那么在面对类似消费者-生产者的模型时，就必须额外地实现同步策略以及线程间唤醒策略，这个实现起来就非常麻烦。</strong></p>
+<p>　　但是有了阻塞队列就不一样了，它会对当前线程产生阻塞，比如一个线程从一个空的阻塞队列中取元素，此时线程会被阻塞直到阻塞队列中有了元素。当队列中有元素后，被阻塞的线程会自动被唤醒（不需要我们编写代码去唤醒）。这样提供了极大的方便性。</p>
+<h3 id="非阻塞队列的方法">非阻塞队列的方法</h3>
+<blockquote>
+<p><strong>add</strong>(E e):将元素e插入到队列末尾，如果插入成功，则返回true；如果插入失败（即队列已满），则会抛出异常；</p>
+<p><strong>remove</strong>()：移除队首元素，若移除成功，则返回true；如果移除失败（队列为空），则会抛出异常；</p>
+<p><strong>offer</strong>(E e)：将元素e插入到队列末尾，如果插入成功，则返回true；如果插入失败（即队列已满），则返回false；</p>
+<p><strong>poll</strong>()：移除并获取队首元素，若成功，则返回队首元素；否则返回null；</p>
+<p><strong>peek</strong>()：获取队首元素，若成功，则返回队首元素；否则返回null</p>
+</blockquote>
+<p>　　对于非阻塞队列，一般情况下<strong>建议使用offer、poll和peek三个方法</strong>，不建议使用add和remove方法。因为使用offer、poll和peek三个方法可以通过返回值判断操作成功与否，而使用add和remove方法却不能达到这样的效果。</p>
+<p><strong>注意，非阻塞队列中的方法都没有进行同步措施</strong>。</p>
+<h3 id="阻塞队列的方法">阻塞队列的方法</h3>
+<p>　　阻塞队列包括了非阻塞队列中的大部分方法，上面列举的5个方法在阻塞队列中都存在，但是要注意这5个方法在阻塞队列中都进行了同步措施。除此之外，阻塞队列提供了另外4个非常有用的方法：</p>
+<blockquote>
+<p><strong>put</strong>(E e)：put方法用来向队尾存入元素，如果队列满，则等待；</p>
+<p><strong>take</strong>()：take方法用来从队首取元素，如果队列为空，则等待；</p>
+<p><strong>offer</strong>(E e,long timeout, TimeUnit unit)：offer方法用来向队尾存入元素，如果队列满，则等待一定的时间，当时间期限达到时，如果还没有插入成功，则返回false；否则返回true；</p>
+<p><strong>poll</strong>(long timeout, TimeUnit unit)：poll方法用来从队首取元素，如果队列空，则等待一定的时间，当时间期限达到时，如果取到，则返回null；否则返回取得的元素；</p>
+</blockquote>
+<p>========================================================================================================================　</p>
+<h1 id="阻塞队列的实现原理">阻塞队列的实现原理</h1>
+<p>　　前面谈到了非阻塞队列和阻塞队列中常用的方法，下面来探讨阻塞队列的实现原理</p>
+<p>　　以ArrayBlockingQueue为例，其他阻塞队列实现原理可能和ArrayBlockingQueue有一些差别，但是大体思路应该类似，有兴趣的朋友可自行查看其他阻塞队列的实现源码。</p>
+<p>　　首先看一下ArrayBlockingQueue类中的几个成员变量：</p>
+<pre><code>public class ArrayBlockingQueue&lt;E&gt; extends AbstractQueue&lt;E&gt;
+implements BlockingQueue&lt;E&gt;, java.io.Serializable {
+ 
+private static final long serialVersionUID = -817911632652898426L;
+ 
+/** The queued items  */
+private final E[] items;
+
+/** items index for next take, poll or remove */
+private int takeIndex;
+
+/** items index for next put, offer, or add. */
+private int putIndex;
+
+/** Number of items in the queue */
+private int count;
+ 
+/*
+* Concurrency control uses the classic two-condition algorithm
+* found in any textbook.
+*/
+ 
+/** Main lock guarding all access */
+private final ReentrantLock lock;
+
+/** Condition for waiting takes */
+private final Condition notEmpty;
+
+/** Condition for waiting puts */
+private final Condition notFull;
+
+}
+</code></pre><p>　　可以看出，ArrayBlockingQueue中用来存储元素的实际上是一个数组，takeIndex和putIndex分别表示队首元素和队尾元素的下标，count表示队列中元素的个数。</p>
+<p>　　lock是一个可重入锁，notEmpty和notFull是等待条件。</p>
+<p>　　下面看一下ArrayBlockingQueue的构造器，构造器有三个重载版本：</p>
+<pre><code>public ArrayBlockingQueue(int capacity) {
+}
+public ArrayBlockingQueue(int capacity, boolean fair) {
+ 
+}
+public ArrayBlockingQueue(int capacity, boolean fair,
+                          Collection&lt;? extends E&gt; c) {
+}
+</code></pre><p>　　第一个构造器只有一个参数用来指定容量，第二个构造器可以指定容量和公平性，第三个构造器可以指定容量、公平性以及用另外一个集合进行初始化。</p>
+<h3 id="然后看它的两个关键方法的实现put和take">　　然后看它的两个关键方法的实现：put()和take()：</h3>
+<pre><code>public void put(E e) throws InterruptedException {
+    if (e == null) throw new NullPointerException();
+    final E[] items = this.items;
+    final ReentrantLock lock = this.lock;		//获取了锁
+    lock.lockInterruptibly();
+    try {
+        try {
+            while (count == items.length)		//
+                notFull.await();
+        } catch (InterruptedException ie) {
+            notFull.signal(); // propagate to non-interrupted thread
+            throw ie;
+        }
+        insert(e);
+    } finally {
+        lock.unlock();
+    }
+}
+</code></pre><p>　　从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁，然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。</p>
+<p>　　当被其他线程唤醒时，通过insert(e)方法插入元素，最后解锁。</p>
+<p>　　我们看一下insert方法的实现：</p>
+<pre><code>private void insert(E x) {
+    items[putIndex] = x;
+    putIndex = inc(putIndex);
+    ++count;
+    notEmpty.signal();
+}
+</code></pre><p>========================================================================================================================　</p>
+<h3 id="下面是take方法的实现">　　下面是take()方法的实现：</h3>
+<pre><code>public E take() throws InterruptedException {
+    final ReentrantLock lock = this.lock;
+    lock.lockInterruptibly();
+    try {
+        try {
+            while (count == 0)
+                notEmpty.await();
+        } catch (InterruptedException ie) {
+            notEmpty.signal(); // propagate to non-interrupted thread
+            throw ie;
+        }
+        E x = extract();
+        return x;
+    } finally {
+        lock.unlock();
+    }
+}
+</code></pre><p>　跟put方法实现很类似，只不过put方法等待的是notFull信号，而take方法等待的是notEmpty信号。在take方法中，如果可以取元素，则通过extract方法取得元素，下面是extract方法的实现：</p>
+<pre><code>private E extract() {
+    final E[] items = this.items;
+    E x = items[takeIndex];
+    items[takeIndex] = null;
+    takeIndex = inc(takeIndex);
+    --count;
+    notFull.signal();
+    return x;
+}
+</code></pre><p>　跟insert方法也很类似。</p>
+<p>　　其实从这里大家应该明白了阻塞队列的实现原理，<strong>事实它和我们用Object.wait()、Object.notify()和非阻塞队列实现生产者-消费者的思路类似，只不过它把这些工作一起集成到了阻塞队列中实现。</strong></p>
+<p>========================================================================================================================　</p>
+<h1 id="示例和使用场景">示例和使用场景</h1>
+<p><strong>先使用Object.wait()和Object.notify()非阻塞队列实现生产者-消费者模式（Object.wait()和Object.notify()主要用于来实现线程间通信）：</strong></p>
+<pre><code>public class Test {
+
+    private int queueSize = 10;
+    //非阻塞队列
+    private PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;Integer&gt;(queueSize);
+     
+    public static void main(String[] args)  {
+        Test test = new Test();
+        Producer producer = test.new Producer();
+        Consumer consumer = test.new Consumer();
+         
+        producer.start();
+        consumer.start();
+    }
+     
+    class Consumer extends Thread{
+         
+        @Override
+        public void run() {
+            consume();
+        }
+         
+        private void consume() {
+            while(true){
+                synchronized (queue) {
+                    while(queue.size() == 0){
+                        try {
+                            System.out.println(&quot;队列空，等待数据&quot;);
+                            queue.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            queue.notify();
+                        }
+                    }
+                    queue.poll();          //每次移走队首元素
+                    queue.notify();
+                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);
+                }
+            }
+        }
+    }
+     
+    class Producer extends Thread{
+         
+        @Override
+        public void run() {
+            produce();
+        }
+         
+        private void produce() {
+            while(true){
+                synchronized (queue) {
+                    while(queue.size() == queueSize){
+                        try {
+                            System.out.println(&quot;队列满，等待有空余空间&quot;);
+                            queue.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            queue.notify();
+                        }
+                    }
+                    queue.offer(1);        //每次插入一个元素
+                    queue.notify();
+                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));
+                }
+            }
+        }
+    }
+}
+</code></pre><p>========================================================================================================================　</p>
+<p><strong>下面是使用阻塞队列实现的生产者-消费者模式：</strong></p>
+<pre><code>public class Test {
+    private int queueSize = 10;
+    private ArrayBlockingQueue&lt;Integer&gt; queue = new ArrayBlockingQueue&lt;Integer&gt;(queueSize);
+     
+    public static void main(String[] args)  {
+        Test test = new Test();
+        Producer producer = test.new Producer();
+        Consumer consumer = test.new Consumer();
+         
+        producer.start();
+        consumer.start();
+    }
+     
+    class Consumer extends Thread{
+         
+        @Override
+        public void run() {
+            consume();
+        }
+         
+        private void consume() {
+            while(true){
+                try {
+                    queue.take();
+                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+     
+    class Producer extends Thread{
+         
+        @Override
+        public void run() {
+            produce();
+        }
+         
+        private void produce() {
+            while(true){
+                try {
+                    queue.put(1);
+                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+</code></pre><p>　有没有发现，使用阻塞队列代码要简单得多，不需要再单独考虑同步和线程间通信的问题。</p>
+<p>　　<strong>在并发编程中，一般推荐使用阻塞队列，这样实现可以尽量地避免程序出现意外的错误。</strong></p>
+<p>　　<strong>阻塞队列使用最经典的场景就是socket客户端数据的读取和解析，读取数据的线程不断将数据放入队列，然后解析线程不断从队列取数据解析。还有其他类似的场景，只要符合生产者-消费者模型的都可以使用阻塞队列。</strong></p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://www.cnblogs.com/shoshana-kong/p/9081133.html">https://www.cnblogs.com/shoshana-kong/p/9081133.html</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+        
+          <a class="ui label" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B" title="多线程">多线程</a>
+        
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/git/" title="Git">
+        Git
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/spring/" title="Spring">
+        Spring
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+        多线程
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%BC%80%E6%BA%90/" title="开源">
+              开源
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/">一些算法设计时的巧妙用法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/">如何快速搭建个人博客网站</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E7%94%9F%E6%B4%BB/" title="生活">
+              生活
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/">写给我的另一半的一封信</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

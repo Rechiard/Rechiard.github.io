@@ -150,15 +150,15 @@ JPA是一个Java应用程序接口规范，描述了使用Java标准平台和Jav
 <p>JPA是一个Java应用程序接口规范，描述了使用Java标准平台和Java企业版平台的应用中的关系数据的管理。</p>
 <h1 id="spirng-data-jpa">Spirng Data JPA</h1>
 <h3 id="什么是jpa">什么是JPA？</h3>
-<p><a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>：JPA（Java Persistence API，Java持久化API）是一个Java应用程序接口规范，描述了使用Java标准平台（Java SE）和Java企业版平台（Java EE）的应用中的关系数据的管理。</p>
-<p><a href="https://segmentfault.com/a/1190000015047290">Spring Data JPA 全面解析</a>：JPA (Java Persistence API) 是 Sun 官方提出的 Java 持久化规范。它为 Java 开发人员提供了一种对象/关联映射工具来管理 Java 应用中的关系数据。他的出现主要是为了简化现有的持久化开发工作和整合 ORM 技术，结束现在 Hibernate，TopLink，JDO 等 ORM 框架各自为营的局面。值得注意的是，JPA 是在充分吸收了现有 Hibernate，TopLink，JDO 等ORM框架的基础上发展而来的，具有易于使用，伸缩性强等优点。从目前的开发社区的反应上看，JPA 受到了极大的支持和赞扬，其中就包括了 Spring 与 EJB3.0 的开发团队</p>
-<p><strong>JPA</strong>所维护的核心是实体（Entity Bean），而它是通过一个持久化上下文（Persistence Context）来使用的。持久化上下文包含了以前3个部分：</p>
+<p>　　<a href="https://zh.wikipedia.org/wiki/Java%E6%8C%81%E4%B9%85%E5%8C%96API">维基百科</a>：JPA（Java Persistence API，Java持久化API）是一个Java应用程序接口规范，描述了使用Java标准平台（Java SE）和Java企业版平台（Java EE）的应用中的关系数据的管理。</p>
+<p>　　<a href="https://segmentfault.com/a/1190000015047290">Spring Data JPA 全面解析</a>：JPA (Java Persistence API) 是 Sun 官方提出的 Java 持久化规范。它为 Java 开发人员提供了一种对象/关联映射工具来管理 Java 应用中的关系数据。他的出现主要是为了简化现有的持久化开发工作和整合 ORM 技术，结束现在 Hibernate，TopLink，JDO 等 ORM 框架各自为营的局面。值得注意的是，JPA 是在充分吸收了现有 Hibernate，TopLink，JDO 等ORM框架的基础上发展而来的，具有易于使用，伸缩性强等优点。从目前的开发社区的反应上看，JPA 受到了极大的支持和赞扬，其中就包括了 Spring 与 EJB3.0 的开发团队</p>
+<p>　　<strong>JPA</strong>所维护的核心是实体（Entity Bean），而它是通过一个持久化上下文（Persistence Context）来使用的。持久化上下文包含了以前3个部分：</p>
 <ul>
 <li>对象关系映射（Object Relational Mapping，简称ORM）描述，JPA支持注解或XML两种形式的描述。</li>
 <li>实体操作API，内置通用CRUD操作，来完成对象的持久化与查询。</li>
 <li>查询语言，约定了面向对象的查询语句JPQL。</li>
 </ul>
-<p>简单来说，JPA就是一种接口规范，一种定义了对象关系映射（ORM）以及实体对象的持久化接口标准的规范，并不是一套直接可用的产品（如：Hibernate）。</p>
+<p>　　简单来说，JPA就是一种接口规范，一种定义了对象关系映射（ORM）以及实体对象的持久化接口标准的规范，并不是一套直接可用的产品（如：Hibernate）。</p>
 <h3 id="jpa具有的优势">Jpa具有的优势</h3>
 <ol>
 <li>
@@ -233,7 +233,7 @@ public class User {
     )
     private List&lt;Role&gt; roles;
 }
-</code></pre><p>在JPA的接口中声明的方法不用我们去实现，只要满足命名规则JpaRepository类会自动帮我们生成相应的sql语句</p>
+</code></pre><p>　　在JPA的接口中声明的方法不用我们去实现，只要满足命名规则JpaRepository类会自动帮我们生成相应的sql语句</p>
 <p><strong>dao层具体代码：</strong></p>
 <pre><code>public interface UserRepository extends JpaRepository&lt;User,Integer&gt; {
 
@@ -247,7 +247,7 @@ public class User {
     public void deleteByUserName(String userName);
 
 }
-</code></pre><p><strong>最后附上Spring Data JPA需要的依赖：</strong></p>
+</code></pre><p>　　<strong>最后附上Spring Data JPA需要的依赖：</strong></p>
 <pre><code>&lt;!--整合SpringData JPA--&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -255,14 +255,14 @@ public class User {
 &lt;/dependency&gt;
 </code></pre><h1 id="mybatis">MyBatis</h1>
 <h3 id="什么是mybatis">什么是MyBatis？</h3>
-<p><a href="https://mybatis.org/mybatis-3/zh/index.html">Mybatis</a>：Mybatis是一款优秀的持久层框架，他支持自定义SQL、存储过程以及高级映射（ORM框架：Object Relational Mapping，用于实现面对对象编程语言里不同类型系统的数据之间的转换）。Mybatis免除了几乎所有的JDBC代码以及设置参数和获取结果集的工作。Mybatis可以通过简单的XML或注解来配置和映射原始类型、接口和Java POJO（Plain Old Java Objects，普通老式Java对象）为数据库中的记录。</p>
+<p>　　<a href="https://mybatis.org/mybatis-3/zh/index.html">Mybatis</a>：Mybatis是一款优秀的持久层框架，他支持自定义SQL、存储过程以及高级映射（ORM框架：Object Relational Mapping，用于实现面对对象编程语言里不同类型系统的数据之间的转换）。Mybatis免除了几乎所有的JDBC代码以及设置参数和获取结果集的工作。Mybatis可以通过简单的XML或注解来配置和映射原始类型、接口和Java POJO（Plain Old Java Objects，普通老式Java对象）为数据库中的记录。</p>
 <p>Mybatis的关注点在于：</p>
 <ul>
 <li>SQL与POJO的映射，或者说查询结果集与POJO的映射</li>
 <li>数据的高效存储于读写</li>
 <li>可定制化SQL，支持原生SQL</li>
 </ul>
-<p>虽然一直都在使用Mybatis作为项目中的orm框架，但是始终没有深入的去了解。Mybatis就是一个ORM框架，是一个半自动的ORM框架，是一个面向查询结果集的ORM框架，一个关注实体与查询结果集之间的映射关系的ORM框架，且支持自定义SQL、存储过程、高级映射。在此基础上存在二次开发的开源产品：Mybatis-Plus，其在Mybatis的基础上进行了增强。</p>
+<p>　　虽然一直都在使用Mybatis作为项目中的orm框架，但是始终没有深入的去了解。Mybatis就是一个ORM框架，是一个半自动的ORM框架，是一个面向查询结果集的ORM框架，一个关注实体与查询结果集之间的映射关系的ORM框架，且支持自定义SQL、存储过程、高级映射。在此基础上存在二次开发的开源产品：Mybatis-Plus，其在Mybatis的基础上进行了增强。</p>
 <h3 id="mybatis具有的优势">MyBatis具有的优势：</h3>
 <ol>
 <li>
@@ -313,11 +313,11 @@ mybatis:
     map-underscore-to-camel-case: true      #针对于解决 model数据模型编写的驼峰方式 和 数据库的模型编写的下划线方式 的匹配问题
   type-aliases-package: sboot.model         #可以在model中的peron和Person都映射为一个相同的文件
 </code></pre><p><strong>根据mybatis自动配置的源码学习：</strong></p>
-<p>mybatis的配置将Mapper包下的PersonMapper是根据MapperFactoryBean来创建代理对象的，并且实例化sqlsessionFactory来创建到sessionTemplate对象对数据库的每一次的操作的开启和关闭等操作进行持久化支持。</p>
-<p>而在mybatis自动配置中，我们不需要再创建MapperFactoryBean 和 sqlsessionFactory来对我们自定义PersonMapper进行动态代理，而是根据注解 <code>@MapperScan</code> 来进行自动配置。</p>
-<p><strong><code>@MapperScan(&quot;sboot.mapper&quot;):</code></strong> 此注解用于扫描sboot.mapper包下所有文件的Mapper，在主程序中写入此注解可以在Mapper的接口中省略@Mapper注解。</p>
-<p>源码中MybatisAutoConfiguration类中明确说到，在MapperScan找不到的情况下，会生成一个一个Scan来扫描根路径下所有带有@Mapper的接口。所以，当拥有@MapperScan注解的时候，上述方法则不会被调用，也就是说@Mapper注解可以省略。</p>
-<p>综上所述，可以明确的得知不需要再对每一个具体的Mapper类注入<code>@Mapper</code>注解了，而是在主程序中直接写入<code>@MapperScan(xxx.mapper)</code>即可。</p>
+<p>　　mybatis的配置将Mapper包下的PersonMapper是根据MapperFactoryBean来创建代理对象的，并且实例化sqlsessionFactory来创建到sessionTemplate对象对数据库的每一次的操作的开启和关闭等操作进行持久化支持。</p>
+<p>　　而在mybatis自动配置中，我们不需要再创建MapperFactoryBean 和 sqlsessionFactory来对我们自定义PersonMapper进行动态代理，而是根据注解 <code>@MapperScan</code> 来进行自动配置。</p>
+<p>　　<strong><code>@MapperScan(&quot;sboot.mapper&quot;):</code></strong> 此注解用于扫描sboot.mapper包下所有文件的Mapper，在主程序中写入此注解可以在Mapper的接口中省略@Mapper注解。</p>
+<p>　　源码中MybatisAutoConfiguration类中明确说到，在MapperScan找不到的情况下，会生成一个一个Scan来扫描根路径下所有带有@Mapper的接口。所以，当拥有@MapperScan注解的时候，上述方法则不会被调用，也就是说@Mapper注解可以省略。</p>
+<p>　　综上所述，可以明确的得知不需要再对每一个具体的Mapper类注入<code>@Mapper</code>注解了，而是在主程序中直接写入<code>@MapperScan(xxx.mapper)</code>即可。</p>
 <p><strong>然后Dao层的编写如下：</strong></p>
 <pre><code>public interface PersonMapper {
 
@@ -546,12 +546,6 @@ mybatis:
           </div>
           <div class="content">
             <div class="ui list">
-            
-              <div class="item">
-                <div class="content">
-                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
-                </div>
-              </div>
             
               <div class="item">
                 <div class="content">
