@@ -199,61 +199,61 @@ JPA是一个Java应用程序接口规范，描述了使用Java标准平台和Jav
 关于这个注解，建议先去掉试试然后再加上，对比一下效果。<strong>它主要可以使标注属性避免被json序列化</strong>，进而避免多对多关系的查询中出现死循环的情况。但是加上了这注解后，就不能进行反向查询了（也就是说不能利用权限名查询拥有这个权限的角色了）</li>
 </ol>
 <p><strong>model层具体代码如下：</strong></p>
-<pre><code>@Entity
-@Data
-@Table(name = &quot;lab_user&quot;)
-public class User {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Entity</span>
+<span style="color:#a6e22e">@Data</span>
+<span style="color:#a6e22e">@Table</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lab_user&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span> <span style="color:#f92672">{</span>
 
-    @Id
-    //该注解的strategy属性主要用于设置主键的增长方式，IDENTITY表示主键由数据库自己生成，从1开始单调递增。
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = &quot;user_id&quot;)
-    private Integer userId;
+    <span style="color:#a6e22e">@Id</span>
+    <span style="color:#75715e">//该注解的strategy属性主要用于设置主键的增长方式，IDENTITY表示主键由数据库自己生成，从1开始单调递增。
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@GeneratedValue</span><span style="color:#f92672">(</span>strategy <span style="color:#f92672">=</span> GenerationType<span style="color:#f92672">.</span><span style="color:#a6e22e">IDENTITY</span><span style="color:#f92672">)</span>
+    <span style="color:#a6e22e">@Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user_id&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> Integer userId<span style="color:#f92672">;</span>
 
-    @Column(name = &quot;user_name&quot;)
-    private String userName;
+    <span style="color:#a6e22e">@Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user_name&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> String userName<span style="color:#f92672">;</span>
 
-    @Column(name = &quot;password&quot;)
-    private String passWord;
+    <span style="color:#a6e22e">@Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;password&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> String passWord<span style="color:#f92672">;</span>
 
-    @Column(name = &quot;role_id&quot;)
-    /*
-    cascade的注解作用是：group对象的增删改关联到user对象
-    fetch是读取查询关联,一对多，一的一方，FetchType默认是LAZY, 多的一方FetchType默认是EAGER
-    */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = &quot;user_role&quot;, //name是表名
+    <span style="color:#a6e22e">@Column</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;role_id&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#75715e">/*
+</span><span style="color:#75715e">    cascade的注解作用是：group对象的增删改关联到user对象
+</span><span style="color:#75715e">    fetch是读取查询关联,一对多，一的一方，FetchType默认是LAZY, 多的一方FetchType默认是EAGER
+</span><span style="color:#75715e">    */</span>
+    <span style="color:#a6e22e">@ManyToMany</span><span style="color:#f92672">(</span>cascade <span style="color:#f92672">=</span> CascadeType<span style="color:#f92672">.</span><span style="color:#a6e22e">ALL</span><span style="color:#f92672">,</span> fetch <span style="color:#f92672">=</span> FetchType<span style="color:#f92672">.</span><span style="color:#a6e22e">LAZY</span><span style="color:#f92672">)</span>
+    <span style="color:#a6e22e">@JoinTable</span><span style="color:#f92672">(</span>
+            name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user_role&#34;</span><span style="color:#f92672">,</span> <span style="color:#75715e">//name是表名
+</span><span style="color:#75715e"></span>
+            <span style="color:#75715e">//joinColumns设置的是entity中属性在关系表的映射名称，name是映射表中的字段名
+</span><span style="color:#75715e"></span>            joinColumns <span style="color:#f92672">=</span> <span style="color:#f92672">{</span><span style="color:#a6e22e">@JoinColumn</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;user_id&#34;</span><span style="color:#f92672">)},</span>
 
-            //joinColumns设置的是entity中属性在关系表的映射名称，name是映射表中的字段名
-            joinColumns = {@JoinColumn(name = &quot;user_id&quot;)},
-
-            //inverseJoinColumns,name是关系实体Role的id在关系表中的名称
-            inverseJoinColumns = {@JoinColumn(name = &quot;role_id&quot;)}
-    )
-    private List&lt;Role&gt; roles;
-}
-</code></pre><p>　　在JPA的接口中声明的方法不用我们去实现，只要满足命名规则JpaRepository类会自动帮我们生成相应的sql语句</p>
+            <span style="color:#75715e">//inverseJoinColumns,name是关系实体Role的id在关系表中的名称
+</span><span style="color:#75715e"></span>            inverseJoinColumns <span style="color:#f92672">=</span> <span style="color:#f92672">{</span><span style="color:#a6e22e">@JoinColumn</span><span style="color:#f92672">(</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;role_id&#34;</span><span style="color:#f92672">)}</span>
+    <span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>Role<span style="color:#f92672">&gt;</span> roles<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　在JPA的接口中声明的方法不用我们去实现，只要满足命名规则JpaRepository类会自动帮我们生成相应的sql语句</p>
 <p><strong>dao层具体代码：</strong></p>
-<pre><code>public interface UserRepository extends JpaRepository&lt;User,Integer&gt; {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">,</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
 
-    //根据userId查找所有信息
-    public List&lt;User&gt; findAllUsersByUserId(int userId);
+    <span style="color:#75715e">//根据userId查找所有信息
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAllUsersByUserId</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> userId<span style="color:#f92672">);</span>
 
-    //根据用户username查找所有信息
-    public List&lt;User&gt; findAllByUserName(String userName);
+    <span style="color:#75715e">//根据用户username查找所有信息
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAllByUserName</span><span style="color:#f92672">(</span>String userName<span style="color:#f92672">);</span>
 
-    //根据用户userId删除用户
-    public void deleteByUserName(String userName);
+    <span style="color:#75715e">//根据用户userId删除用户
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">deleteByUserName</span><span style="color:#f92672">(</span>String userName<span style="color:#f92672">);</span>
 
-}
-</code></pre><p>　　<strong>最后附上Spring Data JPA需要的依赖：</strong></p>
-<pre><code>&lt;!--整合SpringData JPA--&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre><h1 id="mybatis">MyBatis</h1>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　<strong>最后附上Spring Data JPA需要的依赖：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;!--</span>整合SpringData JPA<span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>data<span style="color:#f92672">-</span>jpa<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h1 id="mybatis">MyBatis</h1>
 <h3 id="什么是mybatis">什么是MyBatis？</h3>
 <p>　　<a href="https://mybatis.org/mybatis-3/zh/index.html">Mybatis</a>：Mybatis是一款优秀的持久层框架，他支持自定义SQL、存储过程以及高级映射（ORM框架：Object Relational Mapping，用于实现面对对象编程语言里不同类型系统的数据之间的转换）。Mybatis免除了几乎所有的JDBC代码以及设置参数和获取结果集的工作。Mybatis可以通过简单的XML或注解来配置和映射原始类型、接口和Java POJO（Plain Old Java Objects，普通老式Java对象）为数据库中的记录。</p>
 <p>Mybatis的关注点在于：</p>
@@ -305,58 +305,58 @@ public class User {
 <li>首先通过对SpringBoot项目中的application.yaml文件中添加Mybatis的自动注入:</li>
 </ol>
 <p><strong>具体实现如下：</strong></p>
-<pre><code>#mybatis的配置
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>mybatis的配置
 mybatis:
-  #config-location: classpath:sqlMapConfig.xml   #设置配置文件的位置（可以省略)
-  mapper-locations: classpath:mapper/*.xml    #当前mapper下的所有xml都作为映射文件
-  configuration:
-    map-underscore-to-camel-case: true      #针对于解决 model数据模型编写的驼峰方式 和 数据库的模型编写的下划线方式 的匹配问题
-  type-aliases-package: sboot.model         #可以在model中的peron和Person都映射为一个相同的文件
-</code></pre><p><strong>根据mybatis自动配置的源码学习：</strong></p>
+  <span style="color:#960050;background-color:#1e0010">#</span>config<span style="color:#f92672">-</span>location<span style="color:#f92672">:</span> classpath<span style="color:#f92672">:</span>sqlMapConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">xml</span>   <span style="color:#960050;background-color:#1e0010">#</span>设置配置文件的位置<span style="color:#960050;background-color:#1e0010">（</span>可以省略<span style="color:#f92672">)</span>
+  mapper<span style="color:#f92672">-</span>locations<span style="color:#f92672">:</span> classpath<span style="color:#f92672">:</span>mapper<span style="color:#f92672">/*.</span><span style="color:#a6e22e">xml</span>    <span style="color:#960050;background-color:#1e0010">#</span>当前mapper下的所有xml都作为映射文件
+  configuration<span style="color:#f92672">:</span>
+    map<span style="color:#f92672">-</span>underscore<span style="color:#f92672">-</span>to<span style="color:#f92672">-</span>camel<span style="color:#f92672">-</span><span style="color:#66d9ef">case</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>      <span style="color:#960050;background-color:#1e0010">#</span>针对于解决 model数据模型编写的驼峰方式 和 数据库的模型编写的下划线方式 的匹配问题
+  type<span style="color:#f92672">-</span>aliases<span style="color:#f92672">-</span>package<span style="color:#f92672">:</span> sboot<span style="color:#f92672">.</span><span style="color:#a6e22e">model</span>         <span style="color:#960050;background-color:#1e0010">#</span>可以在model中的peron和Person都映射为一个相同的文件
+</code></pre></div><p><strong>根据mybatis自动配置的源码学习：</strong></p>
 <p>　　mybatis的配置将Mapper包下的PersonMapper是根据MapperFactoryBean来创建代理对象的，并且实例化sqlsessionFactory来创建到sessionTemplate对象对数据库的每一次的操作的开启和关闭等操作进行持久化支持。</p>
 <p>　　而在mybatis自动配置中，我们不需要再创建MapperFactoryBean 和 sqlsessionFactory来对我们自定义PersonMapper进行动态代理，而是根据注解 <code>@MapperScan</code> 来进行自动配置。</p>
 <p>　　<strong><code>@MapperScan(&quot;sboot.mapper&quot;):</code></strong> 此注解用于扫描sboot.mapper包下所有文件的Mapper，在主程序中写入此注解可以在Mapper的接口中省略@Mapper注解。</p>
 <p>　　源码中MybatisAutoConfiguration类中明确说到，在MapperScan找不到的情况下，会生成一个一个Scan来扫描根路径下所有带有@Mapper的接口。所以，当拥有@MapperScan注解的时候，上述方法则不会被调用，也就是说@Mapper注解可以省略。</p>
 <p>　　综上所述，可以明确的得知不需要再对每一个具体的Mapper类注入<code>@Mapper</code>注解了，而是在主程序中直接写入<code>@MapperScan(xxx.mapper)</code>即可。</p>
 <p><strong>然后Dao层的编写如下：</strong></p>
-<pre><code>public interface PersonMapper {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">PersonMapper</span> <span style="color:#f92672">{</span>
 
-    public Person selectById(int pid);
+    <span style="color:#66d9ef">public</span> Person <span style="color:#a6e22e">selectById</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> pid<span style="color:#f92672">);</span>
 
-    public List&lt;Person&gt; selectAll();
+    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">selectAll</span><span style="color:#f92672">();</span>
 
-    public void insert(Person p);
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">insert</span><span style="color:#f92672">(</span>Person p<span style="color:#f92672">);</span>
 
-    public void delete(int pid);
-}
-</code></pre><ol start="2">
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">delete</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> pid<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><ol start="2">
 <li>如此简单的编写之后，Mybatis把sql语句集体放在了resources的Mapper的xml配置文件中：</li>
 </ol>
 <p><img src="/textImgs/image-20201228135316873.png" alt="image-20201228135316873"></p>
 <p><strong>具体实现代码如下：</strong></p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;?</span>xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span> <span style="color:#f92672">?&gt;</span>
+<span style="color:#f92672">&lt;!</span>DOCTYPE mapper PUBLIC <span style="color:#e6db74">&#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;</span>
+        <span style="color:#e6db74">&#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;</span><span style="color:#f92672">&gt;</span>
 
-&lt;mapper namespace=&quot;sboot.mapper.PersonMapper&quot;&gt;
-    &lt;select id=&quot;selectById&quot; resultType=&quot;Person&quot;&gt;
-        select * from person t where t.pid = #{pid}
-    &lt;/select&gt;
-    &lt;select id=&quot;selectAll&quot; resultType=&quot;Person&quot;&gt;
-        select * from person
-    &lt;/select&gt;
-    &lt;insert id=&quot;insert&quot; parameterType=&quot;person&quot;&gt;
-        /*pid自增*/
-        &lt;selectKey keyProperty=&quot;pid&quot; resultType=&quot;int&quot; order=&quot;BEFORE&quot;&gt;
-            select  last_insert_id()
-        &lt;/selectKey&gt;
-        insert into person(pid, pname, addr, gender, birth)values(#{pid},#{pname},#{addr},#{gender},#{birth} )
-    &lt;/insert&gt;
-    &lt;delete id=&quot;delete&quot; parameterType=&quot;int&quot; &gt;
-        delete  from person  where pid = #{pid}
-    &lt;/delete&gt;
-&lt;/mapper&gt;
-</code></pre><h1 id="spring-data-jpa-和-mybatis的对比">Spring Data JPA 和 MyBatis的对比:</h1>
+<span style="color:#f92672">&lt;</span>mapper namespace<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sboot.mapper.PersonMapper&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>select id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;selectById&#34;</span> resultType<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Person&#34;</span><span style="color:#f92672">&gt;</span>
+        select <span style="color:#f92672">*</span> from person t where t<span style="color:#f92672">.</span><span style="color:#a6e22e">pid</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>pid<span style="color:#f92672">}</span>
+    <span style="color:#f92672">&lt;/</span>select<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>select id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;selectAll&#34;</span> resultType<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Person&#34;</span><span style="color:#f92672">&gt;</span>
+        select <span style="color:#f92672">*</span> from person
+    <span style="color:#f92672">&lt;/</span>select<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>insert id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;insert&#34;</span> parameterType<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;person&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#75715e">/*pid自增*/</span>
+        <span style="color:#f92672">&lt;</span>selectKey keyProperty<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pid&#34;</span> resultType<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;int&#34;</span> order<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;BEFORE&#34;</span><span style="color:#f92672">&gt;</span>
+            select  <span style="color:#a6e22e">last_insert_id</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">&lt;/</span>selectKey<span style="color:#f92672">&gt;</span>
+        insert into <span style="color:#a6e22e">person</span><span style="color:#f92672">(</span>pid<span style="color:#f92672">,</span> pname<span style="color:#f92672">,</span> addr<span style="color:#f92672">,</span> gender<span style="color:#f92672">,</span> birth<span style="color:#f92672">)</span>values<span style="color:#f92672">(</span><span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>pid<span style="color:#f92672">},</span><span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>pname<span style="color:#f92672">},</span><span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>addr<span style="color:#f92672">},</span><span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>gender<span style="color:#f92672">},</span><span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>birth<span style="color:#f92672">}</span> <span style="color:#f92672">)</span>
+    <span style="color:#f92672">&lt;/</span>insert<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>delete id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;delete&#34;</span> parameterType<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;int&#34;</span> <span style="color:#f92672">&gt;</span>
+        delete  from person  where pid <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#f92672">{</span>pid<span style="color:#f92672">}</span>
+    <span style="color:#f92672">&lt;/</span>delete<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>mapper<span style="color:#f92672">&gt;</span>
+</code></pre></div><h1 id="spring-data-jpa-和-mybatis的对比">Spring Data JPA 和 MyBatis的对比:</h1>
 <p><strong>Mybatis优势：</strong></p>
 <p>1）SQL语句可以自由控制，更零活，性能更好</p>
 <p>2）SQL与代码分离，易与阅读和维护</p>

@@ -155,6 +155,23 @@
 <p>　　<strong>第一个不用共享变量</strong>，各自用各自的变量就不会有线程安全的问题；</p>
 <p>　　<strong>第二采用加锁机制</strong>，synchronized和Lock接口下的各种锁；</p>
 <p>　　<strong>第三就是采用JUC下面的一些并发容器</strong>，其实还是用锁实现的。所以用锁的目的就是保证线程安全。</p>
+<p>综上所属，在多线程争抢同一个资源的时候，通过一种抽象的锁来对来对资源进行锁定，这样就可以保证线程安全的问题了。</p>
+<h3 id="锁在代码层的实现">锁在代码层的实现</h3>
+<p>首先我们先要来解释一下<strong>对象结构</strong>：</p>
+<p>在对象中，一共包含了三大部分的内容：</p>
+<ul>
+<li>
+<p><strong>对象头</strong>（包含Mark Word（存储当前对象运行时状态有关的数据，类似<strong>锁的标志位</strong>等等）和Class Point（指针，指向了当前对象在JVM中的方法区中的数据类型）</p>
+</li>
+<li>
+<p><strong>实例数据</strong>（在初始化对象的时候，设定的属性和状态的内容）</p>
+</li>
+<li>
+<p><strong>填充字节</strong>（为了Java对象的大小必须是8比特的倍数这一条设计的）</p>
+<p><img src="/textImgs/image-20210122111727304.png" alt="image-20210122111727304"></p>
+<p>简单来说，在Java中，每个Object对象都拥有一把锁，这把锁存放在对象头的Mark word中，Mark Word里面包含了锁的标志位，而锁的标志位是用来区分不同类型的锁的，例如无锁、偏向锁、轻量级锁以及重量级锁。</p>
+</li>
+</ul>
 <blockquote>
 <p>根据分类标准我们把锁分为以下 7 大类别，分别是：</p>
 <ul>
@@ -173,7 +190,7 @@
 <h3 id="1-乐观锁和悲观锁">1. 乐观锁和悲观锁</h3>
 <h4 id="11-乐观锁"><strong>1.1 乐观锁</strong></h4>
 <p>　　是一种乐观思想，即认为<strong>读多写少</strong>，遇到并发写的可能性低，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是<strong>在更新的时候会判断一下在此期间别人有没有去更新这个数据，采取在写时先读出当前版本号，然后加锁操作</strong>（比较跟上一次的版本号，如果一样则更新），如果失败则要重复读-比较-写的操作。</p>
-<p>java 中的乐观锁基本都是通过 CAS 操作实现的，CAS 是一种更新的原子操作，<strong>比较当前值跟传入值是否一样，一样则更新，否则失败。</strong></p>
+<p>　　java 中的乐观锁基本都是通过 CAS 操作实现的，CAS 是一种更新的原子操作，<strong>比较当前值跟传入值是否一样，一样则更新，否则失败。</strong></p>
 <h4 id="12悲观锁"><strong>1.2悲观锁</strong></h4>
 <p>　　就是悲观思想，即<strong>认为写多</strong>，遇到并发写的可能性高，每次去拿数据的时候都认为别人会修改，所以每次在读写数据的时候都会上锁，这样别人想读写这个数据就会 block 直到拿到锁。java中的悲观锁就是<strong>Synchronized</strong>,AQS框架下的锁则是先尝试cas乐观锁去获取锁，获取不到，才会转换为悲观锁，如 RetreenLock。</p>
 <h3 id="2--独占锁和共享锁">2.  独占锁和共享锁</h3>
@@ -244,77 +261,106 @@
 </tr>
 </tbody>
 </table>
-<h4 id="61-偏向锁"><strong>6.1 偏向锁</strong></h4>
+<h4 id="61-无锁">6.1 无锁</h4>
+<p>　　顾名思义就是没有用锁进行锁定，所有线程都能访问到统一资源，这就可能出现两种情况：</p>
+<ol>
+<li>无竞争</li>
+<li>存在竞争，但是是非锁方式来进行同步线程，是利用CAS完成线程同步的。由于CAS通常利用一条指令来实现，所以CAS保证了原子性。通过输入CAS这种方式，我们可以进行无锁编程。</li>
+</ol>
+<h4 id="62-偏向锁"><strong>6.2 偏向锁</strong></h4>
+<ol>
+<li>
+<p>偏向锁的产生</p>
+<p>　　当我们不想要利用线程状态切换，或者CAS来获得锁的时候，如果线程和对象相互认识就直接将对象的锁给线程就好了，这样就节省了很多开销，所以就有了偏向锁的概念。</p>
+</li>
+<li>
+<p>偏向锁的实现</p>
+<p>　　先通过对象头中的Mark Word的标志位是否为01，再判断前一个bit是不是1，如果判断正确则确认是偏向锁，否则为无锁。</p>
+<p>　　接着再去读Mark Word的前23个bit，这23个bit的值就是线程的ID，通过线程ID来确认当前想要获得对象锁的这个线程是不是老顾客。</p>
+<p><img src="/textImgs/image-20210122112534796.png" alt="image-20210122112534796"></p>
+</li>
+</ol>
 <p>　　Hotspot 的作者经过以往的研究发现大多数情况下锁不仅不存在多线程竞争，而且总是由同一线程多次获得。<strong>偏向锁的目的是在某个线程获得锁之后，消除这个线程锁重入（CAS）的开销，看起来让这个线程得到了偏护</strong>。引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次 CAS 原子指令，<strong>而偏向锁只需要在置换ThreadID 的时候依赖一次 CAS 原子指令</strong>（由于一旦出现多线程竞争的情况就必须撤销偏向锁，所以偏向锁的撤销操作的性能损耗必须小于节省下来的 CAS 原子指令的性能消耗）。上面说过，<strong>轻量级锁是为了在线程交替执行同步块时提高性能，而偏向锁则是在只有一个线程执行同步块时进一步提高性能。</strong></p>
-<h4 id="62-轻量级锁"><strong>6.2 轻量级锁</strong></h4>
+<h4 id="63-轻量级锁"><strong>6.3 轻量级锁</strong></h4>
+<ol>
+<li>
+<p>锁的产生</p>
+<p>　　当有多个线程来竞争锁的时候，偏向锁就会升级为轻量级锁。</p>
+</li>
+<li>
+<p>锁的实现</p>
+<p>　　线程通过CAS去尝试获得锁，判断对象头的Mark Word的锁的标志位是不是00，如果是，则会在JVM的栈中创造一块Lock Record来存储Mark Word的副本，并且将Lock Record中的owner指针指向该对象。</p>
+<p>　　另一方面，对象的Mark Word的前30个bit将会生成一个指针，指向线程JVM栈中的Lock Record。这样一来就实现了线程和对象锁的相互绑定，他们就互相知道了对方的存在。</p>
+</li>
+</ol>
 <p>　　“轻量级”是相对于使用操作系统互斥量来实现的传统锁而言的。但是，首先需要强调一点的是，轻量级锁并不是用来代替重量级锁的，它的本意是在没有多线程竞争的前提下，减少传统的重量级锁使用产生的性能消耗。在解释轻量级锁的执行过程之前，先明白一点，<strong>轻量级锁所适应的场景是线程交替执行同步块的情况，如果存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁。</strong></p>
-<h4 id="63-重量级锁"><strong>6.3 重量级锁</strong></h4>
+<h4 id="64-重量级锁"><strong>6.4 重量级锁</strong></h4>
 <p>　　Synchronized 是通过对象内部的一个叫做监视器锁（monitor）来实现的。但是监视器锁本质又是依赖于底层的操作系统的 Mutex Lock 来实现的。而操作系统实现线程之间的切换这就需要从用户态转换到核心态，这个成本非常高，状态之间的转换需要相对比较长的时间，这就是为什么Synchronized 效率低的原因。因此，<strong>这种依赖于操作系统 Mutex Lock 所实现的锁我们称之为“重量级锁”</strong>。JDK 中对 Synchronized 做的种种优化，其核心都是为了减少这种重量级锁的使用。JDK1.6 以后，为了减少获得锁和释放锁所带来的性能消耗，提高性能，引入了“轻量级锁”和“偏向锁”。</p>
 <h3 id="7-可重入锁递归锁和不可重入锁">7. 可重入锁（递归锁）和不可重入锁</h3>
 <p>​	<strong>7.1 可重入锁</strong></p>
 <p>　　本文里面讲的是广义上的可重入锁，而不是单指 JAVA 下的 ReentrantLock。可重入锁，也叫做递归锁，指的是同一线程 外层函数获得锁之后 ，内层递归函数仍然有获取该锁的代码，但不受影响。在 JAVA 环境下 ReentrantLock 和 synchronized 都是 可重入锁。</p>
-<pre><code>// 此处用代码演示了可重入锁的代码层意思
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 此处用代码演示了可重入锁的代码层意思
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">//因为获取了setA()的锁（即获取了方法外层的锁）
+</span><span style="color:#75715e">//此时调用setB()将会自动获取setB()的锁，如果不自动获取的话方法B将不会执行
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setA</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception<span style="color:#f92672">{</span>   
+    Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1000<span style="color:#f92672">);</span>
+    setB<span style="color:#f92672">();</span>   
+<span style="color:#f92672">}</span>
 
-//因为获取了setA()的锁（即获取了方法外层的锁）
-//此时调用setB()将会自动获取setB()的锁，如果不自动获取的话方法B将不会执行
-
-synchronized void setA() throws Exception{   
-    Thread.sleep(1000);
-    setB();   
-}
-
-synchronized void setB() throws Exception{
-    Thread.sleep(1000);
-}
-</code></pre><p>​	<strong>7.2 不可重入锁</strong></p>
+<span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setB</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception<span style="color:#f92672">{</span>
+    Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1000<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>​	<strong>7.2 不可重入锁</strong></p>
 <p>　　所谓不可重入锁，即若当前线程执行某个方法已经获取了该锁，那么在方法中尝试再次获取锁时，就会获取不到被阻塞。我们尝试设计一个不可重入锁：</p>
-<pre><code>public class Lock{
-    private boolean isLocked = false;
-    public synchronized void lock() throws InterruptedException{
-        while(isLocked){    
-            wait();
-        }
-        isLocked = true;
-    }
-    public synchronized void unlock(){
-        isLocked = false;
-        notify();
-    }
-}
-</code></pre><pre><code>public class Count{
-    Lock lock = new Lock();
-    public void print(){
-        lock.lock();
-        doAdd();
-        lock.unlock();
-    }
-    public void doAdd(){
-        lock.lock();
-        //do something
-        lock.unlock();
-    }
-}
-</code></pre><p>　　当前线程执行print()方法首先获取lock，接下来执行doAdd()方法就无法执行doAdd()中的逻辑，必须先释放锁。这个例子很好的说明了不可重入锁。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Lock</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> isLocked <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException<span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>isLocked<span style="color:#f92672">){</span>    
+            wait<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        isLocked <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">unlock</span><span style="color:#f92672">(){</span>
+        isLocked <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        notify<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Count</span><span style="color:#f92672">{</span>
+    Lock lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Lock<span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">print</span><span style="color:#f92672">(){</span>
+        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+        doAdd<span style="color:#f92672">();</span>
+        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doAdd</span><span style="color:#f92672">(){</span>
+        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+        <span style="color:#75715e">//do something
+</span><span style="color:#75715e"></span>        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　当前线程执行print()方法首先获取lock，接下来执行doAdd()方法就无法执行doAdd()中的逻辑，必须先释放锁。这个例子很好的说明了不可重入锁。</p>
 <p>========================================================================================================================</p>
 <h3 id="readwritelock读写锁lock接口">ReadWriteLock读写锁(Lock接口)</h3>
 <p>　　读写锁其实是一对锁，<strong>一个读锁（共享锁）和一个写锁（互斥锁、排他锁）</strong>。</p>
 <p>　　在 Java 中， <strong>ReadWriteLock 接口</strong>只规定了两个方法，一个返回读锁，一个返回写锁。</p>
-<pre><code>public interface ReadWriteLock {
-    /**
-     * Returns the lock used for reading.
-     *
-     * @return the lock used for reading
-     */
-    Lock readLock();
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">ReadWriteLock</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * Returns the lock used for reading.
+</span><span style="color:#75715e">     *
+</span><span style="color:#75715e">     * @return the lock used for reading
+</span><span style="color:#75715e">     */</span>
+    Lock <span style="color:#a6e22e">readLock</span><span style="color:#f92672">();</span>
 
-    /**
-     * Returns the lock used for writing.
-     *
-     * @return the lock used for writing
-     */
-    Lock writeLock();
-}
-</code></pre><p>　　为了提高性能，Java 提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，如果没有写锁的情况下，读是无阻塞的,在一定程度上提高了程序的执行效率。读写锁分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，这是由 jvm 自己控制的，你只要上好相应的锁即可。</p>
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * Returns the lock used for writing.
+</span><span style="color:#75715e">     *
+</span><span style="color:#75715e">     * @return the lock used for writing
+</span><span style="color:#75715e">     */</span>
+    Lock <span style="color:#a6e22e">writeLock</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　为了提高性能，Java 提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，如果没有写锁的情况下，读是无阻塞的,在一定程度上提高了程序的执行效率。读写锁分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，这是由 jvm 自己控制的，你只要上好相应的锁即可。</p>
 <p>​	<strong>7.1 读锁</strong></p>
 <p>​	　　如果你的代码只读数据，可以很多人同时读，但不能同时写，那就上读锁</p>
 <p>​	<strong>7.2 写锁</strong></p>
@@ -324,21 +370,21 @@ synchronized void setB() throws Exception{
 <p><strong>实现互斥锁（计数器为1）</strong></p>
 <p>　　我们也可以创建计数为 1 的 Semaphore，将其作为一种类似互斥锁的机制，这也叫二元信号量，表示两种互斥状态。</p>
 <p><strong>代码实现</strong>:</p>
-<pre><code>// 创建一个计数阈值为 5 的信号量对象
-// 只能 5 个线程同时访问
-Semaphore semp = new Semaphore(5);
-	try { // 申请许可
-		semp.acquire();
-			try {
-			// 业务逻辑
-			} catch (Exception e) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 创建一个计数阈值为 5 的信号量对象
+</span><span style="color:#75715e">// 只能 5 个线程同时访问
+</span><span style="color:#75715e"></span>Semaphore semp <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Semaphore<span style="color:#f92672">(</span>5<span style="color:#f92672">);</span>
+	<span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// 申请许可
+</span><span style="color:#75715e"></span>		semp<span style="color:#f92672">.</span><span style="color:#a6e22e">acquire</span><span style="color:#f92672">();</span>
+			<span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+			<span style="color:#75715e">// 业务逻辑
+</span><span style="color:#75715e"></span>			<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
 			
-			} finally {
-			// 释放许可
-			semp.release();
-			}
-			} catch (InterruptedException e) {}
-</code></pre><h3 id="分段锁">分段锁</h3>
+			<span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+			<span style="color:#75715e">// 释放许可
+</span><span style="color:#75715e"></span>			semp<span style="color:#f92672">.</span><span style="color:#a6e22e">release</span><span style="color:#f92672">();</span>
+			<span style="color:#f92672">}</span>
+			<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{}</span>
+</code></pre></div><h3 id="分段锁">分段锁</h3>
 <p>　　分段锁其实是一种锁的设计，并不是具体的一种锁，对于<code>ConcurrentHashMap</code>而言，其并发的实现就是通过分段锁的形式来实现高效的并发操作。
 　　我们以<code>ConcurrentHashMap</code>来说一下分段锁的含义以及设计思想，<code>ConcurrentHashMap</code>中的分段锁称为Segment，它即类似于HashMap（JDK7与JDK8中HashMap的实现）的结构，即内部拥有一个Entry数组，数组中的每个元素又是一个链表；同时又是一个ReentrantLock（Segment继承了ReentrantLock)。
 当需要put元素的时候，并不是对整个hashmap进行加锁，而是先通过hashcode来知道他要放在那一个分段中，然后对这个分段进行加锁，所以当多线程put的时候，只要不是放在一个分段中，就实现了真正的并行的插入。
@@ -355,20 +401,22 @@ Semaphore semp = new Semaphore(5);
 <h3 id="synchronized-同步锁">Synchronized 同步锁</h3>
 <p>　　synchronized 它可以把任意一个非 NULL 的对象当作锁。他属于独占式的悲观锁，同时属于可重入锁。</p>
 <p>　　在一篇文章中看到一个好的对比，非常形象，synchronized 关键字就像是<strong>自动挡</strong>，可以满足一切的驾驶需求。但是如果你想要做更高级的操作，比如玩漂移或者各种高级的骚操作，那么就需要<strong>手动挡</strong>，也就是 Lock 接口的实现类。</p>
+<p>　　Synchronized被编译后实际上是<strong>Monitorenter</strong>和<strong>Monitorexit两</strong>个字节码指令，而<strong>Monitor</strong>是依赖于操作系统的<strong>mutex lock</strong>来实现的。</p>
+<p>　　<strong>Java线程实际上是对操作系统线程的映射，所以每当挂起或者唤醒一个线程都要切换操作系统的内核态，这种操作是比较重量级的。一些情况下，甚至切换时间本身将会超出线程执行任务的时间，这样的话，使用synchronized将会对程序的性能产生很严重的影响。</strong></p>
 <p>　　而 synchronized 在经过 Java 每个版本的各种优化后，效率也变得很高了。只是使用起来没有 Lock 接口的实现类那么方便。</p>
 <h5 id="synchronized-锁升级过程就是其优化的核心偏向锁---轻量级锁---重量级锁">　　synchronized 锁升级过程就是其优化的核心：偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</h5>
 <p>​	例如:</p>
-<pre><code>class Test{
-    private static final Object object = new Object(); 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Object object <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span> 
     
-    public void test(){
-        synchronized(object) {
-            // do something        
-        }   
-    }
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">synchronized</span><span style="color:#f92672">(</span>object<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// do something        
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span>   
+    <span style="color:#f92672">}</span>
     
-}
-</code></pre><ol>
+<span style="color:#f92672">}</span>
+</code></pre></div><ol>
 <li>
 <p>字锁住某个代码块的时候，一开始锁对象（就是上述代码中的 object）并不是<strong>重量级锁</strong>，而是偏向锁。偏向锁的字面意思就是&quot;偏向于第一个获取它的线程&quot;的锁。线程执行完同步代码块之后，并不会<strong>主动释放偏向锁</strong>。当第二次到达同步代码块时，线程会判断此时持有锁的线程是否就是自己（持有锁的线程 ID 在对象头里存储），如果是则正常往下执行。<strong>由于之前没有释放，这里就不需要重新加锁</strong>，如果从头到尾都是一个线程在使用锁，很明显偏向锁几乎没有额外开销，性能极高。</p>
 </li>
@@ -498,45 +546,45 @@ Semaphore semp = new Semaphore(5);
 <p>　　ReentrantLock 通过方法 lock()与 unlock()来进行加锁与解锁操作，与 synchronized 会 被 JVM 自动解锁机制不同，ReentrantLock 加锁后需要手动进行解锁。为了避免程序出现异常而无法正常解锁的情况，使用 ReentrantLock 必须在 finally 控制块中进行解锁操作。</p>
 <p>　　ReentrantLock 相比 synchronized 的优势是可中断、公平锁、多个锁。这种情况下需要使用 ReentrantLock。</p>
 <p><strong>ReentrantLock</strong> <strong>实现</strong>:</p>
-<pre><code>    public class MyService {
-        private Lock lock = new ReentrantLock();
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyService</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">private</span> Lock lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ReentrantLock<span style="color:#f92672">();</span>
         
-        //Lock lock=new ReentrantLock(true);//公平锁
+        <span style="color:#75715e">//Lock lock=new ReentrantLock(true);//公平锁
+</span><span style="color:#75715e"></span>        
+        <span style="color:#75715e">//Lock lock=new ReentrantLock(false);//非公平锁
+</span><span style="color:#75715e"></span>        
+        <span style="color:#66d9ef">private</span> Condition condition<span style="color:#f92672">=</span>lock<span style="color:#f92672">.</span><span style="color:#a6e22e">newCondition</span><span style="color:#f92672">();</span><span style="color:#75715e">//创建 Condition
+</span><span style="color:#75715e"></span>        
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">testMethod</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span><span style="color:#75715e">//lock 加锁
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">//1：wait 方法等待：
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">//System.out.println(&#34;开始 wait&#34;);
+</span><span style="color:#75715e"></span>                condition<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+                <span style="color:#75715e">//通过创建 Condition 对象来使线程 wait，必须先执行 lock.lock 方法获得锁
+</span><span style="color:#75715e"></span>                 <span style="color:#75715e">//:2：signal 方法唤醒
+</span><span style="color:#75715e"></span>                condition<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span><span style="color:#75715e">//condition 对象的 signal 方法可以唤醒 wait 线程
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 5<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ThreadName=&#34;</span> <span style="color:#f92672">+</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()+</span> <span style="color:#f92672">(</span><span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> <span style="color:#f92672">(</span>i <span style="color:#f92672">+</span> 1<span style="color:#f92672">)));</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">finally</span>
+            <span style="color:#f92672">{</span>
+                lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span> 
         
-        //Lock lock=new ReentrantLock(false);//非公平锁
-        
-        private Condition condition=lock.newCondition();//创建 Condition
-        
-        public void testMethod() {
-            try {
-                lock.lock();//lock 加锁
-                //1：wait 方法等待：
-                //System.out.println(&quot;开始 wait&quot;);
-                condition.await();
-                //通过创建 Condition 对象来使线程 wait，必须先执行 lock.lock 方法获得锁
-                 //:2：signal 方法唤醒
-                condition.signal();//condition 对象的 signal 方法可以唤醒 wait 线程
-                for (int i = 0; i &lt; 5; i++) {
-                    System.out.println(&quot;ThreadName=&quot; + Thread.currentThread().getName()+ (&quot; &quot; + (i + 1)));
-                }
-            }catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            finally
-            {
-                lock.unlock();
-            }
-        } 
-        
-    }
-</code></pre><p>========================================================================================================================</p>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>========================================================================================================================</p>
 <h3 id="锁优化">锁优化</h3>
 <p><strong>减少锁持有时间：</strong></p>
 <p>　　只用在有线程安全要求的程序上加锁。</p>
 <p><strong>减小锁粒度：</strong></p>
 <p>　　将大对象（这个对象可能会被很多线程访问），拆成小对象，大大增加并行度，降低锁竞争。降低了锁的竞争，偏向锁，轻量级锁成功率才会提高。最最典型的减小锁粒度的案例就是ConcurrentHashMap。</p>
 <p><strong>锁分离：</strong></p>
-<p>**　　最常见的锁分离就是读写锁 ReadWriteLock**，根据功能进行分离成读锁和写锁，这样读读不互斥，读写互斥，写写互斥，即保证了线程安全，又提高了性能，具体也请查看[高并发 Java 五] JDK 并发包 1。读写分离思想可以延伸，只要操作互不影响，锁就可以分离。比如LinkedBlockingQueue 从头部取出，从尾部放数据</p>
+<p>　　<strong>最常见的锁分离就是读写锁 ReadWriteLock</strong>，根据功能进行分离成读锁和写锁，这样读读不互斥，读写互斥，写写互斥，即保证了线程安全，又提高了性能，具体也请查看[高并发 Java 五] JDK 并发包 1。读写分离思想可以延伸，只要操作互不影响，锁就可以分离。比如LinkedBlockingQueue 从头部取出，从尾部放数据</p>
 <p><strong>锁粗化：</strong></p>
 <p>　　通常情况下，为了保证多线程间的有效并发，会要求每个线程持有锁的时间尽量短，即在使用完公共资源后，应该立即释放锁。但是，凡事都有一个度，<strong>如果对同一个锁不停的进行请求、同步和释放，其本身也会消耗系统宝贵的资源，反而不利于性能的优化 。</strong></p>
 <p><strong>锁消除：</strong></p>

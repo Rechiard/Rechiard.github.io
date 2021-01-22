@@ -156,31 +156,30 @@
 <p><strong>然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。</strong></p>
 <p><strong>你需要计算完成所有任务所需要的 最短时间 。</strong></p>
 <p>public class Solution {</p>
-<pre><code>public int leastInterval(char[] tasks, int n) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">leastInterval</span><span style="color:#f92672">(</span><span style="color:#66d9ef">char</span><span style="color:#f92672">[]</span> tasks<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
 
-    int[] counts = new int[26];
+    <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> counts <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>26<span style="color:#f92672">];</span>
 
-    for (char c : tasks) {
-        counts[c - 'A'] += 1;
-    }
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">char</span> c <span style="color:#f92672">:</span> tasks<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        counts<span style="color:#f92672">[</span>c <span style="color:#f92672">-</span> <span style="color:#e6db74">&#39;A&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">+=</span> 1<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
 
-    int max = 0;
-    for (int count : counts) {
-        max = Math.max(max, count);
-    }
+    <span style="color:#66d9ef">int</span> max <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> count <span style="color:#f92672">:</span> counts<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        max <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>max<span style="color:#f92672">,</span> count<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
 
-    int maxCount = 0;
-    for (int count : counts) {
-        if (count == max) {
-            maxCount++;
-        }
-    }
+    <span style="color:#66d9ef">int</span> maxCount <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> count <span style="color:#f92672">:</span> counts<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">==</span> max<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            maxCount<span style="color:#f92672">++;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
 
-    return Math.max((n + 1) * (max - 1) + maxCount, tasks.length);
-    }
-}
-</code></pre>
-<h3 id="思路">思路</h3>
+    <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">((</span>n <span style="color:#f92672">+</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> <span style="color:#f92672">(</span>max <span style="color:#f92672">-</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> maxCount<span style="color:#f92672">,</span> tasks<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">);</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h3 id="思路">思路</h3>
 <p>要算出最短时间，就要思考如何安排任务可以得到最短时间。</p>
 <p>首先算出每个任务的个数，并排序。接着当然是安排个数最大的任务，并且附带间隔，这个过程类型填桶的过程。</p>
 <p><strong>任务种类较少，填不满桶时（桶是图蓝色部分）</strong>

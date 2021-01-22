@@ -273,15 +273,15 @@
 <li>
 <p>报错：The requested URL returned error:403 Forbidden while accessing或没有权限</p>
 <p>回答：是因为这是私有项目，没有权限，输入用户名密码，或者远程地址采用这种类型：</p>
-<pre><code>vi .git/config
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">vi .git<span style="color:#f92672">/</span>config
       
-# 将
-[remote &quot;origin&quot;]
-  url = https://github.com/用户名/仓库名.git
-修改为：
-[remote &quot;origin&quot;]
-  url = https://用户名:密码@github.com/用户名/仓库名.git
-</code></pre></li>
+<span style="color:#75715e"># 将
+</span><span style="color:#75715e"></span>[remote <span style="color:#e6db74">&#34;origin&#34;</span>]
+  url <span style="color:#f92672">=</span> https:<span style="color:#75715e">//github.com/用户名/仓库名.git
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">修改为：</span>
+[remote <span style="color:#e6db74">&#34;origin&#34;</span>]
+  url <span style="color:#f92672">=</span> https:<span style="color:#75715e">//用户名:密码@github.com/用户名/仓库名.git
+</span></code></pre></div></li>
 </ol>
 </li>
 <li>

@@ -219,157 +219,157 @@ scope=&ldquo;prototype&rdquo;</p>
 <p><img src="/textImgs/20180331001825192.png" alt="img"></p>
 <h1 id="spring的初始化流程">Spring的初始化流程</h1>
 <h3 id="1应用上下文加载类">1.应用上下文加载类</h3>
-<pre><code>//加载应用上下文的几种方式示例
-//基于xml的配置
-ClassPathXmlApplicationContext context=new ClassPathXmlApplicationContext(“classpath:spring.xml”);
-//基于java的配置
-AnnotaitionConfigApplicationContext context=new AnnotationConfigApplicationContext(“com.star.config.KnightConfig.class”);
-//应用上下文准备就绪之后，我们就可以调用上下文的getBean()方法从Spring容器中获取bean。
-studentdao sdao = ctx.getBean(studentdao.class);
-//再调用sdao中的代码程序功能来实现代码程序
-</code></pre><hr>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//加载应用上下文的几种方式示例
+</span><span style="color:#75715e">//基于xml的配置
+</span><span style="color:#75715e"></span>ClassPathXmlApplicationContext context<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> ClassPathXmlApplicationContext<span style="color:#f92672">(</span><span style="color:#960050;background-color:#1e0010">“</span>classpath<span style="color:#f92672">:</span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">xml</span><span style="color:#960050;background-color:#1e0010">”</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">//基于java的配置
+</span><span style="color:#75715e"></span>AnnotaitionConfigApplicationContext context<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> AnnotationConfigApplicationContext<span style="color:#f92672">(</span><span style="color:#960050;background-color:#1e0010">“</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">star</span><span style="color:#f92672">.</span><span style="color:#a6e22e">config</span><span style="color:#f92672">.</span><span style="color:#a6e22e">KnightConfig</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#960050;background-color:#1e0010">”</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">//应用上下文准备就绪之后，我们就可以调用上下文的getBean()方法从Spring容器中获取bean。
+</span><span style="color:#75715e"></span>studentdao sdao <span style="color:#f92672">=</span> ctx<span style="color:#f92672">.</span><span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>studentdao<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">//再调用sdao中的代码程序功能来实现代码程序
+</span></code></pre></div><hr>
 <h3 id="最后附上一些各部分组件需要导入到pomxml的依赖代码">最后附上一些各部分组件需要导入到pom.xml的依赖代码:</h3>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;?</span>xml version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.0&#34;</span> encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span><span style="color:#f92672">?&gt;</span>
 
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+<span style="color:#f92672">&lt;</span>project xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> xmlns<span style="color:#f92672">:</span>xsi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+  xsi<span style="color:#f92672">:</span>schemaLocation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;</span>modelVersion<span style="color:#f92672">&gt;</span>4<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>modelVersion<span style="color:#f92672">&gt;</span>
 
-  &lt;groupId&gt;org.example&lt;/groupId&gt;
-  &lt;artifactId&gt;exam_springmvc_test&lt;/artifactId&gt;
-  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-  &lt;packaging&gt;war&lt;/packaging&gt;
+  <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">example</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>exam_springmvc_test<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">-</span>SNAPSHOT<span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;</span>packaging<span style="color:#f92672">&gt;</span>war<span style="color:#f92672">&lt;/</span>packaging<span style="color:#f92672">&gt;</span>
 
-  &lt;name&gt;exam_springmvc_test Maven Webapp&lt;/name&gt;
-  &lt;!-- FIXME change it to the project's website --&gt;
-  &lt;url&gt;http://www.example.com&lt;/url&gt;
+  <span style="color:#f92672">&lt;</span>name<span style="color:#f92672">&gt;</span>exam_springmvc_test Maven Webapp<span style="color:#f92672">&lt;/</span>name<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;!--</span> FIXME change it to the project<span style="color:#960050;background-color:#1e0010">&#39;</span>s website <span style="color:#f92672">--&gt;</span>
+  <span style="color:#f92672">&lt;</span>url<span style="color:#f92672">&gt;</span>http<span style="color:#f92672">:</span><span style="color:#75715e">//www.example.com&lt;/url&gt;
+</span><span style="color:#75715e"></span>
+  <span style="color:#f92672">&lt;</span>properties<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>project<span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sourceEncoding</span><span style="color:#f92672">&gt;</span>UTF<span style="color:#f92672">-</span>8<span style="color:#f92672">&lt;/</span>project<span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sourceEncoding</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>maven<span style="color:#f92672">.</span><span style="color:#a6e22e">compiler</span><span style="color:#f92672">.</span><span style="color:#a6e22e">source</span><span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">7</span><span style="color:#f92672">&lt;/</span>maven<span style="color:#f92672">.</span><span style="color:#a6e22e">compiler</span><span style="color:#f92672">.</span><span style="color:#a6e22e">source</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>maven<span style="color:#f92672">.</span><span style="color:#a6e22e">compiler</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span><span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">7</span><span style="color:#f92672">&lt;/</span>maven<span style="color:#f92672">.</span><span style="color:#a6e22e">compiler</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;/</span>properties<span style="color:#f92672">&gt;</span>
 
-  &lt;properties&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-    &lt;maven.compiler.source&gt;1.7&lt;/maven.compiler.source&gt;
-    &lt;maven.compiler.target&gt;1.7&lt;/maven.compiler.target&gt;
-  &lt;/properties&gt;
-
-  &lt;dependencies&gt;
+  <span style="color:#f92672">&lt;</span>dependencies<span style="color:#f92672">&gt;</span>
   
-    &lt;dependency&gt;
-      &lt;groupId&gt;junit&lt;/groupId&gt;
-      &lt;artifactId&gt;junit&lt;/artifactId&gt;
-      &lt;version&gt;4.11&lt;/version&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>junit<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>junit<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>4<span style="color:#f92672">.</span><span style="color:#a6e22e">11</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>scope<span style="color:#f92672">&gt;</span>test<span style="color:#f92672">&lt;/</span>scope<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--webmvc的支持--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
-      &lt;version&gt;4.3.25.RELEASE&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>webmvc的支持<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>webmvc<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>4<span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">.</span><span style="color:#a6e22e">25</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RELEASE</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--servlet的支持--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-      &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-      &lt;version&gt;2.5&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>servlet的支持<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>javax<span style="color:#f92672">.</span><span style="color:#a6e22e">servlet</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>servlet<span style="color:#f92672">-</span>api<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">5</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--jdbc数据池的支持--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
-      &lt;version&gt;4.3.25.RELEASE&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>jdbc数据池的支持<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>jdbc<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>4<span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">.</span><span style="color:#a6e22e">25</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RELEASE</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--DBCP的支持--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;commons-dbcp&lt;/groupId&gt;
-      &lt;artifactId&gt;commons-dbcp&lt;/artifactId&gt;
-      &lt;version&gt;1.4&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>DBCP的支持<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>commons<span style="color:#f92672">-</span>dbcp<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>commons<span style="color:#f92672">-</span>dbcp<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">4</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--数据库连接器--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;mysql&lt;/groupId&gt;
-      &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-      &lt;version&gt;5.1.47&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>数据库连接器<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>mysql<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>mysql<span style="color:#f92672">-</span>connector<span style="color:#f92672">-</span>java<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>5<span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">.</span><span style="color:#a6e22e">47</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--jsp的jstl标签库支持,jsp中用--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-      &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-      &lt;version&gt;1.2&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>jsp的jstl标签库支持<span style="color:#f92672">,</span>jsp中用<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>javax<span style="color:#f92672">.</span><span style="color:#a6e22e">servlet</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>jstl<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-  &lt;!--    使用json需要导入json-lib包--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;net.sf.json-lib&lt;/groupId&gt;
-      &lt;artifactId&gt;json-lib&lt;/artifactId&gt;
-      &lt;version&gt;2.4&lt;/version&gt;
-      &lt;classifier&gt;jdk15&lt;/classifier&gt;
-    &lt;/dependency&gt;
+  <span style="color:#f92672">&lt;!--</span>    使用json需要导入json<span style="color:#f92672">-</span>lib包<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>net<span style="color:#f92672">.</span><span style="color:#a6e22e">sf</span><span style="color:#f92672">.</span><span style="color:#a6e22e">json</span><span style="color:#f92672">-</span>lib<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>json<span style="color:#f92672">-</span>lib<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">4</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>classifier<span style="color:#f92672">&gt;</span>jdk15<span style="color:#f92672">&lt;/</span>classifier<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--Json的核心包--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
-      &lt;version&gt;2.9.0&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>Json的核心包<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">fasterxml</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jackson</span><span style="color:#f92672">.</span><span style="color:#a6e22e">core</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>jackson<span style="color:#f92672">-</span>core<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">9</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--Json数据绑定包--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-      &lt;version&gt;2.9.0&lt;/version&gt;
-    &lt;/dependency&gt;
+    <span style="color:#f92672">&lt;!--</span>Json数据绑定包<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">fasterxml</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jackson</span><span style="color:#f92672">.</span><span style="color:#a6e22e">core</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>jackson<span style="color:#f92672">-</span>databind<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">9</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
 
-    &lt;!--Json注解包--&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
-      &lt;version&gt;2.9.0&lt;/version&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
+    <span style="color:#f92672">&lt;!--</span>Json注解包<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">fasterxml</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jackson</span><span style="color:#f92672">.</span><span style="color:#a6e22e">core</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>jackson<span style="color:#f92672">-</span>annotations<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">9</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;/</span>dependencies<span style="color:#f92672">&gt;</span>
 
-  &lt;build&gt;
-    &lt;finalName&gt;exam_springmvc_test&lt;/finalName&gt;
-    &lt;pluginManagement&gt;&lt;!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) --&gt;
-      &lt;plugins&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-clean-plugin&lt;/artifactId&gt;
-          &lt;version&gt;3.1.0&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging --&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
-          &lt;version&gt;3.0.2&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-          &lt;version&gt;3.8.0&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-          &lt;version&gt;2.22.1&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-war-plugin&lt;/artifactId&gt;
-          &lt;version&gt;3.2.2&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-install-plugin&lt;/artifactId&gt;
-          &lt;version&gt;2.5.2&lt;/version&gt;
-        &lt;/plugin&gt;
-        &lt;plugin&gt;
-          &lt;artifactId&gt;maven-deploy-plugin&lt;/artifactId&gt;
-          &lt;version&gt;2.8.2&lt;/version&gt;
-        &lt;/plugin&gt;
-      &lt;/plugins&gt;
-    &lt;/pluginManagement&gt;
-  &lt;/build&gt;
-&lt;/project&gt;
+  <span style="color:#f92672">&lt;</span>build<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>finalName<span style="color:#f92672">&gt;</span>exam_springmvc_test<span style="color:#f92672">&lt;/</span>finalName<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>pluginManagement<span style="color:#f92672">&gt;&lt;!--</span> lock down plugins versions to avoid using Maven <span style="color:#a6e22e">defaults</span> <span style="color:#f92672">(</span>may be moved to parent pom<span style="color:#f92672">)</span> <span style="color:#f92672">--&gt;</span>
+      <span style="color:#f92672">&lt;</span>plugins<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>clean<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;!--</span> see http<span style="color:#f92672">:</span><span style="color:#75715e">//maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging --&gt;
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>resources<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>compiler<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">8</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>surefire<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">22</span><span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>war<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>install<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">5</span><span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>maven<span style="color:#f92672">-</span>deploy<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">8</span><span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+      <span style="color:#f92672">&lt;/</span>plugins<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>pluginManagement<span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;/</span>build<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>project<span style="color:#f92672">&gt;</span>
 
-</code></pre></article>
+</code></pre></div></article>
     </section>
 
     <footer class="ui attached segment dream-tags" data-html2canvas-ignore>

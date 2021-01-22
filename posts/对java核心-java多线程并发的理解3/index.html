@@ -211,20 +211,20 @@
 </li>
 <li>
 <p>public abstract void put(E paramE) throws InterruptedException： 将指定元素插入此队列中，将等待可用的空间（如果有必要）</p>
-<pre><code>public void put(E paramE) throws InterruptedException {
- checkNotNull(paramE);
- ReentrantLock localReentrantLock = this.lock;
-     localReentrantLock.lockInterruptibly();
-     try{
-             while (this.count == this.items.length)
-             this.notFull.await();//如果队列满了，则线程阻塞等待
-             enqueue(paramE);
-             localReentrantLock.unlock();
-     } finally {
-             localReentrantLock.unlock();
-         }
- }
-</code></pre></li>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>E paramE<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+ checkNotNull<span style="color:#f92672">(</span>paramE<span style="color:#f92672">);</span>
+ ReentrantLock localReentrantLock <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">;</span>
+     localReentrantLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lockInterruptibly</span><span style="color:#f92672">();</span>
+     <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+             <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">count</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">items</span><span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">)</span>
+             <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">notFull</span><span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span><span style="color:#75715e">//如果队列满了，则线程阻塞等待
+</span><span style="color:#75715e"></span>             enqueue<span style="color:#f92672">(</span>paramE<span style="color:#f92672">);</span>
+             localReentrantLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+     <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+             localReentrantLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+         <span style="color:#f92672">}</span>
+ <span style="color:#f92672">}</span>
+</code></pre></div></li>
 <li>
 <p>offer(E o, long timeout, TimeUnit unit)：可以设定等待的时间，如果在指定的时间内，还不能往队列中加入 BlockingQueue，则返回失败</p>
 </li>
@@ -260,8 +260,8 @@
 <p><img src="/textImgs/image-20210121104052715.png" alt="image-20210121104052715"></p>
 <h3 id="一arrayblockingqueue公平非公平">一、ArrayBlockingQueue（公平、非公平）</h3>
 <p>　　<strong>用数组实现的有界阻塞队列</strong>。此队列按照先进先出（FIFO）的原则对元素进行排序。默认情况下不保证访问者公平的访问队列，所谓公平访问队列是指阻塞的所有生产者线程或消费者线程，当队列可用时，可以按照阻塞的先后顺序访问队列，即先阻塞的生产者线程，可以先往队列里插入元素，先阻塞的消费者线程，可以先从队列里获取元素。通常情况下为了保证公平性会降低吞吐量。我们可以使用以下代码创建一个公平的阻塞队列：</p>
-<pre><code>ArrayBlockingQueue fairQueue = new ArrayBlockingQueue(1000,true)
-</code></pre><h3 id="二linkedblockingqueue两个独立锁提高并发">二、LinkedBlockingQueue（两个独立锁提高并发）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">ArrayBlockingQueue fairQueue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayBlockingQueue<span style="color:#f92672">(</span>1000<span style="color:#f92672">,</span><span style="color:#66d9ef">true</span><span style="color:#f92672">)</span>
+</code></pre></div><h3 id="二linkedblockingqueue两个独立锁提高并发">二、LinkedBlockingQueue（两个独立锁提高并发）</h3>
 <p>　　<strong>基于链表的阻塞队列</strong>，同 ArrayListBlockingQueue 类似，此队列按照先进先出（FIFO）的原则对元素进行排序。而 LinkedBlockingQueue 之所以能够高效的处理并发数据，还因为其对于生产者端和消费者端分别采用了独立的锁来控制数据同步，这也意味着在高并发的情况下生产者和消费者可以并行地操作队列中的数据，以此来提高整个队列的并发性能。</p>
 <p>　　LinkedBlockingQueue 会默认一个类似无限大小的容量（Integer.MAX_VALUE）。</p>
 <h3 id="三priorityblockingqueuecompareto-排序实现优先">三、PriorityBlockingQueue（compareTo 排序实现优先）</h3>
@@ -317,235 +317,235 @@
 <p>　　前面谈到了非阻塞队列和阻塞队列中常用的方法，下面来探讨阻塞队列的实现原理</p>
 <p>　　以ArrayBlockingQueue为例，其他阻塞队列实现原理可能和ArrayBlockingQueue有一些差别，但是大体思路应该类似，有兴趣的朋友可自行查看其他阻塞队列的实现源码。</p>
 <p>　　首先看一下ArrayBlockingQueue类中的几个成员变量：</p>
-<pre><code>public class ArrayBlockingQueue&lt;E&gt; extends AbstractQueue&lt;E&gt;
-implements BlockingQueue&lt;E&gt;, java.io.Serializable {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ArrayBlockingQueue</span><span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">extends</span> AbstractQueue<span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span>
+<span style="color:#66d9ef">implements</span> BlockingQueue<span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;,</span> java<span style="color:#f92672">.</span><span style="color:#a6e22e">io</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Serializable</span> <span style="color:#f92672">{</span>
  
-private static final long serialVersionUID = -817911632652898426L;
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> serialVersionUID <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>817911632652898426L<span style="color:#f92672">;</span>
  
-/** The queued items  */
-private final E[] items;
+<span style="color:#75715e">/** The queued items  */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> E<span style="color:#f92672">[]</span> items<span style="color:#f92672">;</span>
 
-/** items index for next take, poll or remove */
-private int takeIndex;
+<span style="color:#75715e">/** items index for next take, poll or remove */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> takeIndex<span style="color:#f92672">;</span>
 
-/** items index for next put, offer, or add. */
-private int putIndex;
+<span style="color:#75715e">/** items index for next put, offer, or add. */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> putIndex<span style="color:#f92672">;</span>
 
-/** Number of items in the queue */
-private int count;
+<span style="color:#75715e">/** Number of items in the queue */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> count<span style="color:#f92672">;</span>
  
-/*
-* Concurrency control uses the classic two-condition algorithm
-* found in any textbook.
-*/
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">* Concurrency control uses the classic two-condition algorithm
+</span><span style="color:#75715e">* found in any textbook.
+</span><span style="color:#75715e">*/</span>
  
-/** Main lock guarding all access */
-private final ReentrantLock lock;
+<span style="color:#75715e">/** Main lock guarding all access */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> ReentrantLock lock<span style="color:#f92672">;</span>
 
-/** Condition for waiting takes */
-private final Condition notEmpty;
+<span style="color:#75715e">/** Condition for waiting takes */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Condition notEmpty<span style="color:#f92672">;</span>
 
-/** Condition for waiting puts */
-private final Condition notFull;
+<span style="color:#75715e">/** Condition for waiting puts */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Condition notFull<span style="color:#f92672">;</span>
 
-}
-</code></pre><p>　　可以看出，ArrayBlockingQueue中用来存储元素的实际上是一个数组，takeIndex和putIndex分别表示队首元素和队尾元素的下标，count表示队列中元素的个数。</p>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　可以看出，ArrayBlockingQueue中用来存储元素的实际上是一个数组，takeIndex和putIndex分别表示队首元素和队尾元素的下标，count表示队列中元素的个数。</p>
 <p>　　lock是一个可重入锁，notEmpty和notFull是等待条件。</p>
 <p>　　下面看一下ArrayBlockingQueue的构造器，构造器有三个重载版本：</p>
-<pre><code>public ArrayBlockingQueue(int capacity) {
-}
-public ArrayBlockingQueue(int capacity, boolean fair) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ArrayBlockingQueue</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> capacity<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ArrayBlockingQueue</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> capacity<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> fair<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
  
-}
-public ArrayBlockingQueue(int capacity, boolean fair,
-                          Collection&lt;? extends E&gt; c) {
-}
-</code></pre><p>　　第一个构造器只有一个参数用来指定容量，第二个构造器可以指定容量和公平性，第三个构造器可以指定容量、公平性以及用另外一个集合进行初始化。</p>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ArrayBlockingQueue</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> capacity<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> fair<span style="color:#f92672">,</span>
+                          Collection<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> E<span style="color:#f92672">&gt;</span> c<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　第一个构造器只有一个参数用来指定容量，第二个构造器可以指定容量和公平性，第三个构造器可以指定容量、公平性以及用另外一个集合进行初始化。</p>
 <h3 id="然后看它的两个关键方法的实现put和take">　　然后看它的两个关键方法的实现：put()和take()：</h3>
-<pre><code>public void put(E e) throws InterruptedException {
-    if (e == null) throw new NullPointerException();
-    final E[] items = this.items;
-    final ReentrantLock lock = this.lock;		//获取了锁
-    lock.lockInterruptibly();
-    try {
-        try {
-            while (count == items.length)		//
-                notFull.await();
-        } catch (InterruptedException ie) {
-            notFull.signal(); // propagate to non-interrupted thread
-            throw ie;
-        }
-        insert(e);
-    } finally {
-        lock.unlock();
-    }
-}
-</code></pre><p>　　从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁，然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>E e<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>e <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">final</span> E<span style="color:#f92672">[]</span> items <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">items</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">final</span> ReentrantLock lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">;</span>		<span style="color:#75715e">//获取了锁
+</span><span style="color:#75715e"></span>    lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lockInterruptibly</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">==</span> items<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">)</span>		<span style="color:#75715e">//
+</span><span style="color:#75715e"></span>                notFull<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException ie<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            notFull<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span> <span style="color:#75715e">// propagate to non-interrupted thread
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">throw</span> ie<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        insert<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　　从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁，然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。</p>
 <p>　　当被其他线程唤醒时，通过insert(e)方法插入元素，最后解锁。</p>
 <p>　　我们看一下insert方法的实现：</p>
-<pre><code>private void insert(E x) {
-    items[putIndex] = x;
-    putIndex = inc(putIndex);
-    ++count;
-    notEmpty.signal();
-}
-</code></pre><p>========================================================================================================================　</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">insert</span><span style="color:#f92672">(</span>E x<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    items<span style="color:#f92672">[</span>putIndex<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> x<span style="color:#f92672">;</span>
+    putIndex <span style="color:#f92672">=</span> inc<span style="color:#f92672">(</span>putIndex<span style="color:#f92672">);</span>
+    <span style="color:#f92672">++</span>count<span style="color:#f92672">;</span>
+    notEmpty<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>========================================================================================================================　</p>
 <h3 id="下面是take方法的实现">　　下面是take()方法的实现：</h3>
-<pre><code>public E take() throws InterruptedException {
-    final ReentrantLock lock = this.lock;
-    lock.lockInterruptibly();
-    try {
-        try {
-            while (count == 0)
-                notEmpty.await();
-        } catch (InterruptedException ie) {
-            notEmpty.signal(); // propagate to non-interrupted thread
-            throw ie;
-        }
-        E x = extract();
-        return x;
-    } finally {
-        lock.unlock();
-    }
-}
-</code></pre><p>　跟put方法实现很类似，只不过put方法等待的是notFull信号，而take方法等待的是notEmpty信号。在take方法中，如果可以取元素，则通过extract方法取得元素，下面是extract方法的实现：</p>
-<pre><code>private E extract() {
-    final E[] items = this.items;
-    E x = items[takeIndex];
-    items[takeIndex] = null;
-    takeIndex = inc(takeIndex);
-    --count;
-    notFull.signal();
-    return x;
-}
-</code></pre><p>　跟insert方法也很类似。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> E <span style="color:#a6e22e">take</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">final</span> ReentrantLock lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">;</span>
+    lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lockInterruptibly</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span>
+                notEmpty<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException ie<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            notEmpty<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span> <span style="color:#75715e">// propagate to non-interrupted thread
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">throw</span> ie<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        E x <span style="color:#f92672">=</span> extract<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">return</span> x<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　跟put方法实现很类似，只不过put方法等待的是notFull信号，而take方法等待的是notEmpty信号。在take方法中，如果可以取元素，则通过extract方法取得元素，下面是extract方法的实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> E <span style="color:#a6e22e">extract</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">final</span> E<span style="color:#f92672">[]</span> items <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">items</span><span style="color:#f92672">;</span>
+    E x <span style="color:#f92672">=</span> items<span style="color:#f92672">[</span>takeIndex<span style="color:#f92672">];</span>
+    items<span style="color:#f92672">[</span>takeIndex<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    takeIndex <span style="color:#f92672">=</span> inc<span style="color:#f92672">(</span>takeIndex<span style="color:#f92672">);</span>
+    <span style="color:#f92672">--</span>count<span style="color:#f92672">;</span>
+    notFull<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">return</span> x<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　跟insert方法也很类似。</p>
 <p>　　其实从这里大家应该明白了阻塞队列的实现原理，<strong>事实它和我们用Object.wait()、Object.notify()和非阻塞队列实现生产者-消费者的思路类似，只不过它把这些工作一起集成到了阻塞队列中实现。</strong></p>
 <p>========================================================================================================================　</p>
 <h1 id="示例和使用场景">示例和使用场景</h1>
 <p><strong>先使用Object.wait()和Object.notify()非阻塞队列实现生产者-消费者模式（Object.wait()和Object.notify()主要用于来实现线程间通信）：</strong></p>
-<pre><code>public class Test {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span> <span style="color:#f92672">{</span>
 
-    private int queueSize = 10;
-    //非阻塞队列
-    private PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;Integer&gt;(queueSize);
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> queueSize <span style="color:#f92672">=</span> 10<span style="color:#f92672">;</span>
+    <span style="color:#75715e">//非阻塞队列
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">private</span> PriorityQueue<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> PriorityQueue<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;(</span>queueSize<span style="color:#f92672">);</span>
      
-    public static void main(String[] args)  {
-        Test test = new Test();
-        Producer producer = test.new Producer();
-        Consumer consumer = test.new Consumer();
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span>  <span style="color:#f92672">{</span>
+        Test test <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Test<span style="color:#f92672">();</span>
+        Producer producer <span style="color:#f92672">=</span> test<span style="color:#f92672">.</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">Producer</span><span style="color:#f92672">();</span>
+        Consumer consumer <span style="color:#f92672">=</span> test<span style="color:#f92672">.</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">Consumer</span><span style="color:#f92672">();</span>
          
-        producer.start();
-        consumer.start();
-    }
+        producer<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        consumer<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
      
-    class Consumer extends Thread{
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Consumer</span> <span style="color:#66d9ef">extends</span> Thread<span style="color:#f92672">{</span>
          
-        @Override
-        public void run() {
-            consume();
-        }
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            consume<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
          
-        private void consume() {
-            while(true){
-                synchronized (queue) {
-                    while(queue.size() == 0){
-                        try {
-                            System.out.println(&quot;队列空，等待数据&quot;);
-                            queue.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            queue.notify();
-                        }
-                    }
-                    queue.poll();          //每次移走队首元素
-                    queue.notify();
-                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);
-                }
-            }
-        }
-    }
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">consume</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">){</span>
+                <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>queue<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">){</span>
+                        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;队列空，等待数据&#34;</span><span style="color:#f92672">);</span>
+                            queue<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                            queue<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">poll</span><span style="color:#f92672">();</span>          <span style="color:#75715e">//每次移走队首元素
+</span><span style="color:#75715e"></span>                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;从队列取走一个元素，队列剩余&#34;</span><span style="color:#f92672">+</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()+</span><span style="color:#e6db74">&#34;个元素&#34;</span><span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
      
-    class Producer extends Thread{
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Producer</span> <span style="color:#66d9ef">extends</span> Thread<span style="color:#f92672">{</span>
          
-        @Override
-        public void run() {
-            produce();
-        }
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            produce<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
          
-        private void produce() {
-            while(true){
-                synchronized (queue) {
-                    while(queue.size() == queueSize){
-                        try {
-                            System.out.println(&quot;队列满，等待有空余空间&quot;);
-                            queue.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            queue.notify();
-                        }
-                    }
-                    queue.offer(1);        //每次插入一个元素
-                    queue.notify();
-                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));
-                }
-            }
-        }
-    }
-}
-</code></pre><p>========================================================================================================================　</p>
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">produce</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">){</span>
+                <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>queue<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> queueSize<span style="color:#f92672">){</span>
+                        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;队列满，等待有空余空间&#34;</span><span style="color:#f92672">);</span>
+                            queue<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                            queue<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">offer</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>        <span style="color:#75715e">//每次插入一个元素
+</span><span style="color:#75715e"></span>                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;向队列取中插入一个元素，队列剩余空间：&#34;</span><span style="color:#f92672">+(</span>queueSize<span style="color:#f92672">-</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()));</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>========================================================================================================================　</p>
 <p><strong>下面是使用阻塞队列实现的生产者-消费者模式：</strong></p>
-<pre><code>public class Test {
-    private int queueSize = 10;
-    private ArrayBlockingQueue&lt;Integer&gt; queue = new ArrayBlockingQueue&lt;Integer&gt;(queueSize);
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> queueSize <span style="color:#f92672">=</span> 10<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> ArrayBlockingQueue<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayBlockingQueue<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;(</span>queueSize<span style="color:#f92672">);</span>
      
-    public static void main(String[] args)  {
-        Test test = new Test();
-        Producer producer = test.new Producer();
-        Consumer consumer = test.new Consumer();
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span>  <span style="color:#f92672">{</span>
+        Test test <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Test<span style="color:#f92672">();</span>
+        Producer producer <span style="color:#f92672">=</span> test<span style="color:#f92672">.</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">Producer</span><span style="color:#f92672">();</span>
+        Consumer consumer <span style="color:#f92672">=</span> test<span style="color:#f92672">.</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">Consumer</span><span style="color:#f92672">();</span>
          
-        producer.start();
-        consumer.start();
-    }
+        producer<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        consumer<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
      
-    class Consumer extends Thread{
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Consumer</span> <span style="color:#66d9ef">extends</span> Thread<span style="color:#f92672">{</span>
          
-        @Override
-        public void run() {
-            consume();
-        }
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            consume<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
          
-        private void consume() {
-            while(true){
-                try {
-                    queue.take();
-                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">consume</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">){</span>
+                <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">take</span><span style="color:#f92672">();</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;从队列取走一个元素，队列剩余&#34;</span><span style="color:#f92672">+</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()+</span><span style="color:#e6db74">&#34;个元素&#34;</span><span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
      
-    class Producer extends Thread{
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Producer</span> <span style="color:#66d9ef">extends</span> Thread<span style="color:#f92672">{</span>
          
-        @Override
-        public void run() {
-            produce();
-        }
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            produce<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
          
-        private void produce() {
-            while(true){
-                try {
-                    queue.put(1);
-                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-}
-</code></pre><p>　有没有发现，使用阻塞队列代码要简单得多，不需要再单独考虑同步和线程间通信的问题。</p>
+        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">produce</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">){</span>
+                <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                    queue<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;向队列取中插入一个元素，队列剩余空间：&#34;</span><span style="color:#f92672">+(</span>queueSize<span style="color:#f92672">-</span>queue<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()));</span>
+                <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>　有没有发现，使用阻塞队列代码要简单得多，不需要再单独考虑同步和线程间通信的问题。</p>
 <p>　　<strong>在并发编程中，一般推荐使用阻塞队列，这样实现可以尽量地避免程序出现意外的错误。</strong></p>
 <p>　　<strong>阻塞队列使用最经典的场景就是socket客户端数据的读取和解析，读取数据的线程不断将数据放入队列，然后解析线程不断从队列取数据解析。还有其他类似的场景，只要符合生产者-消费者模型的都可以使用阻塞队列。</strong></p>
 <hr>
