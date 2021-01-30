@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>资源 on 🏹 Boo 的博客网站</title>
-    <link>https://rechiard.gitee.io/tags/%E8%B5%84%E6%BA%90/</link>
+    <link>https://Rechiard.github.io/tags/%E8%B5%84%E6%BA%90/</link>
     <description>Recent content in 资源 on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Thu, 26 Nov 2020 20:12:57 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/tags/%E8%B5%84%E6%BA%90/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Nov 2020 20:12:57 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/%E8%B5%84%E6%BA%90/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Java后端整合内容(2020年)</title>
-      <link>https://rechiard.gitee.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</link>
+      <link>https://Rechiard.github.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</link>
       <pubDate>Thu, 26 Nov 2020 20:12:57 +0800</pubDate>
       
-      <guid>https://rechiard.gitee.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</guid>
+      <guid>https://Rechiard.github.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</guid>
       <description>&lt;p&gt;Java后端的学习整体框架，从基础编程到运维知识都有一个大概的分类和汇总。&lt;/p&gt;</description>
     </item>
     

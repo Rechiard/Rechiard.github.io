@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SpringBoot on 🏹 Boo 的博客网站</title>
-    <link>https://rechiard.gitee.io/categories/springboot/</link>
+    <link>https://Rechiard.github.io/categories/springboot/</link>
     <description>Recent content in SpringBoot on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sat, 30 Jan 2021 14:16:51 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Jan 2021 14:16:51 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringBoot（2）</title>
-      <link>https://rechiard.gitee.io/posts/springboot2/</link>
+      <link>https://Rechiard.github.io/posts/springboot2/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:51 +0800</pubDate>
       
-      <guid>https://rechiard.gitee.io/posts/springboot2/</guid>
+      <guid>https://Rechiard.github.io/posts/springboot2/</guid>
       <description></description>
     </item>
     
     <item>
       <title>SpringBoot（1）</title>
-      <link>https://rechiard.gitee.io/posts/springboot1/</link>
+      <link>https://Rechiard.github.io/posts/springboot1/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:47 +0800</pubDate>
       
-      <guid>https://rechiard.gitee.io/posts/springboot1/</guid>
+      <guid>https://Rechiard.github.io/posts/springboot1/</guid>
       <description></description>
     </item>
     

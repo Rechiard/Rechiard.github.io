@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>开源 on 🏹 Boo 的博客网站</title>
-    <link>https://rechiard.gitee.io/tags/%E5%BC%80%E6%BA%90/</link>
+    <link>https://Rechiard.github.io/tags/%E5%BC%80%E6%BA%90/</link>
     <description>Recent content in 开源 on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Fri, 27 Nov 2020 10:07:37 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/tags/%E5%BC%80%E6%BA%90/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 Nov 2020 10:07:37 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/%E5%BC%80%E6%BA%90/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>一些算法设计时的巧妙用法</title>
-      <link>https://rechiard.gitee.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</link>
+      <link>https://Rechiard.github.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</link>
       <pubDate>Fri, 27 Nov 2020 10:07:37 +0800</pubDate>
       
-      <guid>https://rechiard.gitee.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</guid>
+      <guid>https://Rechiard.github.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</guid>
       <description>&lt;p&gt;在算法设计中总会出现有一些很有意思的小技巧和方法使程序减少内存占用和运行时间，通过对蓝桥杯和力扣的综合练习，这里总结一下各种类型的算法中一些耳目一新的巧妙写法。希望对大家有所帮助~&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>如何快速搭建个人博客网站</title>
-      <link>https://rechiard.gitee.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</link>
+      <link>https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</link>
       <pubDate>Wed, 25 Nov 2020 10:29:04 +0800</pubDate>
       
-      <guid>https://rechiard.gitee.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</guid>
+      <guid>https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</guid>
       <description>&lt;p&gt;本项目为记录我的第一次利用hugo框架建立自己的个人博客过程&lt;/p&gt;</description>
     </item>
     
