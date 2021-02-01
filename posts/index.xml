@@ -8,21 +8,21 @@
     <language>zh-Hans</language>
     <lastBuildDate>Sat, 30 Jan 2021 14:16:51 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>SpringBoot（2）</title>
+      <title>SpringBoot-Web（2）——SpringBoot运行原理探究</title>
       <link>https://Rechiard.github.io/posts/springboot2/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:51 +0800</pubDate>
       
       <guid>https://Rechiard.github.io/posts/springboot2/</guid>
-      <description></description>
+      <description>&lt;p&gt;通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>SpringBoot（1）</title>
+      <title>SpringBoot-Web（1）——概述和基本理解</title>
       <link>https://Rechiard.github.io/posts/springboot1/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:47 +0800</pubDate>
       
       <guid>https://Rechiard.github.io/posts/springboot1/</guid>
-      <description></description>
+      <description>&lt;p&gt;SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &amp;ldquo;just run&amp;rdquo;，能迅速的开发web应用，几行代码开发一个http接口。&lt;/p&gt;</description>
     </item>
     
     <item>

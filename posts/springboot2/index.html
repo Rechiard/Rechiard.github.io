@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>SpringBoot（2） | 🏹 Boo 的博客网站</title>
+    <title>SpringBoot-Web（2）——SpringBoot运行原理探究 | 🏹 Boo 的博客网站</title>
 
     
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
 
 
 
 <meta name="author" content="🏹 Boo" />
-<meta name="description" content="" />
+<meta name="description" content="通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。
+" />
 
 
 
@@ -20,8 +23,8 @@
 <link rel="canonical" href="https://Rechiard.github.io/posts/springboot2/" />
 
 
-<meta property="og:title" content="SpringBoot（2）" />
-<meta property="og:description" content="" />
+<meta property="og:title" content="SpringBoot-Web（2）——SpringBoot运行原理探究" />
+<meta property="og:description" content="通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Rechiard.github.io/posts/springboot2/" />
 <meta property="article:published_time" content="2021-01-30T14:16:51+08:00" />
@@ -30,8 +33,8 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="SpringBoot（2）"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="SpringBoot-Web（2）——SpringBoot运行原理探究"/>
+<meta name="twitter:description" content="通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。"/>
 
 
 <link rel="stylesheet" href="/css/semantic.min.css" />
@@ -118,10 +121,14 @@
 <div class="ui centered relaxed grid dream-grid">
   <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
     
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/view2.jpg);"></div>
+    </section>
+    
     <section class="ui attached segment">
       <header>
         <h1 class="ui large header">
-          SpringBoot（2）
+          SpringBoot-Web（2）——SpringBoot运行原理探究
           <div class="sub header">
             @
             
@@ -132,7 +139,7 @@
                 Saturday, Jan 30, 2021
               
 
-            | 0 minute read
+            | 3 minute read
 
             | Update at
               
@@ -142,7 +149,255 @@
         </h1>
       </header>
 
-      <article class="main"></article>
+      <article class="main"><p>通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。</p>
+<p>项目存放的地址： <a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为**&ldquo;员工管理系统&rdquo;**。</p>
+<blockquote>
+<p>我将整体流程具体分为5个步骤：</p>
+<ol>
+<li>在BootStrap、Layui或者Semantic UI上寻找一个前端模板用于整个项目的展示</li>
+<li>构建pojo层，mapper层以及controller层（由于过于简单所以直接越过service层，而且数据也是直接在Mapper层模拟的，省去了数据库）</li>
+<li>构建config自定义配置层</li>
+<li>用thymeleaf修改前台模板页面</li>
+<li>调试数据显示结果</li>
+</ol>
+</blockquote>
+<h2 id="运行原理">运行原理</h2>
+<h3 id="1-父依赖">1. 父依赖</h3>
+<p>其中它主要是依赖一个父项目，主要是管理项目的资源过滤及插件！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>parent<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>parent<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">5</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RELEASE</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>relativePath<span style="color:#f92672">/&gt;</span> <span style="color:#f92672">&lt;!--</span> lookup parent from repository <span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;/</span>parent<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>点进去，发现还有一个父依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>parent<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>dependencies<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">5</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RELEASE</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>relativePath<span style="color:#f92672">&gt;../../</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>dependencies<span style="color:#f92672">&lt;/</span>relativePath<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>parent<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>这里才是真正管理SpringBoot应用里面所有依赖版本的地方，SpringBoot的版本控制中心；</p>
+<p><strong>以后我们导入依赖默认是不需要写版本；但是如果导入的包没有在依赖中管理着就需要手动配置版本了；</strong></p>
+<h3 id="2-启动器-spring-boot-starter">2. 启动器 spring-boot-starter</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>web<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><p><strong>springboot-boot-starter-xxx</strong>：就是spring-boot的场景启动器</p>
+<p><strong>spring-boot-starter-web</strong>：帮我们导入了web模块正常运行所依赖的组件；</p>
+<p>SpringBoot将所有的功能场景都抽取出来，做成一个个的starter （启动器），只需要在项目中引入这些starter即可，所有相关的依赖都会导入进来 ， 我们要用什么功能就导入什么样的场景启动器即可 。</p>
+<h3 id="3-默认的主启动类">3. 默认的主启动类</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//@SpringBootApplication 来标注一个主程序类
+</span><span style="color:#75715e">//说明这是一个Spring Boot应用
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@SpringBootApplication</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SpringbootApplication</span> <span style="color:#f92672">{</span>
+
+   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+     <span style="color:#75715e">//以为是启动了一个方法，没想到启动了一个服务
+</span><span style="color:#75715e"></span>      SpringApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>SpringbootApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> args<span style="color:#f92672">);</span>
+   <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>@SpringBootApplication作用：<strong>标注在某个类上说明这个类是SpringBoot的主配置类 ， SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；</strong></p>
+<p>点进去之后是这样的</p>
+<p><img src="/textImgs/image-20210201095649776.png" alt="image-20210201095649776"></p>
+<p><code>@SpringBootConfiguration</code>作用：<strong>SpringBoot的配置类 ，标注在某个类上 ， 表示这是一个SpringBoot的配置类；</strong></p>
+<p>继续进去这个注解查看</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">
+<span style="color:#75715e">// 点进去得到下面的 @Component
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> SpringBootConfiguration <span style="color:#f92672">{}</span>
+
+<span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> Configuration <span style="color:#f92672">{}</span>
+</code></pre></div><p>这里的 @Configuration，说明这是一个配置类 ，配置类就是对应Spring的xml 配置文件；</p>
+<p>里面的 @Component 这就说明，启动类本身也是Spring中的一个组件而已，负责启动应用！</p>
+<p><code>@EnableAutoConfiguration</code>的作用：<strong>开启自动配置功能</strong></p>
+<p>以前我们需要自己配置的东西，而现在SpringBoot可以自动帮我们配置 ；@EnableAutoConfiguration告诉SpringBoot开启自动配置功能，这样自动配置才能生效；</p>
+<p>点进注解接续查看：</p>
+<p><img src="/textImgs/image-20210201102155951.png" alt="image-20210201102155951"></p>
+<p><code>@AutoConfigurationPackage</code> ：<strong>自动配置包</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Import</span><span style="color:#f92672">({</span>Registrar<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> AutoConfigurationPackage <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><code>@import</code> ：Spring底层注解@import ， 给容器中导入一个组件</p>
+<p><code>Registrar.class</code> 作用：将主启动类的所在包及包下面所有子包里面的所有组件扫描到Spring容器 ；</p>
+<p>这个分析完了，退到上一步，继续看</p>
+<p><code>@Import({AutoConfigurationImportSelector.class})</code> ：<strong>给容器导入组件 ；</strong><code>AutoConfigurationImportSelector </code>：自动配置导入选择器，那么它会导入哪些组件的选择器呢？我们点击去这个类看源码：</p>
+<p>1、这个类中有一个方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#75715e">// 获得候选的配置
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">protected</span> List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getCandidateConfigurations</span><span style="color:#f92672">(</span>AnnotationMetadata metadata<span style="color:#f92672">,</span> AnnotationAttributes attributes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+   	 	<span style="color:#75715e">//这里的getSpringFactoriesLoaderFactoryClass（）方法
+</span><span style="color:#75715e"></span>    	<span style="color:#75715e">//返回的就是我们最开始看的启动自动导入配置文件的注解类；EnableAutoConfiguration
+</span><span style="color:#75715e"></span>        List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> configurations <span style="color:#f92672">=</span> SpringFactoriesLoader<span style="color:#f92672">.</span><span style="color:#a6e22e">loadFactoryNames</span><span style="color:#f92672">(</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getSpringFactoriesLoaderFactoryClass</span><span style="color:#f92672">(),</span> 
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getBeanClassLoader</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">);</span>  
+        
+        Assert<span style="color:#f92672">.</span><span style="color:#a6e22e">notEmpty</span><span style="color:#f92672">(</span>configurations<span style="color:#f92672">,</span> 
+        <span style="color:#e6db74">&#34;No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.&#34;</span>
+        <span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> configurations<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>2、这个方法又调用了  SpringFactoriesLoader 类的静态方法！进入SpringFactoriesLoader类loadFactoryNames() 方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">loadFactoryNames</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> factoryType<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Nullable</span> ClassLoader classLoader<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        ClassLoader classLoaderToUse <span style="color:#f92672">=</span> classLoader<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>classLoader <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            classLoaderToUse <span style="color:#f92672">=</span> SpringFactoriesLoader<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getClassLoader</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+
+        String factoryTypeName <span style="color:#f92672">=</span> factoryType<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">();</span>
+        <span style="color:#75715e">//这里它又调用了 loadSpringFactories 方法
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>List<span style="color:#f92672">)</span>loadSpringFactories<span style="color:#f92672">(</span>classLoaderToUse<span style="color:#f92672">).</span><span style="color:#a6e22e">getOrDefault</span><span style="color:#f92672">(</span>factoryTypeName<span style="color:#f92672">,</span> Collections<span style="color:#f92672">.</span><span style="color:#a6e22e">emptyList</span><span style="color:#f92672">());</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>3、继续点击查看 loadSpringFactories 方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">loadSpringFactories</span><span style="color:#f92672">(</span>ClassLoader classLoader<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;&gt;</span> result <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Map<span style="color:#f92672">)</span>cache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>classLoader<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            HashMap result <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">();</span>
+
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                Enumeration urls <span style="color:#f92672">=</span> classLoader<span style="color:#f92672">.</span><span style="color:#a6e22e">getResources</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;META-INF/spring.factories&#34;</span><span style="color:#f92672">);</span>
+
+                <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>urls<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreElements</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                    URL url <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>URL<span style="color:#f92672">)</span>urls<span style="color:#f92672">.</span><span style="color:#a6e22e">nextElement</span><span style="color:#f92672">();</span>
+                    UrlResource resource <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> UrlResource<span style="color:#f92672">(</span>url<span style="color:#f92672">);</span>
+                    Properties properties <span style="color:#f92672">=</span> PropertiesLoaderUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">loadProperties</span><span style="color:#f92672">(</span>resource<span style="color:#f92672">);</span>
+                    Iterator var6 <span style="color:#f92672">=</span> properties<span style="color:#f92672">.</span><span style="color:#a6e22e">entrySet</span><span style="color:#f92672">().</span><span style="color:#a6e22e">iterator</span><span style="color:#f92672">();</span>
+
+                    <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>var6<span style="color:#f92672">.</span><span style="color:#a6e22e">hasNext</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                        Entry<span style="color:#f92672">&lt;?,</span> <span style="color:#f92672">?&gt;</span> entry <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Entry<span style="color:#f92672">)</span>var6<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">();</span>
+                        String factoryTypeName <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>String<span style="color:#f92672">)</span>entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">trim</span><span style="color:#f92672">();</span>
+                        String<span style="color:#f92672">[]</span> factoryImplementationNames <span style="color:#f92672">=</span> StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">commaDelimitedListToStringArray</span><span style="color:#f92672">((</span>String<span style="color:#f92672">)</span>entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">());</span>
+                        String<span style="color:#f92672">[]</span> var10 <span style="color:#f92672">=</span> factoryImplementationNames<span style="color:#f92672">;</span>
+                        <span style="color:#66d9ef">int</span> var11 <span style="color:#f92672">=</span> factoryImplementationNames<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+
+                        <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> var12 <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> var12 <span style="color:#f92672">&lt;</span> var11<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>var12<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            String factoryImplementationName <span style="color:#f92672">=</span> var10<span style="color:#f92672">[</span>var12<span style="color:#f92672">];</span>
+                            <span style="color:#f92672">((</span>List<span style="color:#f92672">)</span>result<span style="color:#f92672">.</span><span style="color:#a6e22e">computeIfAbsent</span><span style="color:#f92672">(</span>factoryTypeName<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">();</span>
+                            <span style="color:#f92672">})).</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>factoryImplementationName<span style="color:#f92672">.</span><span style="color:#a6e22e">trim</span><span style="color:#f92672">());</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+
+                result<span style="color:#f92672">.</span><span style="color:#a6e22e">replaceAll</span><span style="color:#f92672">((</span>factoryType<span style="color:#f92672">,</span> implementations<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>List<span style="color:#f92672">)</span>implementations<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">distinct</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">collectingAndThen</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toList</span><span style="color:#f92672">(),</span> Collections<span style="color:#f92672">::</span>unmodifiableList<span style="color:#f92672">));</span>
+                <span style="color:#f92672">});</span>
+                cache<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>classLoader<span style="color:#f92672">,</span> result<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException var14<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Unable to load factories from location [META-INF/spring.factories]&#34;</span><span style="color:#f92672">,</span> var14<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>4、发现一个多次出现的文件：spring.factories，全局搜索它,然后发现在configurations变量中的这些值都是spring.factories里的自动配置的文件；这就是自动配置根源所在！</p>
+<p><img src="/textImgs/image-20210201123113438.png" alt="image-20210201123113438"></p>
+<p>5、随便打开一个自动配置文件，比如说<code>WebMvcAutoConfiguration.class</code></p>
+<p><img src="/textImgs/image-20210201123650117.png" alt="image-20210201123650117"></p>
+<p>可以看到这些一个个的都是JavaConfig配置类，而且都注入了一些Bean。</p>
+<p>所以，自动配置真正实现是<strong>从classpath中搜寻所有的META-INF/spring.factories配置文件 ，并将其中对应的 org.springframework.boot.autoconfigure. 包下的配置项，通过反射实例化为对应标注了 @Configuration的JavaConfig形式的IOC容器配置类 ， 然后将这些都汇总成为一个实例并加载到IOC容器中。</strong></p>
+<h3 id="4结论">4.结论</h3>
+<ol>
+<li>SpringBoot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值</li>
+<li>将这些值作为自动配置类导入容器 ， 自动配置类就生效 ， 帮我们进行自动配置工作；</li>
+<li>整个J2EE的整体解决方案和自动配置都在springboot-autoconfigure的jar包中；</li>
+<li>它会给容器中导入非常多的自动配置类 （xxxAutoConfiguration）, 就是给容器中导入这个场景需要的所有组件 ， 并配置好这些组件 ；</li>
+<li>有了自动配置类 ， 免去了我们手动编写配置注入功能组件等的工作；</li>
+</ol>
+<h3 id="5自动配置原理">5.自动配置原理</h3>
+<p>分析一下<code>HttpEncodingAutoConfiguration</code>这个类</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//表示这是一个配置类，和以前编写的配置文件一样，也可以给容器中添加组件；
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Configuration</span><span style="color:#f92672">(</span>
+    proxyBeanMethods <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+<span style="color:#f92672">)</span>
+
+<span style="color:#75715e">//Spring底层@Conditional注解
+</span><span style="color:#75715e">//根据不同的条件判断，如果满足指定的条件，整个配置类里面的配置就会生效；
+</span><span style="color:#75715e">//这里的意思就是判断当前应用是否是web应用，如果是，当前配置类生效
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@ConditionalOnWebApplication</span><span style="color:#f92672">(</span>
+    type <span style="color:#f92672">=</span> Type<span style="color:#f92672">.</span><span style="color:#a6e22e">SERVLET</span>
+<span style="color:#f92672">)</span>
+
+<span style="color:#75715e">//启动指定类的ConfigurationProperties功能；
+</span><span style="color:#75715e">//进入这个ServerProperties查看，将配置文件中对应的值和ServerProperties绑定起来；
+</span><span style="color:#75715e">//并把ServerProperties加入到ioc容器中
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@EnableConfigurationProperties</span><span style="color:#f92672">({</span>ServerProperties<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+
+<span style="color:#75715e">//判断当前项目有没有这个类CharacterEncodingFilter；SpringMVC中进行乱码解决的过滤器；
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@ConditionalOnClass</span><span style="color:#f92672">({</span>CharacterEncodingFilter<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+
+<span style="color:#75715e">//判断配置文件中是否存在某个配置：spring.http.encoding.enabled；
+</span><span style="color:#75715e">//如果不存在，判断也是成立的
+</span><span style="color:#75715e">//即使我们配置文件中不配置pring.http.encoding.enabled=true，也是默认生效的；
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@ConditionalOnProperty</span><span style="color:#f92672">(</span>
+    prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;server.servlet.encoding&#34;</span><span style="color:#f92672">,</span>
+    value <span style="color:#f92672">=</span> <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;enabled&#34;</span><span style="color:#f92672">},</span>
+    matchIfMissing <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+<span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HttpEncodingAutoConfiguration</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Encoding properties<span style="color:#f92672">;</span>
+    
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">HttpEncodingAutoConfiguration</span><span style="color:#f92672">(</span>ServerProperties properties<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">properties</span> <span style="color:#f92672">=</span> properties<span style="color:#f92672">.</span><span style="color:#a6e22e">getServlet</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getEncoding</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#75715e">//给容器中添加一个组件，这个组件的某些值需要从properties中获取
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Bean</span>
+    <span style="color:#a6e22e">@ConditionalOnMissingBean</span>	<span style="color:#75715e">//判断容器没有这个组件？
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> CharacterEncodingFilter <span style="color:#a6e22e">characterEncodingFilter</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        CharacterEncodingFilter filter <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> OrderedCharacterEncodingFilter<span style="color:#f92672">();</span>
+        filter<span style="color:#f92672">.</span><span style="color:#a6e22e">setEncoding</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">properties</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getCharset</span><span style="color:#f92672">().</span><span style="color:#a6e22e">name</span><span style="color:#f92672">());</span>
+        filter<span style="color:#f92672">.</span><span style="color:#a6e22e">setForceRequestEncoding</span><span style="color:#f92672">(</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">properties</span><span style="color:#f92672">.</span><span style="color:#a6e22e">shouldForce</span><span style="color:#f92672">(</span>
+                org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">.</span><span style="color:#a6e22e">web</span><span style="color:#f92672">.</span><span style="color:#a6e22e">servlet</span><span style="color:#f92672">.</span><span style="color:#a6e22e">server</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Encoding</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Type</span><span style="color:#f92672">.</span><span style="color:#a6e22e">REQUEST</span><span style="color:#f92672">));</span>
+        filter<span style="color:#f92672">.</span><span style="color:#a6e22e">setForceResponseEncoding</span><span style="color:#f92672">(</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">properties</span><span style="color:#f92672">.</span><span style="color:#a6e22e">shouldForce</span><span style="color:#f92672">(</span>
+                org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">.</span><span style="color:#a6e22e">web</span><span style="color:#f92672">.</span><span style="color:#a6e22e">servlet</span><span style="color:#f92672">.</span><span style="color:#a6e22e">server</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Encoding</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Type</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RESPONSE</span><span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">return</span> filter<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#75715e">//。。。。。。。
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+
+</code></pre></div><p>根据<code>WebMvcAutoConfiguration</code>类中的@Configuration ,可以得到：</p>
+<p><strong>一句话总结 ：根据当前不同的条件判断，决定这个配置类是否生效！</strong></p>
+<ul>
+<li>一但这个配置类生效；这个配置类就会给容器中添加各种组件；</li>
+<li>这些组件的属性是从对应的properties类中获取的，这些类里面的每一个属性又是和配置文件绑定的；</li>
+<li>所有在配置文件中能配置的属性都是在xxxxProperties类中封装着；</li>
+<li>配置文件能配置什么就可以参照某个功能对应的这个属性类</li>
+</ul>
+<p>**xxxxAutoConfigurartion：自动配置类；**给容器中添加组件</p>
+<p><strong>xxxxProperties:封装配置文件中相关属性；</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//从配置文件中获取指定的值和bean的属性进行绑定
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@ConfigurationProperties</span><span style="color:#f92672">(</span>prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;spring.http&#34;</span><span style="color:#f92672">)</span> 
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HttpProperties</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// .....
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p>配置文件里面试试前缀，虽然这里都被划掉了，但是原理是这样的过程。</p>
+<p><img src="/textImgs/image-20210201145445648.png" alt="image-20210201145445648"></p>
+<h3 id="6总结">6.总结</h3>
+<p>1、SpringBoot启动会加载大量的自动配置类</p>
+<p>2、我们看我们需要的功能有没有在SpringBoot默认写好的自动配置类当中；</p>
+<p>3、我们再来看这个自动配置类中到底配置了哪些组件；（只要我们要用的组件存在在其中，我们就不需要再手动配置了）</p>
+<p>4、给容器中自动配置类添加组件的时候，会从properties类中获取某些属性。我们只需要在配置文件中指定这些属性的值即可；</p>
+<p>**xxxxAutoConfigurartion：自动配置类；**给容器中添加组件</p>
+<p><strong>xxxxProperties:封装配置文件中相关属性；</strong></p>
+<p>========================================================================================================================</p>
+<h3 id="了解一下conditional">了解一下@Conditional</h3>
+<p>一个细节问题，<strong>自动配置类必须在一定的条件下才能生效；</strong></p>
+<p><code>@Conditional</code>派生注解（Spring注解版原生的<code>@Conditional</code>作用）</p>
+<p>作用：必须是<code>@Conditional</code>指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效；</p>
+<p><img src="/textImgs/640" alt="图片"></p>
+<p>可以通过在applicaiton.yaml文件中启用 debug=true属性；来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；</p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg==&amp;mid=2247483766&amp;idx=1&amp;sn=27739c5103547320c505d28bec0a9517&amp;scene=19#wechat_redirect">https://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg==&amp;mid=2247483766&amp;idx=1&amp;sn=27739c5103547320c505d28bec0a9517&amp;scene=19#wechat_redirect</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg==&amp;mid=2247483743&amp;idx=1&amp;sn=431a5acfb0e5d6898d59c6a4cb6389e7&amp;scene=19#wechat_redirect">https://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg==&amp;mid=2247483743&amp;idx=1&amp;sn=431a5acfb0e5d6898d59c6a4cb6389e7&amp;scene=19#wechat_redirect</a></p>
+<p><a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a></p></article>
     </section>
 
     <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
@@ -367,13 +622,13 @@
             
               <div class="item">
                 <div class="content">
-                  <a class="item" href="/posts/springboot2/">SpringBoot（2）</a>
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web（2）——SpringBoot运行原理探究</a>
                 </div>
               </div>
             
               <div class="item">
                 <div class="content">
-                  <a class="item" href="/posts/springboot1/">SpringBoot（1）</a>
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web（1）——概述和基本理解</a>
                 </div>
               </div>
             

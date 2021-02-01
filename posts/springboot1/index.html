@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>SpringBoot（1） | 🏹 Boo 的博客网站</title>
+    <title>SpringBoot-Web（1）——概述和基本理解 | 🏹 Boo 的博客网站</title>
 
     
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
 
 
 
 <meta name="author" content="🏹 Boo" />
-<meta name="description" content="" />
+<meta name="description" content="SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置， you can &amp;ldquo;just run&amp;rdquo;，能迅速的开发web应用，几行代码开发一个http接口。
+" />
 
 
 
@@ -20,8 +23,8 @@
 <link rel="canonical" href="https://Rechiard.github.io/posts/springboot1/" />
 
 
-<meta property="og:title" content="SpringBoot（1）" />
-<meta property="og:description" content="" />
+<meta property="og:title" content="SpringBoot-Web（1）——概述和基本理解" />
+<meta property="og:description" content="SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &ldquo;just run&rdquo;，能迅速的开发web应用，几行代码开发一个http接口。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Rechiard.github.io/posts/springboot1/" />
 <meta property="article:published_time" content="2021-01-30T14:16:47+08:00" />
@@ -30,8 +33,8 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="SpringBoot（1）"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="SpringBoot-Web（1）——概述和基本理解"/>
+<meta name="twitter:description" content="SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &ldquo;just run&rdquo;，能迅速的开发web应用，几行代码开发一个http接口。"/>
 
 
 <link rel="stylesheet" href="/css/semantic.min.css" />
@@ -118,10 +121,14 @@
 <div class="ui centered relaxed grid dream-grid">
   <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
     
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/view1.jpg);"></div>
+    </section>
+    
     <section class="ui attached segment">
       <header>
         <h1 class="ui large header">
-          SpringBoot（1）
+          SpringBoot-Web（1）——概述和基本理解
           <div class="sub header">
             @
             
@@ -132,7 +139,7 @@
                 Saturday, Jan 30, 2021
               
 
-            | 0 minute read
+            | 1 minute read
 
             | Update at
               
@@ -142,7 +149,153 @@
         </h1>
       </header>
 
-      <article class="main"></article>
+      <article class="main"><p>SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &ldquo;just run&rdquo;，能迅速的开发web应用，几行代码开发一个http接口。</p>
+<h3 id="什么是springboot">什么是SpringBoot</h3>
+<p>Spring Boot 是基于 Spring 开发，Spirng Boot 本身并不提供 Spring 框架的核心特性以及扩展功能，只是用于快速、敏捷地开发新一代基于 Spring 框架的应用程序。也就是说，它并不是用来替代 Spring 的解决方案，而是和 Spring 框架紧密结合用于提升 Spring 开发者体验的工具。Spring Boot 以<strong>约定大于配置的核心思想</strong>，默认帮我们进行了很多设置，多数 Spring Boot 应用只需要很少的 Spring 配置。同时它集成了大量常用的第三方库配置（例如 Redis、MongoDB、Jpa、RabbitMQ、Quartz 等等），Spring Boot 应用中这些第三方库几乎可以零配置的开箱即用。</p>
+<p>简单来说就是SpringBoot其实不是什么新的框架，它默认配置了很多框架的使用方式，就像maven整合了所有的jar包，spring boot整合了所有的框架 。</p>
+<p>Spring Boot 出生名门，从一开始就站在一个比较高的起点，又经过这几年的发展，生态足够完善，Spring Boot 已经当之无愧成为 Java 领域最热门的技术。</p>
+<h3 id="springboot的优点">SpringBoot的优点</h3>
+<ul>
+<li>为所有Spring开发者更快的入门</li>
+<li><strong>开箱即用</strong>，提供各种默认配置来简化项目配置</li>
+<li>内嵌式容器简化Web项目</li>
+<li>没有冗余代码生成和XML配置的要求</li>
+</ul>
+<h3 id="spring的创建项目方法">Spring的创建项目方法</h3>
+<ol>
+<li>
+<h4 id="使用spring-initializr-的-web页面创建项目">使用Spring Initializr 的 Web页面创建项目</h4>
+<p>1、打开  <a href="https://start.spring.io/">https://start.spring.io/</a></p>
+<p>2、填写项目信息</p>
+<p>3、点击”Generate Project“按钮生成项目；下载此项目</p>
+<p>4、解压项目包，并用IDEA以Maven项目导入，一路下一步即可，直到项目导入完毕。</p>
+<p>5、如果是第一次使用，可能速度会比较慢，包比较多、需要耐心等待一切就绪。</p>
+</li>
+<li>
+<h4 id="使用-idea-直接创建项目">使用 IDEA 直接创建项目</h4>
+<p>1、创建一个新项目</p>
+<p>2、选择spring initalizr ， 可以看到默认就是去官网的快速构建工具那里实现</p>
+<p>3、填写项目信息</p>
+<p>4、选择初始化的组件（初学勾选 Web 即可）</p>
+<p>5、填写项目路径</p>
+<p>6、等待项目构建成功</p>
+</li>
+<li>
+<h4 id="项目结构分析">项目结构分析：</h4>
+<p>通过上面步骤完成了基础项目的创建。就会自动生成以下文件。</p>
+<p>1、程序的主启动类</p>
+<p>2、一个 application.properties 配置文件</p>
+<p>3、一个 测试类</p>
+<p>4、一个 pom.xml</p>
+</li>
+</ol>
+<p>========================================================================================================================</p>
+<h3 id="最后附上一些pomxml文件中的依赖以及注解脑子一时记不住的话就可以来看两眼这些依赖都是干什么作用的具体版本想要更换的话可以去webjar上自行找">最后附上一些pom.xml文件中的依赖以及注解，脑子一时记不住的话，就可以来看两眼这些依赖都是干什么作用的(具体版本想要更换的话，可以去webjar上自行找）：</h3>
+<h4 id="springboot的starter">springboot的starter</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>parent<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>parent<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">4</span><span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>parent<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="web的starter">web的starter</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>web<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="druid是一个高效的数据查询系统jdbc组件">Druid是一个高效的数据查询系统，JDBC组件</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">alibaba</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>druid<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">9</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="mysql依赖">mysql依赖</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>mysql<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>scope<span style="color:#f92672">&gt;</span>runtime<span style="color:#f92672">&lt;/</span>scope<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>mysql<span style="color:#f92672">-</span>connector<span style="color:#f92672">-</span>java<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="mybatis提供自动配置类的starter">mybatis提供自动配置类的starter</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">mybatis</span><span style="color:#f92672">.</span><span style="color:#a6e22e">spring</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>mybatis<span style="color:#f92672">-</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="这个好像是用于开发后端时候用test文件夹run测试时候的依赖">这个好像是用于开发后端时候用test文件夹run测试时候的依赖</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>test<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>scope<span style="color:#f92672">&gt;</span>test<span style="color:#f92672">&lt;/</span>scope<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>exclusions<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>exclusion<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">junit</span><span style="color:#f92672">.</span><span style="color:#a6e22e">vintage</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>junit<span style="color:#f92672">-</span>vintage<span style="color:#f92672">-</span>engine<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>exclusion<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>exclusions<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="jquery依赖">jquery依赖</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">webjars</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>jquery<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="热部署在项目run的过程中当源码改变时页面也相应的发生改变等多个developer-tools工具">热部署(在项目run的过程中，当源码改变时页面也相应的发生改变)等多个Developer Tools工具</h4>
+<p>热部署的使用：</p>
+<ol>
+<li>
+<p>通过ctrl+F9来进行rebuild实习网页的更新(热部署)</p>
+</li>
+<li>
+<p>先在File-&gt;setting-&gt;compiler-&gt;build project automatically打勾，再用快捷键ctrl+shift+alt+/ 打开Registry,找到compiler.automake.allow.when.app.running打上勾</p>
+</li>
+<li>
+<p>run程序后，在console中clear All，修改源码，在浏览器中打开localhost：8080/hello，刷新，则可以看到idea的console自动重新部署了</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>devtools<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>optional<span style="color:#f92672">&gt;</span><span style="color:#66d9ef">true</span><span style="color:#f92672">&lt;/</span>optional<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="yaml提示的依赖方便编写yaml文件">yaml提示的依赖，方便编写yaml文件</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>optional<span style="color:#f92672">&gt;</span><span style="color:#66d9ef">true</span><span style="color:#f92672">&lt;/</span>optional<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>configuration<span style="color:#f92672">-</span>processor<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="thymeleaf的依赖是springboot支持前端页面的一个模板技术">thymeleaf的依赖，是SpringBoot支持前端页面的一个模板技术</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">-</span>thymeleaf<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="lombok的依赖用于简化pojo中的setgettosrting等等方法可以利用data代替注意data简化的是无参的构造函数">lombok的依赖，用于简化pojo中的set/get/tosrting等等方法，可以利用@Data代替，注意@Data简化的是无参的构造函数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">projectlombok</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>lombok<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">18</span><span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="校验的规范依赖">校验的规范依赖</h4>
+<p>校验是为了约束一些实例化的条件，例如程序员的年龄在20-35之内，规范了数据库的约束。在实际例子中，通过@Validated来装配到类中，并且有@Not Null/@Max/@Min等等注解的使用当有内部类或者别的类引用并且没有属性注入的时候，需要在属性上面添加@Vaild注解，否则无法判断内部类的实例化是否为空</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">hibernate</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>hibernate<span style="color:#f92672">-</span>validator<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>5<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Final</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="打包用的插件用于执行打包后的文件提供主清单属性">打包用的插件，用于执行打包后的文件，提供主清单属性</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>build<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>plugins<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>plugin<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">springframework</span><span style="color:#f92672">.</span><span style="color:#a6e22e">boot</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>maven<span style="color:#f92672">-</span>plugin<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;/</span>plugin<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>plugins<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>build<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="log4j日志依赖">log4j日志依赖</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>log4j<span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>log4j<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">15</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div></article>
     </section>
 
     <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
@@ -367,13 +520,13 @@
             
               <div class="item">
                 <div class="content">
-                  <a class="item" href="/posts/springboot2/">SpringBoot（2）</a>
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web（2）——SpringBoot运行原理探究</a>
                 </div>
               </div>
             
               <div class="item">
                 <div class="content">
-                  <a class="item" href="/posts/springboot1/">SpringBoot（1）</a>
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web（1）——概述和基本理解</a>
                 </div>
               </div>
             
