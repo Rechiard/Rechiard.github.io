@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SpringBoot集成Swagger的了解和使用 | 🏹 Boo 的博客网站</title>
+
+    
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/" />
+
+
+<meta property="og:title" content="SpringBoot集成Swagger的了解和使用" />
+<meta property="og:description" content="Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/" />
+<meta property="article:published_time" content="2021-03-01T14:42:06+08:00" />
+<meta property="article:modified_time" content="2021-03-01T14:42:06+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SpringBoot集成Swagger的了解和使用"/>
+<meta name="twitter:description" content="Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/background.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/background-dark.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/view3.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          SpringBoot集成Swagger的了解和使用
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Monday, Mar 1, 2021
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Monday, Mar 1, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。</p>
+<p>项目存放的地址： <a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为 <strong>&ldquo;Swagger&rdquo;</strong> 。</p>
+<h1 id="swagger简介">Swagger简介</h1>
+<ol>
+<li>
+<p>号称世界上最流行的Api框架</p>
+</li>
+<li>
+<p>RestFul Api文档在线自动生成工具=&gt;<code>Api文档定义同步更新</code></p>
+</li>
+<li>
+<p>直接运行，在线测试Api接口</p>
+</li>
+<li>
+<p>支持多种语言（Java，Php）</p>
+</li>
+</ol>
+<p>官网：https://swagger.io/</p>
+<p>在项目使用Swagger需要Springbox：</p>
+<ul>
+<li>
+<p>Swagger2</p>
+</li>
+<li>
+<p>ui</p>
+</li>
+</ul>
+<h3 id="前后端分离">前后端分离</h3>
+<p><strong>前后端分离时代</strong>：</p>
+<p>后端：后端控制层，服务层，数据访问层【后端团队】</p>
+<p>前端：前端控制层，视图层【前端团队】</p>
+<p>伪造后端数据，json，已经存在了，不需要和藕断，前端工程依旧能够跑起来</p>
+<p>前后端如何交互？ ===》 API</p>
+<p>前后端相互独立，松耦合</p>
+<p>前后端甚至可以部署在不同的服务器上</p>
+<p><strong>产生一个问题</strong>：前后端集成联调，前端人员和后端人员无法做到“即使协商，尽早解决”，最终导致问题集中爆发。</p>
+<p><strong>解决方案</strong>：</p>
+<p>首先指定schema【计划的提纲】，实时更新最新API，降低集成的风险</p>
+<p>早些年：指定word计划文档</p>
+<hr>
+<h3 id="springboot集成swagger">SpringBoot集成Swagger</h3>
+<ol>
+<li>
+<p>新建一个SpringBoot-Web项目</p>
+</li>
+<li>
+<p>导入相关依赖（<a href="https://mvnrepository.com/">https://mvnrepository.com/</a>）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> <span style="color:#f92672">&lt;!--</span>swagger<span style="color:#f92672">-</span>ui<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>io<span style="color:#f92672">.</span><span style="color:#a6e22e">springfox</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>springfox<span style="color:#f92672">-</span>swagger<span style="color:#f92672">-</span>ui<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+   
+    <span style="color:#f92672">&lt;!--</span>swagger2<span style="color:#f92672">--&gt;</span>
+    <span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>io<span style="color:#f92672">.</span><span style="color:#a6e22e">springfox</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>springfox<span style="color:#f92672">-</span>swagger2<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div></li>
+<li>
+<p>编写一个Hello工程</p>
+</li>
+<li>
+<p>配置Swagger ==&gt; Config</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>
+<span style="color:#a6e22e">@EnableSwagger2</span>     <span style="color:#75715e">//开启Swagger2
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SwaggerConfig</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span>
+</code></pre></div></li>
+<li>
+<p>测试运行，访问页面</p>
+<p><img src="/textImgs/image-20210224123936050.png" alt="image-20210224123936050"></p>
+</li>
+</ol>
+<hr>
+<h3 id="配置swagger">配置Swagger</h3>
+<p><strong>Swagger的bean实例Docket：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">apiInfo</span><span style="color:#f92672">(</span>apiInfo<span style="color:#f92672">());</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>配置Swagger信息=apiInfo:</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> ApiInfo <span style="color:#a6e22e">apiInfo</span><span style="color:#f92672">(){</span>
+
+    <span style="color:#75715e">//作者信息，在运行访问页面的时候可以看到效果
+</span><span style="color:#75715e"></span>    Contact DEFAULT_CONTACT <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Contact<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;龚剑波&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;http://www.rechiard.site&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;616316004@qq.com&#34;</span><span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ApiInfo<span style="color:#f92672">(</span>
+        <span style="color:#e6db74">&#34;龚剑波的SwaggerAPI文档&#34;</span><span style="color:#f92672">,</span>
+        <span style="color:#e6db74">&#34;这是我的第一个Swagger配置制作&#34;</span><span style="color:#f92672">,</span>
+        <span style="color:#e6db74">&#34;1.0&#34;</span><span style="color:#f92672">,</span>
+        <span style="color:#e6db74">&#34;http://www.rechiard.site&#34;</span><span style="color:#f92672">,</span>
+        DEFAULT_CONTACT<span style="color:#f92672">,</span>
+        <span style="color:#e6db74">&#34;Apache 2.0&#34;</span><span style="color:#f92672">,</span>
+        <span style="color:#e6db74">&#34;http://www.apache.org/licenses/LICENSE-2.0&#34;</span><span style="color:#f92672">,</span>
+        <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">());</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>========================================================================================================================</p>
+<h3 id="swagger配置扫描接口">Swagger配置扫描接口</h3>
+<p><strong>Docket.select()</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//配置了Swagger的Docket的Baen实例
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">)</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">apiInfo</span><span style="color:#f92672">(</span>apiInfo<span style="color:#f92672">())</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">()</span>
+        <span style="color:#75715e">//RequestHandlerSelectors，配置要扫描接口的方式
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//basePackage:指定要扫描的包
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//any:扫描全部
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//none:不扫描
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//withClassAnnotation:扫描类上的注解，参数是一个注解的反射对象
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//withMethodAnnotation:扫描方法上的注解，
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">apis</span><span style="color:#f92672">(</span>RequestHandlerSelectors<span style="color:#f92672">.</span><span style="color:#a6e22e">basePackage</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;com.example.swagger.controller&#34;</span><span style="color:#f92672">))</span>
+        <span style="color:#75715e">//过滤路径
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//.paths(PathSelectors.ant(&#34;/**&#34;))
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>   <span style="color:#75715e">//工厂模式
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p><strong>配置是否启动Swagger</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//配置了Swagger的Docket的Baen实例
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">)</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">apiInfo</span><span style="color:#f92672">(</span>apiInfo<span style="color:#f92672">())</span>
+    	<span style="color:#f92672">.</span><span style="color:#a6e22e">enable</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span><span style="color:#75715e">//enable是否启动Swagger，如果为false，则Swagger不能在浏览器中使用   
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">apis</span><span style="color:#f92672">(</span>RequestHandlerSelectors<span style="color:#f92672">.</span><span style="color:#a6e22e">basePackage</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;com.example.swagger.controller&#34;</span><span style="color:#f92672">))</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>========================================================================================================================</p>
+<h3 id="问如果只希望swagger在生成环境中使用在发布的时候不适用">问：如果只希望Swagger在生成环境中使用，在发布的时候不适用？</h3>
+<ul>
+<li>判断是不是生产环境，flag = false</li>
+<li>注入enable（）</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//配置了Swagger的Docket的Baen实例 //配置了Swagger的Docket的Baen实例
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket</span><span style="color:#f92672">(</span>Environment environment<span style="color:#f92672">){</span>
+
+    <span style="color:#75715e">//设置要显示的Swagger环境
+</span><span style="color:#75715e"></span>    Profiles profiles <span style="color:#f92672">=</span> Profiles<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dev&#34;</span><span style="color:#f92672">,</span><span style="color:#e6db74">&#34;test&#34;</span><span style="color:#f92672">);</span>
+
+    <span style="color:#75715e">//获取项目的环境：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//通过 environment.acceptsProfiles判断是否处于自己设定的环境当中
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">boolean</span> flag <span style="color:#f92672">=</span> environment<span style="color:#f92672">.</span><span style="color:#a6e22e">acceptsProfiles</span><span style="color:#f92672">(</span>profiles<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">)</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">apiInfo</span><span style="color:#f92672">(</span>apiInfo<span style="color:#f92672">())</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">enable</span><span style="color:#f92672">(</span>flag<span style="color:#f92672">)</span>   <span style="color:#75715e">//判断是否开启Swagger
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">apis</span><span style="color:#f92672">(</span>RequestHandlerSelectors<span style="color:#f92672">.</span><span style="color:#a6e22e">basePackage</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;com.example.swagger.controller&#34;</span><span style="color:#f92672">))</span>
+        <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>   <span style="color:#75715e">//工厂模式
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p><img src="/textImgs/image-20210228164329245.png" alt="image-20210228164329245"></p>
+<p>========================================================================================================================</p>
+<h3 id="配置api文档的分组">配置API文档的分组</h3>
+<p>Api的分组是为了方便多人开发时候减少发生的冲突。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">.</span><span style="color:#a6e22e">groupName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;龚剑波&#34;</span><span style="color:#f92672">)</span>
+</code></pre></div><h3 id="配置多个分组">配置多个分组</h3>
+<p>多个Docket实例既可，以下代码就是多个分组：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket1</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">).</span><span style="color:#a6e22e">groupName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;A&#34;</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+<span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket2</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">).</span><span style="color:#a6e22e">groupName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;B&#34;</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+<span style="color:#a6e22e">@Bean</span>
+<span style="color:#66d9ef">public</span> Docket <span style="color:#a6e22e">docket3</span><span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Docket<span style="color:#f92672">(</span>DocumentationType<span style="color:#f92672">.</span><span style="color:#a6e22e">SWAGGER_2</span><span style="color:#f92672">).</span><span style="color:#a6e22e">groupName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;C&#34;</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>效果图：</p>
+<p><img src="/textImgs/image-20210302195950211.png" alt="image-20210302195950211"></p>
+<hr>
+<h3 id="实体类配置">实体类配置：</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//@Api(&#34;注释&#34;)
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@ApiModel</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;用户实体类&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#75715e">//注解的作用：在页面的Models中显示中文
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@ApiModelProperty</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;用户名&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String username<span style="color:#f92672">;</span>
+    <span style="color:#a6e22e">@ApiModelProperty</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;密码&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String password<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p><strong>Controller</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RestController</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloController</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/hello&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">hello</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#75715e">//只要我们的接口中，返回值中存在实体类，他就会被扫描到Swagger中
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@PostMapping</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/hello&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">user</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> User<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#75715e">//Operation接口,不是放在类上，是放在方法上面的
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@ApiOperation</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello控制类&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/hello2&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">hello2</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@ApiParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;用户名&#34;</span><span style="color:#f92672">)</span> String username<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">+</span>username<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@ApiOperation</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Post测试类&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#a6e22e">@PostMapping</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/postt&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">postt</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@ApiParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;用户名&#34;</span><span style="color:#f92672">)</span> User user<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">return</span> user<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>我们在代码中添加一系列的@Api注解后，就可以在页面中将英文转化为中文，方便前后端对接：</strong></p>
+<p><img src="/textImgs/image-20210302200155280.png" alt="image-20210302200155280"></p>
+<p><strong>在swagger-ui.html中，我们也可以在线实时的测试接口的功能，非常的方便：</strong></p>
+<p><img src="/textImgs/image-20210302200405883.png" alt="image-20210302200405883"></p>
+<h3 id="总结">总结：</h3>
+<ol>
+<li>
+<p>可以通过Swagger给一些比较难理解的属性或者接口，增加注解信息</p>
+</li>
+<li>
+<p>接口文档实时更新</p>
+</li>
+<li>
+<p>可以在线测试</p>
+</li>
+</ol>
+<h3 id="注意点">注意点</h3>
+<ol>
+<li>
+<p><strong>在学习Swagger例子的时候，一定要去看一下源码有哪些改变，我一开始使用Swagger2的版本就将访问的URL的swagger-ui.html换成了index.html，所以在高版本的时候就直接访问localhost:8080/swagger就可以了，特别坑人！！！</strong></p>
+</li>
+<li>
+<p><strong>在正式发布的时候，关闭Swagger！！！处于安全考虑，而且还能节省内存开销，目前还没工作，没有体验到，反正网上都是这么说的。</strong></p>
+</li>
+</ol></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%BC%80%E6%BA%90/" title="开源">
+        开源
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%94%9F%E6%B4%BB/" title="生活">
+        生活
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/git/" title="Git">
+              Git
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub4/">玩转Github（4）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub3/">玩转Github（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub2/">玩转Github（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub1/">玩转Github（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring/" title="Spring">
+              Spring
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Jpa和MyBatis的对比学习总结</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/">Spring初次体验总结（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/springboot/" title="Springboot">
+              Springboot
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web（2）——SpringBoot运行原理探究</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web（1）——概述和基本理解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+              多线程
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/">对Java核心——Java多线程并发的理解（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/">对Java核心——Java多线程并发的理解（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class=" instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class=" codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class="large instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class="large codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/background-dark.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

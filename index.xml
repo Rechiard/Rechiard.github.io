@@ -6,7 +6,16 @@
     <description>Recent content on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sat, 30 Jan 2021 14:16:51 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Mar 2021 14:42:06 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringBoot集成Swagger的了解和使用</title>
+      <link>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Mon, 01 Mar 2021 14:42:06 +0800</pubDate>
+      
+      <guid>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>SpringBoot-Web（2）——SpringBoot运行原理探究</title>
       <link>https://Rechiard.github.io/posts/springboot2/</link>
