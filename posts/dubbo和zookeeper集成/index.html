@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dubbo和Zookeeper集成 | 🏹 Boo 的博客网站</title>
+
+    
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="通过对分布式系统的学习，利用SpingBoot &#43; dubbo &#43; zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/" />
+
+
+<meta property="og:title" content="Dubbo和Zookeeper集成" />
+<meta property="og:description" content="通过对分布式系统的学习，利用SpingBoot &#43; dubbo &#43; zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/" />
+<meta property="article:published_time" content="2021-03-06T12:47:20+08:00" />
+<meta property="article:modified_time" content="2021-03-06T12:47:20+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dubbo和Zookeeper集成"/>
+<meta name="twitter:description" content="通过对分布式系统的学习，利用SpingBoot &#43; dubbo &#43; zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/backgroundwhite.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/backgroundblack.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/Rechiard.github.io\/'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/view6.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          Dubbo和Zookeeper集成
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Saturday, Mar 6, 2021
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Saturday, Mar 6, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>通过对分布式系统的学习，利用SpingBoot + dubbo + zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法</p>
+<p>声明：本文内容完全是根据<strong>B站Up主狂神说</strong> 学习的！！</p>
+<p>项目存放地址：<a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为&quot;Dubbo+Zookeeper&quot;</p>
+<h1 id="分布式集群dubbozookeeperspringboot">分布式、集群、Dubbo+Zookeeper+SpringBoot</h1>
+<h3 id="什么是分布式系统">什么是分布式系统？</h3>
+<p>分布式系统是若干独立计算机的集合，这些计算机对于用户来说就像单个相关系统。</p>
+<p>分布式系统是由一组通过网络进行通信、为了完成共同的任务和协调工作的计算机节点组成的系统。分布式系统的出现是为了用廉价的、普通的机器完成单个计算机无法完成的计算、存储任务。其目的是利用更多的机器、处理更多的数据。</p>
+<p>分布式系统（distributed system）是建立在网络之上的软件系统</p>
+<p>首先需要明确的是，只有当单个节点的处理能力无法满足日益增长的计算、存储任务的时候，且硬件的提升高昂到得不偿失的时候，应用程序也不能进一步优化的时候，我们才需要考虑分布式系统。通俗的来说，也就是使用的人多了，数据多了，承受不住了，才考虑分布式，一开始是不考虑分布式系统的。</p>
+<p>其中就会牵扯到<strong>负载均衡</strong>的概念，也就是说我们通过<strong>Nginx代理服务器</strong>将多个单机联系起来的时候需要考虑的事情是比单机服务器没有的问题。</p>
+<p><img src="/textImgs/image-20210305150113519.png" alt="image-20210305150113519"></p>
+<h3 id="什么是集群">什么是集群？</h3>
+<p>多台服务器组成的一组计算机，作为一个整体存在，向用户提供一组网络资源，这些单个的服务器就是集群的节点。</p>
+<p>集群拥有以下两个特点：</p>
+<ol>
+<li>
+<p><strong>可扩展性：</strong> 集群的性能不限制于单一的服务实体，新的服务实体可以动态的添加到集群，从而增强集群的性能。</p>
+</li>
+<li>
+<p><strong>高可用性：</strong> 集群当其中一个节点发生故障时，这台节点上面所运行的应用程序将在另一台节点被自动接管，消除单点故障对于增强数据可用性、可达性和可靠性是非常重要的。</p>
+</li>
+</ol>
+<p>集群必须拥有以下两大能力：</p>
+<ol>
+<li>负载均衡：负载均衡把任务比较均匀的分布到集群环境下的计算和网络资源，以提高数据吞吐量。</li>
+<li>错误恢复：如果集群中的某一台服务器由于故障或者维护需要无法使用，资源和应用程序将转移到可用的集群节点上。这种由于某个节点的资源不能工作，另一个可用节点中的资源能够透明的接管并继续完成任务的过程，叫做错误恢复。</li>
+</ol>
+<p><strong>负载均衡和错误恢复</strong>要求各服务器中有执行同一任务的资源存在，而且对于同一任务的各个资源来说，执行任务所需的信息视图必须是相同的。</p>
+<h3 id="分布式和集群的区别">分布式和集群的区别</h3>
+<ol>
+<li>
+<p>分布式是指将不同的业务分布到不同的地方。</p>
+</li>
+<li>
+<p>而集群是指将几台服务器集中在一起，实在同一个业务。</p>
+</li>
+<li>
+<p>分布式的每一个节点，都可以用来做集群。而集群不一定就是分布式了</p>
+</li>
+</ol>
+<p>例如：互联网上访问的人多了，就可以做一个集群，前面放一个响应服务器，后面几台服务器完成同一业务，如果有业务访问的时候，响应服务器看哪台服务器的负载不是很重，就将任务交给哪台去完成。</p>
+<p>而分布式，从狭义上理解，也与集群差不多，但是它的组织比较松散，不像集群，有一定组织性，一台服务器宕了，其他的服务器可以顶上来。分布式的每一个节点，都完成不同的业务，一个节点宕了，这个业务就不可访问了。</p>
+<hr>
+<h1 id="dubbo">Dubbo</h1>
+<h3 id="rpc">RPC</h3>
+<p>RPC，就是Remote Procedure Call的简称，翻译成中文就是<strong>远程过程调用</strong>。是一种进程间的通信方式，他是一种技术的思想，而不是规范。</p>
+<p>首先说说本地过程调用，就相当于在自己的计算机中有方法A和B，A可以直接调用B。所以远程过程调用就是计算机的方法A想用调用另一台计算机的方法B就要利用到远程过程调用。</p>
+<p>RPC与HTTP都是用来网络通讯和序列化的。</p>
+<h3 id="dubbo的由来">Dubbo的由来</h3>
+<p>随着互联网的发展，网站应用的规模不断扩大，常规的垂直应用架构已无法应对，分布式服务架构以及流动计算架构势在必行，亟需一个治理系统确保架构有条不紊的演进。</p>
+<p><img src="/textImgs/dubbo-architecture-roadmap.jpg" alt="image"></p>
+<h4 id="单一应用架构">单一应用架构</h4>
+<p>当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的数据访问框架(ORM)是关键。</p>
+<p>缺点：</p>
+<ol>
+<li>性能扩展比较难</li>
+<li>协同开发问题</li>
+<li>不利于升级维护</li>
+</ol>
+<h4 id="垂直应用架构">垂直应用架构</h4>
+<p>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，提升效率的方法之一是将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</p>
+<p>缺点：公用莫怪无法重复利用，开发性的浪费</p>
+<h4 id="分布式服务架构">分布式服务架构</h4>
+<p>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</p>
+<h4 id="流动计算架构">流动计算架构</h4>
+<p>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键。</p>
+<h3 id="总结">总结</h3>
+<p>Dubbo作为一款高性能、轻量级的开源 Java RPC服务框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。</p>
+<p><img src="/textImgs/image-20210305161823614.png" alt="image-20210305161823614"></p>
+<p>========================================================================================================================</p>
+<h3 id="dubbo的工作原理">Dubbo的工作原理</h3>
+<p><img src="/textImgs/image-20210305162833053.png" alt="image-20210305162833053"></p>
+<p><strong>服务提供者（Provider）：</strong> 暴露服务的服务提供方，服务提供者在启动时，向注册中心注册自己提供的服务。</p>
+<p><strong>服务消费者（Consumer）：</strong> 调用远程服务的服务消费方，服务消费者在启动时，向注册中心订阅自己需要的服务，服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</p>
+<p><strong>注册中心（Registry）：</strong> 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</p>
+<p><strong>监控中心（Monitor）：</strong> 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一条统计数据到监控中心。</p>
+<h3 id="调用关系说明">调用关系说明</h3>
+<ul>
+<li>服务容器负责启动，加载，运行服务提供者</li>
+<li>服务提供者在启动时，向注册中心注册自己提供的服务</li>
+<li>服务消费者在启动时，向注册中心订阅自己所需的服务</li>
+<li>注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者</li>
+<li>服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一条统计数据到监控中心。</li>
+</ul>
+<p>========================================================================================================================</p>
+<h3 id="dubbo环境搭建">Dubbo环境搭建</h3>
+<p>在安装Dubbo之前需要了解一下Zookeeper：</p>
+<h3 id="zookeeper">Zookeeper</h3>
+<p>ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，是Hadoop和Hbase的重要组件。它是一个为分布式应用提供一致性服务的软件，提供的功能包括：配置维护、域名服务、分布式同步、组服务等。</p>
+<p>相当于**在Dubbo工作原理中的注册中心（Registry）**的功能。</p>
+<h3 id="window下安装zookeeper">Window下安装zookeeper</h3>
+<ol>
+<li>
+<p>下载zookeeper：<a href="https://zookeeper.apache.org/releases.html">https://zookeeper.apache.org/releases.html</a></p>
+</li>
+<li>
+<p>运行/bin/zkServer.cmd，初次运行会报错，没有zoo.cfg配置文件；可能会闪退</p>
+<p>解决方法：编辑zkServer.cmd文件末尾添加pause。这样运行出错就不会退出，会提示错误信息。</p>
+</li>
+<li>
+<p>一般的错误信息都是因为在/conf下没有zoo.cfg，所以我们需要复制conf/zoo_simple.cfg这个文件然后改名为zoo.cfg就可以运行zkServer.cmd了</p>
+</li>
+<li>
+<p>运行成功之后，需要使用zkCli.cmd测试</p>
+</li>
+<li>
+<p>一下是一些zookeeper的一些Linxu代码：</p>
+<ul>
+<li><code>ls /</code>：列出zookeeper根下保存的所有节点</li>
+<li><code>create -e /xxx 123</code>：创建一个xxx的节点，值为2123</li>
+<li><code>get /xxx </code>:获取/xxx节点的值</li>
+</ul>
+</li>
+</ol>
+<p>========================================================================================================================</p>
+<h3 id="window下安装dubbo-admin官方的dubbo的监控管理后台">window下安装dubbo-admin(官方的dubbo的监控管理后台)</h3>
+<p>dubbo本身并不是一个服务软件，它其实就是一个jar包，能够帮你的java程序连接到zookeeper，并利用zookeeper消费、提供服务。</p>
+<p><strong>但是为了让用户更好的管理监控众多的dubbo服务，官方提供了一个可视化的监控程序dubbo-admin</strong>，不过这个监控即使不装也不影响使用。就类似于Swagger一样的图形化界面的功能使用网页。</p>
+<ol>
+<li>
+<p>dubbo-admin的压缩包的下载页面：<a href="https://github.com/apache/dubbo-admin/tree/master">https://github.com/apache/dubbo-admin/tree/master</a></p>
+</li>
+<li>
+<p>解压之后，利用idea或者cmd将文件打包，指令为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">mvn clean package <span style="color:#f92672">-</span>Dmaven.test.skip<span style="color:#f92672">=</span>true
+</code></pre></div></li>
+<li>
+<p>打包好了之后，运行zkServer.cmd文件，然后双击刚刚打包的jar包或者使用cmd指令：<code>java -jar dubbo-admin-0.0.1-SNAPSHOT.jar</code>，如果没有报错的话就可以在访问：<a href="localhost:7001">localhost:7001</a>，登录的账户密码应该就是dubbo-admin里的application.properties里的账户密码信息，一般是设为root-root，以下为登录成功页面：</p>
+<p><img src="/textImgs/image-20210305184244907.png" alt="image-20210305184244907"></p>
+</li>
+</ol>
+<hr>
+<h1 id="springbootdubbozookeeper">SpringBoot+Dubbo+zookeeper</h1>
+<ol>
+<li>
+<p>启动zookeeper ！</p>
+</li>
+<li>
+<p>IDEA创建一个空项目；</p>
+</li>
+<li>
+<p>创建一个模块，实现服务提供者：provider-server ， 选择web依赖即可</p>
+</li>
+<li>
+<p>项目创建完毕，我们写一个服务，比如卖票的服务；</p>
+</li>
+</ol>
+<p>编写接口：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.provider.service<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">TicketService</span> <span style="color:#f92672">{</span>
+   <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getTicket</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>编写实体类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.provider.service<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TicketServiceImpl</span> <span style="color:#66d9ef">implements</span> TicketService <span style="color:#f92672">{</span>
+   <span style="color:#a6e22e">@Override</span>
+   <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getTicket</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+       <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;《Java》&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><ol start="5">
+<li>
+<p>创建一个模块，实现服务消费者：consumer-server ， 选择web依赖即可</p>
+</li>
+<li>
+<p>项目创建完毕，我们写一个服务，比如用户的服务；</p>
+</li>
+</ol>
+<p>编写service</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.kuang.consumer.service<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+   <span style="color:#75715e">//我们需要去拿去注册中心的服务
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p><strong>需求：现在我们的用户想使用买票的服务，这要怎么弄呢 ？</strong></p>
+<h2 id="服务提供者">服务提供者</h2>
+<p><strong>1、将服务提供者注册到注册中心，我们需要整合Dubbo和zookeeper，所以需要导包</strong></p>
+<p><strong>我们从dubbo官网进入github，看下方的帮助文档，找到dubbo-springboot，找到依赖包</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;!--</span> Dubbo Spring Boot Starter <span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">dubbo</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>dubbo<span style="color:#f92672">-</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">7</span><span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>    
+</code></pre></div><p><strong>zookeeper的包我们去maven仓库下载，zkclient；</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;!--</span> https<span style="color:#f92672">:</span><span style="color:#75715e">//mvnrepository.com/artifact/com.github.sgroschupf/zkclient --&gt;
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">github</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sgroschupf</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>zkclient<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><p><strong>【新版的坑】zookeeper及其依赖包，解决日志冲突，还需要剔除日志依赖；</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;!--</span> 引入zookeeper <span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">curator</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>curator<span style="color:#f92672">-</span>framework<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">12</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">curator</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>curator<span style="color:#f92672">-</span>recipes<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">12</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">zookeeper</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>zookeeper<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">4</span><span style="color:#f92672">.</span><span style="color:#a6e22e">6</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;!--</span>排除这个slf4j<span style="color:#f92672">-</span>log4j12<span style="color:#f92672">--&gt;</span>
+   <span style="color:#f92672">&lt;</span>exclusions<span style="color:#f92672">&gt;</span>
+       <span style="color:#f92672">&lt;</span>exclusion<span style="color:#f92672">&gt;</span>
+           <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">slf4j</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+           <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>slf4j<span style="color:#f92672">-</span>log4j12<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+       <span style="color:#f92672">&lt;/</span>exclusion<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;/</span>exclusions<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><p><strong>2、在springboot配置文件中配置dubbo相关属性！</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>当前应用名字
+dubbo<span style="color:#f92672">.</span><span style="color:#a6e22e">application</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span><span style="color:#f92672">=</span>provider<span style="color:#f92672">-</span>server
+<span style="color:#960050;background-color:#1e0010">#</span>注册中心地址
+dubbo<span style="color:#f92672">.</span><span style="color:#a6e22e">registry</span><span style="color:#f92672">.</span><span style="color:#a6e22e">address</span><span style="color:#f92672">=</span>zookeeper<span style="color:#f92672">:</span><span style="color:#75715e">//127.0.0.1:2181
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">#</span>扫描指定包下服务
+dubbo<span style="color:#f92672">.</span><span style="color:#a6e22e">scan</span><span style="color:#f92672">.</span><span style="color:#a6e22e">base</span><span style="color:#f92672">-</span>packages<span style="color:#f92672">=</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">kuang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">provider</span><span style="color:#f92672">.</span><span style="color:#a6e22e">service</span>
+</code></pre></div><p><strong>3、在service的实现类中配置服务注解，发布服务！注意导包问题，这里的@Service注解注意是dubbo包里面的。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> org.apache.dubbo.config.annotation.Service<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Component<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Service</span> <span style="color:#75715e">//将服务发布出去
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Component</span> <span style="color:#75715e">//放在容器中
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TicketServiceImpl</span> <span style="color:#66d9ef">implements</span> TicketService <span style="color:#f92672">{</span>
+   <span style="color:#a6e22e">@Override</span>
+   <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getTicket</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+       <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;《狂神说Java》&#34;</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>逻辑理解 ：应用启动起来，dubbo就会扫描指定的包下带有@component注解的服务，将它发布在指定的注册中心中！</strong></p>
+<p>启动zookeeper和之前打包的dubbo-admin，并且最后运行此实验项目provider-server，可以在dubbo-admin监控到provider-server注入进来了中<img src="/content/textImgs/image-20210306112603392.png" alt="image-20210306112603392"></p>
+<h2 id="服务消费者">服务消费者</h2>
+<p><strong>1、导入依赖，和之前的依赖一样；</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">&lt;!--</span>dubbo<span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;!--</span> Dubbo Spring Boot Starter <span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">dubbo</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>dubbo<span style="color:#f92672">-</span>spring<span style="color:#f92672">-</span>boot<span style="color:#f92672">-</span>starter<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">7</span><span style="color:#f92672">.</span><span style="color:#a6e22e">3</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;!--</span>zookeeper<span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;!--</span> https<span style="color:#f92672">:</span><span style="color:#75715e">//mvnrepository.com/artifact/com.github.sgroschupf/zkclient --&gt;
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>com<span style="color:#f92672">.</span><span style="color:#a6e22e">github</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sgroschupf</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>zkclient<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">1</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;!--</span> 引入zookeeper <span style="color:#f92672">--&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">curator</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>curator<span style="color:#f92672">-</span>framework<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">12</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">curator</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>curator<span style="color:#f92672">-</span>recipes<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>2<span style="color:#f92672">.</span><span style="color:#a6e22e">12</span><span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;</span>dependency<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">zookeeper</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>zookeeper<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;</span>version<span style="color:#f92672">&gt;</span>3<span style="color:#f92672">.</span><span style="color:#a6e22e">4</span><span style="color:#f92672">.</span><span style="color:#a6e22e">14</span><span style="color:#f92672">&lt;/</span>version<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;!--</span>排除这个slf4j<span style="color:#f92672">-</span>log4j12<span style="color:#f92672">--&gt;</span>
+   <span style="color:#f92672">&lt;</span>exclusions<span style="color:#f92672">&gt;</span>
+       <span style="color:#f92672">&lt;</span>exclusion<span style="color:#f92672">&gt;</span>
+           <span style="color:#f92672">&lt;</span>groupId<span style="color:#f92672">&gt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">slf4j</span><span style="color:#f92672">&lt;/</span>groupId<span style="color:#f92672">&gt;</span>
+           <span style="color:#f92672">&lt;</span>artifactId<span style="color:#f92672">&gt;</span>slf4j<span style="color:#f92672">-</span>log4j12<span style="color:#f92672">&lt;/</span>artifactId<span style="color:#f92672">&gt;</span>
+       <span style="color:#f92672">&lt;/</span>exclusion<span style="color:#f92672">&gt;</span>
+   <span style="color:#f92672">&lt;/</span>exclusions<span style="color:#f92672">&gt;</span>
+<span style="color:#f92672">&lt;/</span>dependency<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>2、<strong>配置参数</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#960050;background-color:#1e0010">#</span>当前应用名字
+dubbo<span style="color:#f92672">.</span><span style="color:#a6e22e">application</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span><span style="color:#f92672">=</span>consumer<span style="color:#f92672">-</span>server
+<span style="color:#960050;background-color:#1e0010">#</span>注册中心地址
+dubbo<span style="color:#f92672">.</span><span style="color:#a6e22e">registry</span><span style="color:#f92672">.</span><span style="color:#a6e22e">address</span><span style="color:#f92672">=</span>zookeeper<span style="color:#f92672">:</span><span style="color:#75715e">//127.0.0.1:2181
+</span></code></pre></div><p><strong>3. 本来正常步骤是需要将服务提供者的接口打包，然后用pom文件导入，我们这里使用简单的方式，直接将服务的接口拿过来，路径必须保证正确，即和服务提供者相同；</strong></p>
+<p><img src="/textImgs/640" alt=" "></p>
+<p><strong>4. 完善消费者的服务类，这里的@Service是springboot中的。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.kuang.consumer.service<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> com.kuang.provider.service.TicketService<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.apache.dubbo.config.annotation.Reference<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Service<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Service</span> <span style="color:#75715e">//注入到容器中
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+
+   <span style="color:#a6e22e">@Reference</span> <span style="color:#75715e">//远程引用指定的服务，他会按照全类名进行匹配，看谁给注册中心注册了这个全类名
+</span><span style="color:#75715e"></span>   TicketService ticketService<span style="color:#f92672">;</span>
+
+   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bugTicket</span><span style="color:#f92672">(){</span>
+       String ticket <span style="color:#f92672">=</span> ticketService<span style="color:#f92672">.</span><span style="color:#a6e22e">getTicket</span><span style="color:#f92672">();</span>
+       System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;在注册中心买到&#34;</span><span style="color:#f92672">+</span>ticket<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>5. 测试类编写；</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@RunWith</span><span style="color:#f92672">(</span>SpringRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@SpringBootTest</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ConsumerServerApplicationTests</span> <span style="color:#f92672">{</span>
+
+   <span style="color:#a6e22e">@Autowired</span>
+   UserService userService<span style="color:#f92672">;</span>
+
+   <span style="color:#a6e22e">@Test</span>
+   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">contextLoads</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+
+       userService<span style="color:#f92672">.</span><span style="color:#a6e22e">bugTicket</span><span style="color:#f92672">();</span>
+
+  <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="启动测试">启动测试</h2>
+<p><strong>1. 开启zookeeper</strong></p>
+<p><strong>2. 打开dubbo-admin实现监控【可以不用做】</strong></p>
+<p><strong>3. 开启服务者，也就是先启动provider-server主启动类</strong></p>
+<p><strong>4. 消费者消费测试，结果：</strong></p>
+<p><img src="/textImgs/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210306163712.jpg" alt="微信图片_20210306163712"></p>
+<p><strong>监控中心 ：</strong></p>
+<p><img src="/textImgs/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210306163717-1615019874965.png" alt="微信图片_20210306163717"></p>
+<p><strong>ok , 这就是SpingBoot + dubbo + zookeeper实现分布式开发的应用，其实就是一个服务拆分的思想；</strong></p>
+<hr>
+<h3 id="参考链接">参考链接</h3>
+<p><a href="https://blog.csdn.net/ljj_9/article/details/79156255">https://blog.csdn.net/ljj_9/article/details/79156255</a></p>
+<p><a href="https://space.bilibili.com/95256449?spm_id_from=333.788.b_765f7570696e666f.2">https://space.bilibili.com/95256449?spm_id_from=333.788.b_765f7570696e666f.2</a></p>
+<p><a href="https://www.kuangstudy.com/bbs/1367070126070931458">https://www.kuangstudy.com/bbs/1367070126070931458</a></p>
+<p><a href="https://mp.weixin.qq.com/s/sKu9-vH7NEpUd8tbxLRLVQ">https://mp.weixin.qq.com/s/sKu9-vH7NEpUd8tbxLRLVQ</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%BC%80%E6%BA%90/" title="开源">
+        开源
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%94%9F%E6%B4%BB/" title="生活">
+        生活
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/git/" title="Git">
+              Git
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub4/">玩转Github（4）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub3/">玩转Github（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub2/">玩转Github（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub1/">玩转Github（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring/" title="Spring">
+              Spring
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Jpa和MyBatis的对比学习总结</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/">Spring初次体验总结（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/springboot/" title="Springboot">
+              Springboot
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">Dubbo和Zookeeper集成</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web——SpringBoot运行原理探究</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web——概述和基本理解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+              多线程
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/">对Java核心——Java多线程并发的理解（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/">对Java核心——Java多线程并发的理解（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class=" instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class=" codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class="large instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class="large codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/backgroundblack.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/Rechiard.github.io\//index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>
