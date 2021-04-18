@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 🏹 Boo 的博客网站</title>
-    <link>https://Recahird.github.io/tags/</link>
+    <link>https://Rechiard.github.io/tags/</link>
     <description>Recent content in Tags on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sun, 18 Apr 2021 10:50:18 +0800</lastBuildDate><atom:link href="https://Recahird.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Apr 2021 10:50:18 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>前端</title>
-      <link>https://Recahird.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
+      <link>https://Rechiard.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
       <pubDate>Sun, 18 Apr 2021 10:50:18 +0800</pubDate>
       
-      <guid>https://Recahird.github.io/tags/%E5%89%8D%E7%AB%AF/</guid>
+      <guid>https://Rechiard.github.io/tags/%E5%89%8D%E7%AB%AF/</guid>
       <description></description>
     </item>
     
     <item>
       <title>开源</title>
-      <link>https://Recahird.github.io/tags/%E5%BC%80%E6%BA%90/</link>
+      <link>https://Rechiard.github.io/tags/%E5%BC%80%E6%BA%90/</link>
       <pubDate>Fri, 27 Nov 2020 10:07:37 +0800</pubDate>
       
-      <guid>https://Recahird.github.io/tags/%E5%BC%80%E6%BA%90/</guid>
+      <guid>https://Rechiard.github.io/tags/%E5%BC%80%E6%BA%90/</guid>
       <description></description>
     </item>
     
     <item>
       <title>资源</title>
-      <link>https://Recahird.github.io/tags/%E8%B5%84%E6%BA%90/</link>
+      <link>https://Rechiard.github.io/tags/%E8%B5%84%E6%BA%90/</link>
       <pubDate>Thu, 26 Nov 2020 20:12:57 +0800</pubDate>
       
-      <guid>https://Recahird.github.io/tags/%E8%B5%84%E6%BA%90/</guid>
+      <guid>https://Rechiard.github.io/tags/%E8%B5%84%E6%BA%90/</guid>
       <description></description>
     </item>
     
     <item>
       <title>生活</title>
-      <link>https://Recahird.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
+      <link>https://Rechiard.github.io/tags/%E7%94%9F%E6%B4%BB/</link>
       <pubDate>Mon, 23 Nov 2020 08:25:25 +0800</pubDate>
       
-      <guid>https://Recahird.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
+      <guid>https://Rechiard.github.io/tags/%E7%94%9F%E6%B4%BB/</guid>
       <description></description>
     </item>
     
