@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Git on 🏹 Boo 的博客网站</title>
-    <link>https://Rechiard.github.io/categories/git/</link>
+    <link>https://Recahird.github.io/categories/git/</link>
     <description>Recent content in Git on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Mon, 21 Dec 2020 14:52:09 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/categories/git/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Dec 2020 14:52:09 +0800</lastBuildDate><atom:link href="https://Recahird.github.io/categories/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>玩转Github（4）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</link>
+      <link>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</link>
       <pubDate>Mon, 21 Dec 2020 14:52:09 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</guid>
+      <guid>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</guid>
       <description>&lt;p&gt;本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（3）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</link>
+      <link>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</link>
       <pubDate>Mon, 21 Dec 2020 14:52:04 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</guid>
+      <guid>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</guid>
       <description>&lt;p&gt;本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（2）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</link>
+      <link>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</link>
       <pubDate>Mon, 21 Dec 2020 14:38:47 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</guid>
+      <guid>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</guid>
       <description>&lt;p&gt;本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（1）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</link>
+      <link>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</link>
       <pubDate>Mon, 21 Dec 2020 14:37:53 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</guid>
+      <guid>https://Recahird.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</guid>
       <description>&lt;p&gt;本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github&lt;/p&gt;</description>
     </item>
     

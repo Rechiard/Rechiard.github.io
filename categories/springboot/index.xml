@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SpringBoot on 🏹 Boo 的博客网站</title>
-    <link>https://Rechiard.github.io/categories/springboot/</link>
+    <link>https://Recahird.github.io/categories/springboot/</link>
     <description>Recent content in SpringBoot on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sat, 06 Mar 2021 12:47:20 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Mar 2021 12:47:20 +0800</lastBuildDate><atom:link href="https://Recahird.github.io/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dubbo和Zookeeper集成</title>
-      <link>https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</link>
+      <link>https://Recahird.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</link>
       <pubDate>Sat, 06 Mar 2021 12:47:20 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</guid>
+      <guid>https://Recahird.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</guid>
       <description>&lt;p&gt;通过对分布式系统的学习，利用SpingBoot + dubbo + zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot集成Swagger的了解和使用</title>
-      <link>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</link>
+      <link>https://Recahird.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Mon, 01 Mar 2021 14:42:06 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</guid>
+      <guid>https://Recahird.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</guid>
       <description>&lt;p&gt;Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot-Web——SpringBoot运行原理探究</title>
-      <link>https://Rechiard.github.io/posts/springboot2/</link>
+      <link>https://Recahird.github.io/posts/springboot2/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:51 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/springboot2/</guid>
+      <guid>https://Recahird.github.io/posts/springboot2/</guid>
       <description>&lt;p&gt;通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot-Web——概述和基本理解</title>
-      <link>https://Rechiard.github.io/posts/springboot1/</link>
+      <link>https://Recahird.github.io/posts/springboot1/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:47 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/springboot1/</guid>
+      <guid>https://Recahird.github.io/posts/springboot1/</guid>
       <description>&lt;p&gt;SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &amp;ldquo;just run&amp;rdquo;，能迅速的开发web应用，几行代码开发一个http接口。&lt;/p&gt;</description>
     </item>
     
