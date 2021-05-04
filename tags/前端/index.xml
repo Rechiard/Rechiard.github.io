@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>前端 on 🏹 Boo 的博客网站</title>
-    <link>https://Rechiard.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
+    <link>https://rechiard.gitee.io/tags/%E5%89%8D%E7%AB%AF/</link>
     <description>Recent content in 前端 on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sun, 18 Apr 2021 10:50:18 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Apr 2021 10:50:18 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>JavaScript整体学习和掌握</title>
-      <link>https://Rechiard.github.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
+      <link>https://rechiard.gitee.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
       <pubDate>Sun, 18 Apr 2021 10:50:18 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
+      <guid>https://rechiard.gitee.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
       <description>&lt;p&gt;JavaScript是一门世界上最流行的脚本语言,是一个全栈程序员的必须精通的一本语言&lt;/p&gt;</description>
     </item>
     

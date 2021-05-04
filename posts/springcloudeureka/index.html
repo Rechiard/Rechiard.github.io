@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SpringCloud——Eureka | 🏹 Boo 的博客网站</title>
+
+    
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://rechiard.gitee.io/posts/springcloudeureka/" />
+
+
+<meta property="og:title" content="SpringCloud——Eureka" />
+<meta property="og:description" content="Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rechiard.gitee.io/posts/springcloudeureka/" />
+<meta property="article:published_time" content="2021-05-04T20:43:27+08:00" />
+<meta property="article:modified_time" content="2021-05-04T20:43:27+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SpringCloud——Eureka"/>
+<meta name="twitter:description" content="Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/backgroundwhite.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/backgroundblack.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/rechiard.gitee.io'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/ice1.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          SpringCloud——Eureka
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Tuesday, May 4, 2021
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Tuesday, May 4, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。</p>
+<p>本项目存放在：项目存放地址：<a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为&quot;Spring Cloud&quot;</p>
+<h1 id="eureka简介">Eureka简介</h1>
+<h3 id="什么是eureka">什么是Eureka</h3>
+<ul>
+<li>Netflix在设计Eureka时，遵循的就是AP原则</li>
+<li>Eureka是Netflix的一个子模块，也是核心模块之一，Eureka是一个基于REST的服务，用于定位服务，以实现云端中间层服务发现和故障转移，服务注册和发现对于微服务来说是非常重要的，有了服务发现和注册，只需要使用服务的标识符，就可以访问到服务，而不需要修改服务调用的配置文件了，功能类似于Dubbo的注册中心，比如Zookeeper；</li>
+</ul>
+<h3 id="原理讲解">原理讲解</h3>
+<p>Eureka的基本架构</p>
+<ul>
+<li>SpringCloud封装了NetFlix公司开发的Eureka模块来实现服务注册和发现（对比Zookeeper）</li>
+<li>Eureka采用了C-S的架构设计，EurekaServer作为服务注册功能的服务器，他是服务注册中心</li>
+<li>而系统中的其他微服务，使用Eureka的客户端连接到EurekaServer并维持心跳连接。这样系统的维护人员就可以通过EurekaServer来监控系统中各个微服务是否正常运行，SpringCloud的一些其他模块（比如Zuul）就可以通过EurekaServer来发现系统中的其他微服务，并执行相关的逻辑。</li>
+<li>和Dubbo架构对比</li>
+<li>Eureka包含两个组件：<strong>Eureka Server</strong>和<strong>Eureka Client</strong></li>
+<li>Eureka Server提供服务注册服务，各个节点启动后，会在Eureka Server中进行注册，这样Eureka Server中的服务注册表中将会存储所有可用的服务节点信息，服务节点的信息可用在界面中直观的看到（类似于Dubbo-admin）</li>
+<li>Eureka Client是一个Java客户端，用于简化EurekaServer的交互，客户端同时也具备一个内置的，使用轮循负载算法的负载均衡器。在应用启动后，将会向EurekaServer发送心跳（默认周期为30秒）。如果Eureka Server在多个心跳周期内没有接收到某个节点的心跳，Eureka Server将会从服务注册表中把这个服务节点移除掉（默认周期为90秒）。</li>
+</ul>
+<h3 id="三大角色">三大角色</h3>
+<ul>
+<li>Eureka Server：提供服务的注册与发现</li>
+<li>Service Provider：将自身服务注册到Eureka中，从而使消费方能够找到</li>
+<li>Service Consumer：服务消费方从Eureka中获取服务注册列表，从而找到消费服务。</li>
+</ul>
+<h1 id="eureka构建步骤">Eureka构建步骤</h1>
+<h3 id="1eureka-server">1、eureka-server</h3>
+<ol>
+<li>
+<p>microservicecloud-eureka-7001模块建立</p>
+</li>
+<li>
+<p>pom.xml配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;project</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
+         <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;parent&gt;</span>
+        <span style="color:#f92672">&lt;artifactId&gt;</span>springcloud<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;groupId&gt;</span>org.example<span style="color:#f92672">&lt;/groupId&gt;</span>
+        <span style="color:#f92672">&lt;version&gt;</span>1.0-SNAPSHOT<span style="color:#f92672">&lt;/version&gt;</span>
+    <span style="color:#f92672">&lt;/parent&gt;</span>
+    <span style="color:#f92672">&lt;modelVersion&gt;</span>4.0.0<span style="color:#f92672">&lt;/modelVersion&gt;</span>
+   
+    <span style="color:#f92672">&lt;artifactId&gt;</span>springcloud-eureka-7001<span style="color:#f92672">&lt;/artifactId&gt;</span>
+   
+    <span style="color:#f92672">&lt;properties&gt;</span>
+        <span style="color:#f92672">&lt;maven.compiler.source&gt;</span>8<span style="color:#f92672">&lt;/maven.compiler.source&gt;</span>
+        <span style="color:#f92672">&lt;maven.compiler.target&gt;</span>8<span style="color:#f92672">&lt;/maven.compiler.target&gt;</span>
+    <span style="color:#f92672">&lt;/properties&gt;</span>
+   
+    <span style="color:#f92672">&lt;dependencies&gt;</span>
+        <span style="color:#75715e">&lt;!--GSON--&gt;</span>
+        <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>com.google.code.gson<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>gson<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>2.8.6<span style="color:#f92672">&lt;/version&gt;</span>
+        <span style="color:#f92672">&lt;/dependency&gt;</span>
+        <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-netflix-eureka-server<span style="color:#f92672">&lt;/artifactId&gt;</span>
+            <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+        <span style="color:#f92672">&lt;/dependency&gt;</span>
+        <span style="color:#f92672">&lt;dependency&gt;</span>
+            <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+            <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-devtools<span style="color:#f92672">&lt;/artifactId&gt;</span>
+        <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;/dependencies&gt;</span>
+   
+<span style="color:#f92672">&lt;/project&gt;</span>
+</code></pre></div></li>
+<li>
+<p>Yml文件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">7001</span>
+   
+<span style="color:#75715e">#Eureka 配置</span>
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">instance</span>:
+    <span style="color:#f92672">hostname</span>: <span style="color:#ae81ff">localhost</span> <span style="color:#75715e">#Eureka服务端的实例名称</span>
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">register-with-eureka</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e">#表示是否向eureka注册中心注册自己</span>
+    <span style="color:#f92672">fetch-registry</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e">#表示自己为注册中心</span>
+    <span style="color:#f92672">service-url</span>: <span style="color:#75715e">#监控页面的url</span>
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://${eureka.instance.hostname}:${server.port}/eureka/</span>
+</code></pre></div></li>
+<li>
+<p>编写主启动类</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud<span style="color:#f92672">;</span>
+   
+<span style="color:#f92672">import</span> org.springframework.boot.SpringApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.boot.autoconfigure.SpringBootApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.cloud.netflix.eureka.server.EnableEurekaServer<span style="color:#f92672">;</span>
+   
+<span style="color:#75715e">//启动之后，访问http://localhost:7001/
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@SpringBootApplication</span>
+<span style="color:#a6e22e">@EnableEurekaServer</span> <span style="color:#75715e">//EnableEurekaServer 服务端的启动类，可以接受别人注册进来~
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">EurekaServer_7001</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        SpringApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>EurekaServer_7001<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>args<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+   
+</code></pre></div></li>
+<li>
+<p>启动，访问测试结果</p>
+<p><img src="/textImgs/image-20210504210014067.png" alt="image-20210504210014067"></p>
+</li>
+</ol>
+<hr>
+<h3 id="2service-provider">2、Service Provider</h3>
+<p>将8001的服务注入到7001的eureka中</p>
+<ol>
+<li>
+<p>修改8001服务的pom文件，增加eureka的支持！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--EUREKA--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-eureka<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div></li>
+<li>
+<p>yml文件修改</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#Eureka的配置，服务注册到那里</span>
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">service-url</span>:
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://localhost:7001/eureka/</span>
+  <span style="color:#f92672">instance</span>:
+    <span style="color:#f92672">instance-id</span>: <span style="color:#ae81ff">springcloud-provider-dept8001 </span> <span style="color:#75715e">#修改eureka上的默认描述信息</span>
+   
+   
+<span style="color:#75715e">#info配置，用于配置eureka的界面配置</span>
+<span style="color:#f92672">info</span>:
+  <span style="color:#f92672">app.name</span>: <span style="color:#ae81ff">bobo</span>
+  <span style="color:#f92672">company.name</span>: <span style="color:#ae81ff">龚剑波</span>
+</code></pre></div></li>
+<li>
+<p>8001的主启动类注解支持</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud<span style="color:#f92672">;</span>
+   
+<span style="color:#f92672">import</span> org.springframework.boot.SpringApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.boot.autoconfigure.SpringBootApplication<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.cloud.netflix.eureka.EnableEurekaClient<span style="color:#f92672">;</span>
+   
+<span style="color:#a6e22e">@SpringBootApplication</span>
+<span style="color:#a6e22e">@EnableEurekaClient</span> <span style="color:#75715e">//在服务启动后，自动注册到Eureka中，也就是springcloud-eureka-7001这个项目中
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeptProvider_8001</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        SpringApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>DeptProvider_8001<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>args<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+   
+</code></pre></div></li>
+<li>
+<p>启动7001，再启动8001，测试访问</p>
+<p><img src="/textImgs/Y90ZJ8JEUSF1%5B@E72AT3WX9.png" alt="img"></p>
+</li>
+</ol>
+<hr>
+<h3 id="3acturator与注册微服务信息完善">3、acturator与注册微服务信息完善</h3>
+<p>主机名称：服务名称修改</p>
+<p><img src="/textImgs/image-20210503154027321.png" alt="image-20210503154027321"></p>
+<ul>
+<li>
+<p>在8001的yaml中修改一下配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#Eureka的配置，服务注册到那里</span>
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">service-url</span>:
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://localhost:7001/eureka/</span>
+  <span style="color:#f92672">instance</span>:
+    <span style="color:#f92672">instance-id</span>: <span style="color:#ae81ff">springcloud-provider-dept8001 </span> <span style="color:#75715e">#修改eureka上的默认描述信息</span>
+</code></pre></div></li>
+<li>
+<p>点开路径后的配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#info配置，用于配置eureka的界面配置</span>
+<span style="color:#f92672">info</span>:
+  <span style="color:#f92672">app.name</span>: <span style="color:#ae81ff">bobo</span>
+  <span style="color:#f92672">company.name</span>: <span style="color:#ae81ff">龚剑波</span>
+</code></pre></div></li>
+</ul>
+<h4 id="自我保护机制">自我保护机制：</h4>
+<p><strong>自我保护机制:好死不如赖活着</strong></p>
+<p>一句话总结:某时刻某一个微服务不可以用了，eureka不会立刻清理，依旧会对该微服务的信息进行保存!</p>
+<ul>
+<li>
+<p>·默认情况下，如果EurekaServer在一定时间内没有接收到某个微服务实例的心跳，EurekaServer将会注销该实例（默认90秒)。但是当网络分区故障发生时，微服务与Eureka之间无法正常通行，以上行为可能变得非常危险了~因为微服务本身其实是健康的，此时本不应该注销这个服务。Eureka通过自我保护机制来解决这个问题-当EurekaServer节点在短时间内丢失过多客户端时(可能发生了网络分区故障)，那么这个节点就会进入自我保护模式。一旦进入该模式，EurekaServer就会保护服务注册表中的信息，不再删除服务注册表中的数据（也就是不会注销任何微服务)。当网络故障恢复后，该EurekaServer节点会自动退出自我保护模式。</p>
+</li>
+<li>
+<p>·在自我保护模式中，EurekaServer会保护服务注册表中的信息，不再注销任何服务实例。当它收到的心跳数重新恢复到阈值以上时，该EurekaServer节点就会自动退出自我保护模式，它的设计哲学就是宁可保留错误的服务注册信息，也不盲目注销任何可能健康的服务实例。一句话:好死不如赖活着</p>
+</li>
+<li>
+<p>·综上，自我保护模式是一种应对网络异常的安全保护措施。它的架构哲学是宁可同时保留所有微服务（健康的微服务和不健康的微服务都会保留），也不豪目注销任何健康的微服务。使用自我保护模式，可以让Eureka集群更加的健壮和稳定</p>
+</li>
+<li>
+<p>·在SpringCloud中，可以使用<code>eureka.server.enable-se1f-preservation = false</code>禁用自我保护模式
+【不推荐关闭自我保护机制】</p>
+</li>
+</ul>
+<h1 id="集群配置">集群配置</h1>
+<p>1、创建三个子模块，内容全部相同</p>
+<p>​	<img src="/textImgs/image-20210504085424646.png" alt="image-20210504085424646"></p>
+<p>2、配置三个项目的yaml文件</p>
+<p><img src="/textImgs/image-20210504085556522.png" alt="image-20210504085556522"></p>
+<p>3、配置Provider提供者的yaml的文件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#Eureka的配置，服务注册到那里</span>
+<span style="color:#f92672">eureka</span>:  
+	<span style="color:#f92672">client</span>:    
+		<span style="color:#f92672">service-url</span>:      
+			<span style="color:#f92672">defaultZone</span>:   <span style="color:#ae81ff">http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/,http://eureka7003.com:7003/eureka/</span>
+    <span style="color:#f92672">instance</span>:
+    	<span style="color:#f92672">instance-id</span>: <span style="color:#ae81ff">springcloud-provider-dept8001 </span> <span style="color:#75715e">#修改eureka上的默认描述信息</span>
+</code></pre></div><hr>
+<h3 id="对比zookeeper">对比Zookeeper</h3>
+<h4 id="回顾cap原则">回顾CAP原则</h4>
+<ul>
+<li>RDBMS(Mysql、Oracle、sqlServer) ===&gt; ACID</li>
+<li>NoSQL(redis、mongdb) ===&gt; CAP</li>
+</ul>
+<h4 id="acid是什么">ACID是什么</h4>
+<ul>
+<li>A（Atomicity）原子性</li>
+<li>C（Consistency）一致性</li>
+<li>I（Isolation）隔离性</li>
+<li>D（Durability）持久性</li>
+</ul>
+<h4 id="cap是什么">CAP是什么</h4>
+<ul>
+<li>C（Consistency）强一致性</li>
+<li>A（Availability）可用性</li>
+<li>P（Partition tolerance）分区容错性</li>
+</ul>
+<p>CAP的三进二：CA、AP、CP</p>
+<h4 id="cap理论的核心"><code>CAP理论的核心</code></h4>
+<ul>
+<li>一个分布式系统不可能同时很好的满足一致性，可用性和分区容错性这三个需求</li>
+<li>根据CAP原理，将NoSQL数据库分成了满足CA原则，满足CP原则和满足AP原则三大类：
+<ul>
+<li>CA：单点集群，满足一致性，可用性的系统，通常可扩展性较差</li>
+<li>CP：满足一致性，分区容错性的系统，通常性能不是特别高</li>
+<li>AP：满足可用性，分区容错性的系统，通常可能对一致性要求低一点</li>
+</ul>
+</li>
+</ul>
+<h4 id="zookeeper保证的是cp">Zookeeper保证的是CP</h4>
+<p>ZooKeeper在选举期间注册服务瘫痪，虽然服务最终会恢复，但是选举期间不可用的，只有等到选举结束之后，所有数据同步之后才能使用。</p>
+<h4 id="eureka保证的是ap">Eureka保证的是AP</h4>
+<p>Eureka各个节点是平等关系，只要有一台Eureka就可以保证服务可用，而查询到的数据并不是最新的，自我保护机制会导致Eureka不再从注册列表移除因长时间没收到心跳而应该过期的服务。Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其他节点(高可用)，当网络稳定时,当前实例新的注册信息会被同步到其他节点中(最终一致性)</p>
+<p><strong>因此，Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像ZooKeeper一样使得整个注册系统瘫痪</strong></p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://blog.csdn.net/lepgon/article/details/107982637">https://blog.csdn.net/lepgon/article/details/107982637</a></p>
+<p><a href="https://blog.csdn.net/weixin_43375482/article/details/99311946">https://blog.csdn.net/weixin_43375482/article/details/99311946</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=6">https://www.bilibili.com/video/BV1jJ411S7xr?p=6</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=7">https://www.bilibili.com/video/BV1jJ411S7xr?p=7</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=8">https://www.bilibili.com/video/BV1jJ411S7xr?p=8</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">
+        前端
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%BC%80%E6%BA%90/" title="开源">
+        开源
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%94%9F%E6%B4%BB/" title="生活">
+        生活
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/git/" title="Git">
+              Git
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub4/">玩转Github（4）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub3/">玩转Github（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub2/">玩转Github（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub1/">玩转Github（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring/" title="Spring">
+              Spring
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/">MyBatis_Plus的学习和掌握</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Jpa和MyBatis的对比学习总结</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/">Spring初次体验总结（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring-cloud/" title="Spring Cloud">
+              Spring Cloud
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudfeign/">SpringCloud——Feign</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudribbon/">SpringCloud——Ribbon</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudeureka/">SpringCloud——Eureka</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/">微服务与SpringCloud</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/springboot/" title="Springboot">
+              Springboot
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">Dubbo和Zookeeper集成</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web——SpringBoot运行原理探究</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web——概述和基本理解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+              多线程
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/">对Java核心——Java多线程并发的理解（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/">对Java核心——Java多线程并发的理解（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class=" instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class=" codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class="large instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class="large codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/backgroundblack.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/rechiard.gitee.io/index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

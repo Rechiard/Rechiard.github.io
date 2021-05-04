@@ -2,210 +2,246 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>🏹 Boo 的博客网站</title>
-    <link>https://Rechiard.github.io/</link>
+    <link>https://rechiard.gitee.io/</link>
     <description>Recent content on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Sun, 18 Apr 2021 10:50:18 +0800</lastBuildDate><atom:link href="https://Rechiard.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 May 2021 20:43:53 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringCloud——Feign</title>
+      <link>https://rechiard.gitee.io/posts/springcloudfeign/</link>
+      <pubDate>Tue, 04 May 2021 20:43:53 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudfeign/</guid>
+      <description>&lt;p&gt;Feign，是声明式的web service客户端，它让微服务之间的调用变得更简单了，类似controller调用service。Spring Cloud集成了Ribbon和Eureka，可在使用Feign时提供负载均衡的http客户端。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Ribbon</title>
+      <link>https://rechiard.gitee.io/posts/springcloudribbon/</link>
+      <pubDate>Tue, 04 May 2021 20:43:42 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudribbon/</guid>
+      <description>&lt;p&gt;Ribbon，是Spring Cloud的重要组件之一，它是基于HTTP和TCP的客户端负载均衡工具，通过Spring Cloud的封装，可以让我们轻松地将面向服务的REST模版请求自动转换成客户端负载均衡的服务调用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Eureka</title>
+      <link>https://rechiard.gitee.io/posts/springcloudeureka/</link>
+      <pubDate>Tue, 04 May 2021 20:43:27 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudeureka/</guid>
+      <description>&lt;p&gt;Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>微服务与SpringCloud</title>
+      <link>https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/</link>
+      <pubDate>Tue, 04 May 2021 20:43:04 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/</guid>
+      <description>&lt;p&gt;本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>JavaScript整体学习和掌握</title>
-      <link>https://Rechiard.github.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
+      <link>https://rechiard.gitee.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
       <pubDate>Sun, 18 Apr 2021 10:50:18 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
+      <guid>https://rechiard.gitee.io/posts/javascript%E6%95%B4%E4%BD%93%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
       <description>&lt;p&gt;JavaScript是一门世界上最流行的脚本语言,是一个全栈程序员的必须精通的一本语言&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>MyBatis_Plus的学习和掌握</title>
-      <link>https://Rechiard.github.io/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
+      <link>https://rechiard.gitee.io/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</link>
       <pubDate>Sun, 18 Apr 2021 10:49:17 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
+      <guid>https://rechiard.gitee.io/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/</guid>
       <description>&lt;p&gt;MyBatis-Plus（简称 MP）是一个 MyBatis (opens new window的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。所有的CRUD代码它都可以自动化完成！&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Dubbo和Zookeeper集成</title>
-      <link>https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</link>
+      <link>https://rechiard.gitee.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</link>
       <pubDate>Sat, 06 Mar 2021 12:47:20 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</guid>
+      <guid>https://rechiard.gitee.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/</guid>
       <description>&lt;p&gt;通过对分布式系统的学习，利用SpingBoot + dubbo + zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot集成Swagger的了解和使用</title>
-      <link>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</link>
+      <link>https://rechiard.gitee.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Mon, 01 Mar 2021 14:42:06 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</guid>
+      <guid>https://rechiard.gitee.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/</guid>
       <description>&lt;p&gt;Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot-Web——SpringBoot运行原理探究</title>
-      <link>https://Rechiard.github.io/posts/springboot2/</link>
+      <link>https://rechiard.gitee.io/posts/springboot2/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:51 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/springboot2/</guid>
+      <guid>https://rechiard.gitee.io/posts/springboot2/</guid>
       <description>&lt;p&gt;通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>SpringBoot-Web——概述和基本理解</title>
-      <link>https://Rechiard.github.io/posts/springboot1/</link>
+      <link>https://rechiard.gitee.io/posts/springboot1/</link>
       <pubDate>Sat, 30 Jan 2021 14:16:47 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/springboot1/</guid>
+      <guid>https://rechiard.gitee.io/posts/springboot1/</guid>
       <description>&lt;p&gt;SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &amp;ldquo;just run&amp;rdquo;，能迅速的开发web应用，几行代码开发一个http接口。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>对Java核心——Java多线程并发的理解（3）</title>
-      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</link>
       <pubDate>Mon, 18 Jan 2021 13:45:11 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/</guid>
       <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
 &lt;p&gt;本文主要讲述：Java阻塞队列知识点与理解&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>对Java核心——Java多线程并发的理解（2）</title>
-      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</link>
       <pubDate>Mon, 18 Jan 2021 13:45:05 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/</guid>
       <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
 &lt;p&gt;本文主要讲述：Java锁的理解与知识普及&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>对Java核心——Java多线程并发的理解（1）</title>
-      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</link>
       <pubDate>Fri, 15 Jan 2021 09:35:01 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/</guid>
       <description>&lt;p&gt;J.U.C，即java.util.concurrent的缩写，提供了并发编程的解决方案，是Java多线程学习中必不可少的部分。&lt;/p&gt;
 &lt;p&gt;本文主要讲述：JAVA线程实现的四种方式、线程池、线程的生命周期、线程的基本方法、后台线程&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>对Java核心——垃圾回收与算法</title>
-      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</link>
       <pubDate>Tue, 12 Jan 2021 11:53:02 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
       <description>&lt;p&gt;JVM GC：Gabage Collection，指JVM堆内存区域的垃圾回收。里面涉及到了一些对垃圾的标记以及回收垃圾的算法。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>MyBatis源码级别核心理解</title>
-      <link>https://Rechiard.github.io/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/</link>
+      <link>https://rechiard.gitee.io/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/</link>
       <pubDate>Thu, 07 Jan 2021 18:21:15 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/</guid>
+      <guid>https://rechiard.gitee.io/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/</guid>
       <description>&lt;p&gt;MyBatis 是一款优秀的持久层ORM框架，它支持定制化 SQL、存储过程以及高级映射,用于实现面对对象编程语言里不同类型系统的数据之间的转换。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Jpa和MyBatis的对比学习总结</title>
-      <link>https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</link>
+      <link>https://rechiard.gitee.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</link>
       <pubDate>Mon, 28 Dec 2020 12:21:09 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://rechiard.gitee.io/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</guid>
       <description>&lt;p&gt;MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。&lt;/p&gt;
 &lt;p&gt;JPA是一个Java应用程序接口规范，描述了使用Java标准平台和Java企业版平台的应用中的关系数据的管理。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（4）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</link>
+      <link>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</link>
       <pubDate>Mon, 21 Dec 2020 14:52:09 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub4/</guid>
       <description>&lt;p&gt;本博客介绍的是Git的分支管理，包括创建分支、切换分支、合并分支以及删除分支。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（3）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</link>
+      <link>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</link>
       <pubDate>Mon, 21 Dec 2020 14:52:04 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub3/</guid>
       <description>&lt;p&gt;本博客介绍的是一些常用的Git指令，包括历史记录，版本前进和后退，找回文件，文件内容比较等。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（2）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</link>
+      <link>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</link>
       <pubDate>Mon, 21 Dec 2020 14:38:47 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub2/</guid>
       <description>&lt;p&gt;本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>玩转Github（1）</title>
-      <link>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</link>
+      <link>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</link>
       <pubDate>Mon, 21 Dec 2020 14:37:53 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub1/</guid>
       <description>&lt;p&gt;本博客介绍的是一个面向开源及私有软件项目的托管平台——Github，了解Github的作用以及基本概念，并且如何使用个人的Github&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Spring初次体验总结（1）</title>
-      <link>https://Rechiard.github.io/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/</link>
+      <link>https://rechiard.gitee.io/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/</link>
       <pubDate>Sat, 19 Dec 2020 13:06:08 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://rechiard.gitee.io/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/</guid>
       <description>&lt;p&gt;记录本人初次学习Java企业级应用的开源开发框架——Spring框架。在校跟随企业老师为期三个月的Spring学习总结和经验&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>一些算法设计时的巧妙用法</title>
-      <link>https://Rechiard.github.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</link>
+      <link>https://rechiard.gitee.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</link>
       <pubDate>Fri, 27 Nov 2020 10:07:37 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</guid>
+      <guid>https://rechiard.gitee.io/posts/java%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%B7%A7%E5%A6%99%E7%94%A8%E6%B3%95/</guid>
       <description>&lt;p&gt;在算法设计中总会出现有一些很有意思的小技巧和方法使程序减少内存占用和运行时间，通过对蓝桥杯和力扣的综合练习，这里总结一下各种类型的算法中一些耳目一新的巧妙写法。希望对大家有所帮助~&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Java后端整合内容(2020年)</title>
-      <link>https://Rechiard.github.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</link>
+      <link>https://rechiard.gitee.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</link>
       <pubDate>Thu, 26 Nov 2020 20:12:57 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</guid>
+      <guid>https://rechiard.gitee.io/posts/java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B62020/</guid>
       <description>&lt;p&gt;Java后端的学习整体框架，从基础编程到运维知识都有一个大概的分类和汇总。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>如何快速搭建个人博客网站</title>
-      <link>https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</link>
+      <link>https://rechiard.gitee.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</link>
       <pubDate>Wed, 25 Nov 2020 10:29:04 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E4%B9%8B%E6%97%85/</guid>
       <description>&lt;p&gt;本项目为记录我的第一次利用hugo框架建立自己的个人博客过程&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>写给我的另一半的一封信</title>
-      <link>https://Rechiard.github.io/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/</link>
       <pubDate>Mon, 23 Nov 2020 08:25:25 +0800</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%86%99%E7%BB%99%E6%88%91%E7%9A%84%E5%8F%A6%E4%B8%80%E5%8D%8A%E7%9A%84%E4%B8%80%E5%B0%81%E4%BF%A1/</guid>
       <description>&lt;p&gt;很想和你拥有一个很长很长的未来，很想和你得到所有人的祝福，很想陪你走完你的一生，彼此温暖，互不辜负。我爱你❤&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>对Java核心——JVM的详细了解</title>
-      <link>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/</link>
+      <link>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Rechiard.github.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/</guid>
+      <guid>https://rechiard.gitee.io/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/</guid>
       <description>&lt;p&gt;Java核心技术中，JVM是面试必不可少的重要部分，它决定这你对Java核心技术的把控以及了解程度。&lt;/p&gt;</description>
     </item>
     

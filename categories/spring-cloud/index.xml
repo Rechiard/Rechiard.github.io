@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Cloud on 🏹 Boo 的博客网站</title>
+    <link>https://rechiard.gitee.io/categories/spring-cloud/</link>
+    <description>Recent content in Spring Cloud on 🏹 Boo 的博客网站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 04 May 2021 20:43:53 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/categories/spring-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringCloud——Feign</title>
+      <link>https://rechiard.gitee.io/posts/springcloudfeign/</link>
+      <pubDate>Tue, 04 May 2021 20:43:53 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudfeign/</guid>
+      <description>&lt;p&gt;Feign，是声明式的web service客户端，它让微服务之间的调用变得更简单了，类似controller调用service。Spring Cloud集成了Ribbon和Eureka，可在使用Feign时提供负载均衡的http客户端。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Ribbon</title>
+      <link>https://rechiard.gitee.io/posts/springcloudribbon/</link>
+      <pubDate>Tue, 04 May 2021 20:43:42 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudribbon/</guid>
+      <description>&lt;p&gt;Ribbon，是Spring Cloud的重要组件之一，它是基于HTTP和TCP的客户端负载均衡工具，通过Spring Cloud的封装，可以让我们轻松地将面向服务的REST模版请求自动转换成客户端负载均衡的服务调用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Eureka</title>
+      <link>https://rechiard.gitee.io/posts/springcloudeureka/</link>
+      <pubDate>Tue, 04 May 2021 20:43:27 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudeureka/</guid>
+      <description>&lt;p&gt;Eureka，是Spring Cloud中的重要组件之一，用于服务注册和发现。它和 zookeeper、Consul一样，都是用于服务注册管理的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>微服务与SpringCloud</title>
+      <link>https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/</link>
+      <pubDate>Tue, 04 May 2021 20:43:04 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/</guid>
+      <description>&lt;p&gt;本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

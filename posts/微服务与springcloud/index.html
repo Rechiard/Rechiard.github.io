@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>微服务与SpringCloud | 🏹 Boo 的博客网站</title>
+
+    
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/" />
+
+
+<meta property="og:title" content="微服务与SpringCloud" />
+<meta property="og:description" content="本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rechiard.gitee.io/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/" />
+<meta property="article:published_time" content="2021-05-04T20:43:04+08:00" />
+<meta property="article:modified_time" content="2021-05-04T20:43:04+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微服务与SpringCloud"/>
+<meta name="twitter:description" content="本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/backgroundwhite.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/backgroundblack.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/rechiard.gitee.io'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/star2.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          微服务与SpringCloud
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Tuesday, May 4, 2021
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Tuesday, May 4, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>本文介绍的是微服务和SpringCloud的概念和之间的关系，并且携带了依稀关于微服务中的常见面试题。</p>
+<h1 id="微服务">微服务</h1>
+<p>微服务(Microservices Architecture)是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。在所有情况下，每个任务代表着一个小的业务能力。</p>
+<p>说的简单点，实际上就是将	all in one  ==》模块化</p>
+<p><img src="/textImgs/image-20210501095334858.png" alt="image-20210501095334858"></p>
+<p>微服务框架4个核心问题：</p>
+<blockquote>
+<p>1、服务很多，客户端怎么访问？</p>
+<p>2、这么多服务，服务之间如何通信？</p>
+<p>3、这么多服务，如何治理？</p>
+<p>4、服务挂了怎么办？</p>
+</blockquote>
+<p>解决方案：</p>
+<p>​	Spring Cluod：为解决这四个核心问题而诞生的微服务框架<strong>生态环境</strong>。</p>
+<p>由于Spring Cloud是一套生态的解决方案，类似游戏中打怪通关的不同方法一样，在网络上的解决方案也有多种。</p>
+<ol>
+<li>
+<p>Spring Cloud NetFlix（一站式解决方案）</p>
+<blockquote>
+<p>解决客户端的通信问题：api网关（zuul组件）。</p>
+<p>解决服务之间的通信问题：Feign &mdash;HttpClinet	&mdash;-Http通信方式，同步并且阻塞。</p>
+<p>解决服务治理（服务注册发现）：Eureka</p>
+<p>解决服务挂了的问题（熔断机制）：Hystrix</p>
+</blockquote>
+</li>
+<li>
+<p>Apache Dubbo Zookeeper（半自动，需要整合别人的）</p>
+<blockquote>
+<p>解决客户端的通信问题：ApI:没有，找第三方组件，或者自己实现</p>
+<p>解决服务之间的通信问题：Dubbo，高性能的基于Java开源的RPC通讯框架</p>
+<p>解决服务治理（服务注册发现）：Zookeeper</p>
+<p>解决服务挂了的问题（熔断机制）：没有，找第三方组件</p>
+</blockquote>
+</li>
+<li>
+<p>Spring Cloud Alibaba（最新的一站式解决方案，因为NetFlix停止更新了）</p>
+<blockquote>
+<p>所有的解决方案都类似于Spring Cloud NetFlix</p>
+</blockquote>
+</li>
+</ol>
+<p>新概念：服务网格~ Server Mesh</p>
+<p>​	istio</p>
+<blockquote>
+<p>万变不离其中：</p>
+<p>​	1、API</p>
+<p>​	2、Http、RPC</p>
+<p>​	3、注册和发现</p>
+<p>​	4、熔断机制</p>
+</blockquote>
+<h1 id="springcloud">SpringCloud</h1>
+<p>Spring官网：https://spring.io/</p>
+<p><img src="/textImgs/image-20210502152312520.png" alt="image-20210502152312520"></p>
+<p>SpringCloud，本质是一个<strong>生态环境</strong>，是基于SpringBoot提供了一套微服务解决方案，包括服务注册与发现，配置中心，全链路监控，服务网关，负载均衡，熔断器等组件，除了基于NetFlix的开源组件做高度抽象封装之外，还有一些选型中立的开源组件。</p>
+<p>SpringCloud利用SpringBoot的开发便利性，巧妙地简化了分布式系统基础设施的开发，SpringCloud为开发人员提供了快速构建分布式系统的一些工具，<strong>包括配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等</strong>，他们都可以用SpringBoot的开发风格做到一键启动和部署。</p>
+<p>SpringBoot并没有重复造轮子，它只是将目前各家公司开发的比较成熟，经得起实际考验的服务框架组合起来，通过SpringBoot风格进行再封装，屏蔽掉了复杂的配置和实现原理，<strong>最终给开发者留出了一套简单易懂，易部署和易维护的分布式系统开发工具包</strong></p>
+<p>SpringCloud是分布式微服务架构下的一站式解决方案，是各个微服务架构落地技术的集合体，俗称微服务全家桶。</p>
+<h3 id="springboot和springcloud请你谈谈对他们的理解">SpringBoot和SpringCloud，请你谈谈对他们的理解</h3>
+<ul>
+<li><strong>SpringCloud是Spring为微服务架构思想做的一个一站式实现。</strong>
+从某种程度可以理解为，微服务是一个概念、一个项目开发的架构思想。SpringCloud是微服务架构的一种java实现。</li>
+<li><strong>SpringCloud是基于SpringBoot的一套实现微服务的框架。</strong>
+为微服务体系开发中的架构问题，提供了一整套的解决方案，它提供了微服务开发所需要的配置管理、服务发现、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等组件。最重要的是，跟SpringBoot框架一起使用的话，会<strong>让开发微服务架构的云服务非常方便</strong>。</li>
+<li>Spring Cloud是一个基于Spring Boot实现的云应用开发工具；Spring boo<strong>t专注于快速、方便集成的单个个体</strong>，Spring Cloud是<strong>关注全局的服务治理框架</strong>；spring boot使用了默认大于配置的理念，很多集成方案已经帮你选择好了，能不配置就不配置，Spring Cloud很大的一部分是基于Spring boot来实现。</li>
+</ul>
+<h3 id="dubbo和springcloud技术选型">Dubbo和SpringCloud技术选型</h3>
+<h4 id="1分布式服务治理dubbo">1、分布式+服务治理Dubbo</h4>
+<p>目前成熟的互联网架构：应用服务化拆分+消息中间件</p>
+<p><img src="/textImgs/image-20210502154650834.png" alt="image-20210502154650834"></p>
+<h4 id="2duboo和springcloud对比">2、Duboo和SpringCloud对比</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Dubbo</th>
+<th>Spring Cloud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务注册中心</td>
+<td>Zookeeper</td>
+<td>Spring Cloud Netflix Eureka</td>
+</tr>
+<tr>
+<td>服务调用方式</td>
+<td>RPC</td>
+<td>REST API</td>
+</tr>
+<tr>
+<td>服务监控</td>
+<td>Dubbo-monitor</td>
+<td>Spring Boot Admin</td>
+</tr>
+<tr>
+<td>断路器</td>
+<td>不完善</td>
+<td>Spring Cloud Netflix Hystrix</td>
+</tr>
+<tr>
+<td>服务网关</td>
+<td>无</td>
+<td>Sping Cloud Netflix Zuul</td>
+</tr>
+<tr>
+<td>分布式配置</td>
+<td>无</td>
+<td>Spring Cloud Config</td>
+</tr>
+<tr>
+<td>服务追踪</td>
+<td>无</td>
+<td>Spring Cloud Sleuth</td>
+</tr>
+<tr>
+<td>消息总线</td>
+<td>无</td>
+<td>Spring Cloud Bus</td>
+</tr>
+<tr>
+<td>数据流</td>
+<td>无</td>
+<td>Spring Cloud Stream</td>
+</tr>
+<tr>
+<td>批量任务</td>
+<td>无</td>
+<td>Spring Cloud Task</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最大的区别：SpringCloud摒弃了Dubbo的RPC风格，采用的是基于HTTP的REST方式</strong></p>
+<h3 id="spring-cloud下载和使用">Spring Cloud下载和使用</h3>
+<p>下载地址：https://spring.io/projects/spring-cloud#learn</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.springcloud.cc/spring-cloud-netflix.html">https://www.springcloud.cc/spring-cloud-netflix.html</a></li>
+<li>中文API文档：https://www.springcloud.cc/spring-cloud-dalston.html</li>
+<li>SpringCloud中文网：https://www.springcloud.cc/</li>
+</ul>
+<h1 id="面试题总结">面试题总结</h1>
+<h3 id="1什么是微服务">1.、什么是微服务?</h3>
+<p>微服务化的核心就是将传统的一站式应用，根据业务拆分成一个一个的服务，彻底地去耦合，每一个微服务提供单个业务功能的服务，一个服务做一件事情，从技术角度看就是一种小而独立的处理过程，类似进程的概念，能够自行单独的启动或者销毁，拥有自己独立的数据库。</p>
+<h3 id="2微服务之间是如何独立通讯的">2、微服务之间是如何独立通讯的？</h3>
+<p>同步通信：dubbo通过 RPC 远程过程调用、springcloud通过 REST接口json调用等。
+异步：消息队列，如：RabbitMq、ActiveMq、Kafka 等</p>
+<h3 id="3springcloud与dubbo的区别">3、SpringCloud与Dubbo的区别</h3>
+<ul>
+<li>初始定位不同：SpringCloud定位为微服务架构下的一站式解决方案；Dubbo 是 SOA 时代的产物，它的关注点主要在于服务的调用和治理。</li>
+<li>生态环境不同：SpringCloud依托于Spring平台，具备更加完善的生态体系；而Dubbo一开始只是做RPC远程调用，生态相对匮乏，现在逐渐丰富起来。</li>
+<li>调用方式：SpringCloud是采用Http协议做远程调用，接口一般是Rest风格，比较灵活；Dubbo是采用Dubbo协议，接口一般是Java的Service接口，格式固定。但调用时采用Netty的NIO方式，性能较好。</li>
+<li>组件差异比较多，例如SpringCloud注册中心一般用Eureka，而Dubbo用的是Zookeeper</li>
+</ul>
+<h3 id="4springboot和springcloud请你谈谈对他们的理解">4、SpringBoot和SpringCloud，请你谈谈对他们的理解</h3>
+<ul>
+<li>
+<p><strong>SpringCloud是Spring为微服务架构思想做的一个一站式实现。</strong>
+从某种程度可以理解为，微服务是一个概念、一个项目开发的架构思想。SpringCloud是微服务架构的一种java实现。</p>
+</li>
+<li>
+<p><strong>SpringCloud是基于SpringBoot的一套实现微服务的框架。</strong>
+为微服务体系开发中的架构问题，提供了一整套的解决方案，它提供了微服务开发所需要的配置管理、服务发现、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等组件。最重要的是，跟SpringBoot框架一起使用的话，会<strong>让开发微服务架构的云服务非常方便</strong>。</p>
+</li>
+<li>
+<p>Spring Cloud是一个基于Spring Boot实现的云应用开发工具；Spring boo<strong>t专注于快速、方便集成的单个个体</strong>，Spring Cloud是<strong>关注全局的服务治理框架</strong>；spring boot使用了默认大于配置的理念，很多集成方案已经帮你选择好了，能不配置就不配置，Spring Cloud很大的一部分是基于Spring boot来实现。</p>
+</li>
+<li>
+<p>SpringCloud五大核心组件</p>
+<blockquote>
+<p>服务注册发现-Netflix Eureka</p>
+<p>配置中心 - spring cloud config</p>
+<p>负载均衡-Netflix Ribbon</p>
+<p>断路器 - Netflix Hystrix</p>
+<p>路由(网关) - Netflix Zuul</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="5什么是服务熔断什么是服务降级">5、什么是服务熔断？什么是服务降级</h3>
+<ul>
+<li>
+<p><strong>服务熔断</strong>一般是指软件系统中，由于某些原因使得服务出现了过载现象，为防止造成整个系统故障，从而采用的一种保护措施，所以很多地方把熔断亦称为过载保护；</p>
+</li>
+<li>
+<p><strong>服务降级</strong>是在服务器压力陡增的情况下，利用有限资源，根据当前业务情况，关闭某些服务接口或者页面，以此释放服务器资源以保证核心任务的正常运行。</p>
+</li>
+<li>
+<p><strong>服务熔断</strong>一般是某个服务（下游服务）故障引起，而<strong>服务降级</strong>一般是从整体负荷考虑；<strong>熔断</strong>其实是一个框架级的处理，每个微服务都需要（无层级之分），而<strong>降级</strong>一般需要对业务有层级之分（比如<strong>降级</strong>一般是从最外围服务开始）</p>
+</li>
+</ul>
+<h3 id="6微服务的优缺点是分别是什么说下你在项目开发中遇到的坑">6、微服务的优缺点是分别是什么？说下你在项目开发中遇到的坑</h3>
+<p><strong>优点：</strong></p>
+<ul>
+<li>单一职责原则</li>
+<li>每个服务足够内聚，足够小，代码容易理解，这样能聚集一个指定的业务功能或业务需求</li>
+<li>开发简单，开发效率提高，一个服务可能就是专一的只干一件事</li>
+<li>微服务能够被小团队单独开发，这个小的团队是2~5人的开发人员组成</li>
+<li>微服务是松耦合的，是有功能意义的服务，无论是在开发阶段或部署阶段都是独立的</li>
+<li>微服务能使用不同的语言开发</li>
+<li>易于和第三方集成，微服务允许容易且灵活的方式都集成自动部署，通过持续集成工具，如jenkins、Hudson、bamboo</li>
+<li>微服务易于被一个开发人员理解，修改和维护，这样的小团队能够更关注自己的工作成果，无需通过合作才能体现价值</li>
+<li>微服务允许你利用融合最新的技术</li>
+<li><strong>微服务只是业务逻辑的代码，不会和HTML、CSS或其他界面混合</strong></li>
+<li><strong>每个微服务都有自己的存储能力，可以有自己的数据库，也可以有统一的数据库</strong></li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>开发人员要处理分布式系统的复杂性</li>
+<li>多服务运维难度，随着服务的增加，运维的压力也在增大</li>
+<li>系统部署依赖</li>
+<li>服务间通信成本</li>
+<li>数据一致性</li>
+<li>系统集成测试</li>
+<li>性能监控</li>
+</ul>
+<h3 id="7你所知道的微服务技术栈有哪些">7、你所知道的微服务技术栈有哪些</h3>
+<table>
+<thead>
+<tr>
+<th>微服务条目</th>
+<th>落地技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务开发</td>
+<td>SpirngBoot、Spring、SpringMVC</td>
+</tr>
+<tr>
+<td>服务配置与管理</td>
+<td>Netflix公司的Archaius，阿里的Diamond等</td>
+</tr>
+<tr>
+<td>服务注册与发现</td>
+<td>Eureka、Consul、Zookeeper等</td>
+</tr>
+<tr>
+<td>服务调用</td>
+<td>Rest、RPC、gRPC</td>
+</tr>
+<tr>
+<td>服务熔断器</td>
+<td>Hystrix、Envoy等</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>Ribbon、Niginx等</td>
+</tr>
+<tr>
+<td>服务接口调用（客户端调用服务的简化工具）</td>
+<td>Feign等</td>
+</tr>
+<tr>
+<td>消息队列</td>
+<td>Kafka、RabbitMQ、ActiveMQ等</td>
+</tr>
+<tr>
+<td>服务配置中心管理</td>
+<td>SpringCloudConfig、Chef等</td>
+</tr>
+<tr>
+<td>服务路由（API网关）</td>
+<td>Zuul等</td>
+</tr>
+<tr>
+<td>服务监控</td>
+<td>Zabbix、Nagios、Metrics、Specatator等</td>
+</tr>
+<tr>
+<td>全链路追踪</td>
+<td>Zipkin、Brave、Dapper等</td>
+</tr>
+<tr>
+<td>服务部署</td>
+<td>Docker、OpenStack、Kubernetes等</td>
+</tr>
+<tr>
+<td>数据流操作开发包</td>
+<td>SpringCloud Stream（封装与Redis、Rabbit、Kafka等发送接收消息）</td>
+</tr>
+<tr>
+<td>事件消息总线</td>
+<td>SpringCloud Bus</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8eureka和zookeeper都可以提供服务注册与发现的功能说说区别">8、eureka和zookeeper都可以提供服务注册与发现的功能，说说区别</h3>
+<ul>
+<li>
+<p>ZooKeeper保证的是CP，就是一致性和容错，Eureka保证的是AP，就是可用性和容错。</p>
+<p>ZooKeeper在选举期间注册服务瘫痪，虽然服务最终会恢复，但是选举期间不可用的，只有等到选举结束之后，所有数据同步之后才能使用。</p>
+<p>Eureka各个节点是平等关系，只要有一台Eureka就可以保证服务可用，而查询到的数据并不是最新的，自我保护机制会导致Eureka不再从注册列表移除因长时间没收到心跳而应该过期的服务。Eureka仍然能够接受新服务的注册和查询请求，但是不会被同步到其他节点(高可用)，当网络稳定时,当前实例新的注册信息会被同步到其他节点中(最终一致性)</p>
+<p>Eureka可以很好的应对因网络故障导致部分节点失去联系的情况，而不会像ZooKeeper一样使得整个注册系统瘫痪</p>
+</li>
+<li>
+<p>ZooKeeper有Leader和Follower角色，Eureka各个节点平等</p>
+</li>
+<li>
+<p>ZooKeeper采用过半数存活原则，Eureka采用自我保护机制解决分区问题</p>
+</li>
+<li>
+<p><strong>Eureka本质上是一个微服务的一个模块，而ZooKeeper只是一个进程，需要单独安装</strong></p>
+</li>
+</ul>
+<h3 id="9为什么选择springcloud作为微服务架构">9、为什么选择SpringCloud作为微服务架构</h3>
+<ul>
+<li>整体解决方案和框架成熟度高</li>
+<li>社区热度高</li>
+<li>可维护性高</li>
+<li>学习难度不高</li>
+</ul>
+<h3 id="10当前各大it公司用的微服务架构有哪些">10、当前各大IT公司用的微服务架构有哪些？</h3>
+<ul>
+<li>阿里：dubbo+HFS</li>
+<li>京东：JSF</li>
+<li>新浪：Motan</li>
+<li>当当网：DubboX</li>
+</ul>
+<h3 id="各大微服务框架对比">各大微服务框架对比</h3>
+<table>
+<thead>
+<tr>
+<th>功能点/服务框架</th>
+<th>Netflix/SpringCloud</th>
+<th>Motan</th>
+<th>gRPC</th>
+<th>Thrift</th>
+<th>Dubbo/DubboX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能定位</td>
+<td>完整的微服务框架</td>
+<td>RPC框架，但整合了ZK或Consul，实现集群环境的基本服务注册/发现</td>
+<td>RPC框架</td>
+<td>RPC框架</td>
+<td>服务框架</td>
+</tr>
+<tr>
+<td>支持Rest</td>
+<td>是，Ribbon支持多种可插拔的序列化选择</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>支持RPC</td>
+<td>否</td>
+<td>是（Hession2）</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>支持多语言</td>
+<td>是（Rest形式）</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>是（服务端zuul+客户端Ribbon），zuul服务，动态路由，云端负载均衡Eureka（针对中间层服务器）</td>
+<td>是（客户端）</td>
+<td>否</td>
+<td>否</td>
+<td>是（客户端）</td>
+</tr>
+<tr>
+<td>配置服务</td>
+<td>Netfix Archaius，SpringCloud Config Server集中配置</td>
+<td>是（zookeeper提供）</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>服务调动链监控</td>
+<td>是（zuul），zuul提供边缘服务，API网关</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>高可用/容错</td>
+<td>是（服务端Hystrix+客户端Ribbon）</td>
+<td>是（客户端）</td>
+<td>否</td>
+<td>否</td>
+<td>是（客户端）</td>
+</tr>
+<tr>
+<td>典型应用案例</td>
+<td>Netflix</td>
+<td>Sina</td>
+<td>Google</td>
+<td>Facebook</td>
+<td></td>
+</tr>
+<tr>
+<td>社会活跃程度</td>
+<td>高</td>
+<td>一般</td>
+<td>高</td>
+<td>一般</td>
+<td>2017年后重新开始维护，之前断了5年</td>
+</tr>
+<tr>
+<td>学习难度</td>
+<td>中等</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>文档丰富程度</td>
+<td>高</td>
+<td>一般</td>
+<td>一般</td>
+<td>一般</td>
+<td>高</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>SpringCloud Bus为我们的应用程序带来了更多的管理端点</td>
+<td>支持降级</td>
+<td>Netflix内部在开发集成gRPC</td>
+<td>IDL定义</td>
+<td>实践的公司比较多</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://blog.csdn.net/lepgon/article/details/107982637">https://blog.csdn.net/lepgon/article/details/107982637</a></p>
+<p><a href="https://blog.csdn.net/weixin_43375482/article/details/99311946">https://blog.csdn.net/weixin_43375482/article/details/99311946</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">
+        前端
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%BC%80%E6%BA%90/" title="开源">
+        开源
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%94%9F%E6%B4%BB/" title="生活">
+        生活
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/git/" title="Git">
+              Git
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub4/">玩转Github（4）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub3/">玩转Github（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub2/">玩转Github（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub1/">玩转Github（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring/" title="Spring">
+              Spring
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/">MyBatis_Plus的学习和掌握</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Jpa和MyBatis的对比学习总结</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/">Spring初次体验总结（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring-cloud/" title="Spring Cloud">
+              Spring Cloud
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudfeign/">SpringCloud——Feign</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudribbon/">SpringCloud——Ribbon</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudeureka/">SpringCloud——Eureka</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/">微服务与SpringCloud</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/springboot/" title="Springboot">
+              Springboot
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">Dubbo和Zookeeper集成</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web——SpringBoot运行原理探究</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web——概述和基本理解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+              多线程
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/">对Java核心——Java多线程并发的理解（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/">对Java核心——Java多线程并发的理解（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class=" instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class=" codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class="large instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class="large codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/backgroundblack.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/rechiard.gitee.io/index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>
