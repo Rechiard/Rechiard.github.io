@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>SpringBoot | 🏹 Boo 的博客网站</title>
+    <title>SpringCloud——Zuul | 🏹 Boo 的博客网站</title>
 
     
 <link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -13,26 +13,28 @@
 
 
 <meta name="author" content="🏹 Boo" />
-<meta name="description" content="🏹 Boo 的生活记录～" />
+<meta name="description" content="Zuul，是Spring Cloud全家桶中的微服务API网关，本质上是一个web servlet应用，用于路由跳转以及路径过滤。
+" />
 
 
 
 <meta name="generator" content="Hugo 0.78.2" />
 
-<link rel="canonical" href="https://rechiard.gitee.io/categories/springboot/" />
+<link rel="canonical" href="https://rechiard.gitee.io/posts/springcloudzuul/" />
 
 
-<meta property="og:title" content="SpringBoot" />
-<meta property="og:description" content="🏹 Boo 的生活记录～" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://rechiard.gitee.io/categories/springboot/" />
-<meta property="og:updated_time" content="2021-03-06T12:47:20+08:00" />
+<meta property="og:title" content="SpringCloud——Zuul" />
+<meta property="og:description" content="Zuul，是Spring Cloud全家桶中的微服务API网关，本质上是一个web servlet应用，用于路由跳转以及路径过滤。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rechiard.gitee.io/posts/springcloudzuul/" />
+<meta property="article:published_time" content="2021-05-05T17:35:21+08:00" />
+<meta property="article:modified_time" content="2021-05-05T17:35:21+08:00" />
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="SpringBoot"/>
-<meta name="twitter:description" content="🏹 Boo 的生活记录～"/>
+<meta name="twitter:title" content="SpringCloud——Zuul"/>
+<meta name="twitter:description" content="Zuul，是Spring Cloud全家桶中的微服务API网关，本质上是一个web servlet应用，用于路由跳转以及路径过滤。"/>
 
 
 <link rel="stylesheet" href="/css/semantic.min.css" />
@@ -82,7 +84,13 @@
   
 </style>
 
-     
+    
+
+
+
+
+
+
   </head>
 
   <body class="default">
@@ -111,7 +119,133 @@
           <div class="dream-max-width">
             
 <div class="ui centered relaxed grid dream-grid">
-  <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/star2.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          SpringCloud——Zuul
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Wednesday, May 5, 2021
+              
+
+            | 1 minute read
+
+            | Update at
+              
+                Wednesday, May 5, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>Zuul，是Spring Cloud全家桶中的微服务API网关，本质上是一个web servlet应用，用于路由跳转以及路径过滤。</p>
+<p>项目存放地址：<a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为&quot;Spring Cloud&quot;</p>
+<h1 id="zuul简介">Zuul简介</h1>
+<h3 id="什么是zuul">什么是Zuul</h3>
+<p>​		Zuul包含了对请求的路由和过滤两个最主要的动能:</p>
+<p>​		其中路由功能负责将外部请求转发到具体的微服务实例上，是实现外部访问统一入口的基础，而过滤器功能则负责对请求的处理过程进行干预，是实现请求校验，服务聚合等功能的基础。Zuul和Eureka进行整合，将Zuul自身注册为Eureka服务治理下的应用，同时从Eureka中获得其他微服务的消息，也即以后的访问微服务都是通过Zuul跳转后获得。</p>
+<p>​		注意:Zuul服务最终还是会注册进Eureka</p>
+<p>​		提供:代理+路由＋过滤三大功能!</p>
+<h3 id="zuul能干嘛">Zuul能干嘛</h3>
+<ul>
+<li>路由</li>
+<li>过滤</li>
+</ul>
+<h1 id="zuul的使用">Zuul的使用</h1>
+<p>1、添加pom依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--zuul--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-zuul<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>2、修改yaml配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">9527</span>
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">springcloud-zuul</span>
+
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">service-url</span>:
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/,http://eureka7003.com:7003/eureka/</span>
+  <span style="color:#f92672">instance</span>:
+    <span style="color:#f92672">instance-id</span>: <span style="color:#ae81ff">zuul9527.com</span>
+    <span style="color:#f92672">prefer-ip-address</span>: <span style="color:#66d9ef">true</span>
+
+<span style="color:#f92672">info</span>:
+  <span style="color:#f92672">app.name</span>: <span style="color:#ae81ff">bobo</span>
+  <span style="color:#f92672">company.name</span>: <span style="color:#ae81ff">龚剑波</span>
+</code></pre></div><p>3、在主启动类上添加注解<code>@EnableZuulProxy</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@EnableZuulProxy</span>    <span style="color:#75715e">//开启Zuul代理
+</span></code></pre></div><p>4、启动注册中心7001，服务提供者8001，服务提供者zuul，检测路径名称的改变</p>
+<p><img src="/textImgs/image-20210505115612413.png" alt="image-20210505115612413"></p>
+<p>在yaml文件中，添加zuul的一些过滤和拦截之后</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#zuul配置</span>
+<span style="color:#f92672">zuul</span>:
+  <span style="color:#f92672">routes</span>:
+    <span style="color:#f92672">mydept.serviceId</span>: <span style="color:#ae81ff">springcloud-provider-dept  </span> <span style="color:#75715e">#微服务名称</span>
+    <span style="color:#f92672">mydept.path</span>: <span style="color:#ae81ff">/mydept/**                       </span>
+    <span style="color:#75715e">#设置微服务名称的访问域名，访问路径改为： www.rechiard.com(hosts文件的域名):9527/mydept/**</span>
+  <span style="color:#f92672">ignored-services</span>: <span style="color:#ae81ff">springcloud-provider-dept     </span>
+  <span style="color:#75715e">#不能再使用原路劲(www.rechiard.com(hosts文件的域名):9527/springcloud-provider-dept/**</span>
+  <span style="color:#75715e">#ignore-services: &#34;*&#34;   #隐藏全部的</span>
+  <span style="color:#f92672">prefix</span>: <span style="color:#ae81ff">/bobo   </span>
+  <span style="color:#75715e">#设置统一的前缀，访问路径改为： www.rechiard.com(hosts文件的域名):9527/bobo/mydept/**</span>
+</code></pre></div><p>再次检测路径的变化：</p>
+<p><img src="/textImgs/image-20210505115717708.png" alt="image-20210505115717708"></p>
+<h3 id="总结">总结</h3>
+<p>zuul将所有的微服务都放在zuul之上，起到了路由跳转的作用。当用户访问的时候，所有的用户都必须通过路由的过滤和拦截，然后访问封装好的路径，不再使IP地址以及微服务名称暴露出来。</p>
+<p><img src="/textImgs/image-20210505115949715.png" alt="image-20210505115949715"></p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=17">https://www.bilibili.com/video/BV1jJ411S7xr?p=17</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
     <article class="dream-header">
   <section class="ui top attached center aligned segment">
     <div class="ui small circular image">
@@ -514,176 +648,6 @@
 </article>
 
   </div>
-
-  
-  
-    <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
-      <article class="ui attached segment card dream-card">
-  <a class="image" href="https://rechiard.gitee.io/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">
-    
-      <img src="/img/view6.jpg" alt="Dubbo和Zookeeper集成" />
-    
-  </a>
-
-  <div class="content">
-    <h2 class="ui medium header">
-      <a href="/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">Dubbo和Zookeeper集成</a>
-    </h2>
-    <div class="meta">
-      <p class="date">
-        
-          Saturday, Mar 6, 2021
-        
-      </p>
-      <p class="author">
-        @
-        
-          🏹 Boo
-        
-      </p>
-    </div>
-    <div class="description">
-      <p>通过对分布式系统的学习，利用SpingBoot + dubbo + zookeeper实现分布式开发的应用，了解到服务拆分的思想以及各大框架的概念和用法</p>
-    </div>
-  </div>
-
-  <div class="extra content">
-    <a class="reading-time">
-      <i class="clock icon"></i>
-      2 minute read
-    </a>
-  </div>
-</article>
-
-    </div>
-  
-    <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
-      <article class="ui attached segment card dream-card">
-  <a class="image" href="https://rechiard.gitee.io/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">
-    
-      <img src="/img/view3.jpg" alt="SpringBoot集成Swagger的了解和使用" />
-    
-  </a>
-
-  <div class="content">
-    <h2 class="ui medium header">
-      <a href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
-    </h2>
-    <div class="meta">
-      <p class="date">
-        
-          Monday, Mar 1, 2021
-        
-      </p>
-      <p class="author">
-        @
-        
-          🏹 Boo
-        
-      </p>
-    </div>
-    <div class="description">
-      <p>Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。方便了前后端交互时候的对接工作。</p>
-    </div>
-  </div>
-
-  <div class="extra content">
-    <a class="reading-time">
-      <i class="clock icon"></i>
-      2 minute read
-    </a>
-  </div>
-</article>
-
-    </div>
-  
-    <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
-      <article class="ui attached segment card dream-card">
-  <a class="image" href="https://rechiard.gitee.io/posts/springboot2/">
-    
-      <img src="/img/view2.jpg" alt="SpringBoot-Web——SpringBoot运行原理探究" />
-    
-  </a>
-
-  <div class="content">
-    <h2 class="ui medium header">
-      <a href="/posts/springboot2/">SpringBoot-Web——SpringBoot运行原理探究</a>
-    </h2>
-    <div class="meta">
-      <p class="date">
-        
-          Saturday, Jan 30, 2021
-        
-      </p>
-      <p class="author">
-        @
-        
-          🏹 Boo
-        
-      </p>
-    </div>
-    <div class="description">
-      <p>通过对SpringBoot的学习，用简单的CRUD构建一个web网站的demo来总结一下这段时间对SpringBoot的学习中一些知识点。</p>
-    </div>
-  </div>
-
-  <div class="extra content">
-    <a class="reading-time">
-      <i class="clock icon"></i>
-      3 minute read
-    </a>
-  </div>
-</article>
-
-    </div>
-  
-    <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
-      <article class="ui attached segment card dream-card">
-  <a class="image" href="https://rechiard.gitee.io/posts/springboot1/">
-    
-      <img src="/img/view1.jpg" alt="SpringBoot-Web——概述和基本理解" />
-    
-  </a>
-
-  <div class="content">
-    <h2 class="ui medium header">
-      <a href="/posts/springboot1/">SpringBoot-Web——概述和基本理解</a>
-    </h2>
-    <div class="meta">
-      <p class="date">
-        
-          Saturday, Jan 30, 2021
-        
-      </p>
-      <p class="author">
-        @
-        
-          🏹 Boo
-        
-      </p>
-    </div>
-    <div class="description">
-      <p>SpringBoot，就是一个javaweb的开发框架，和SpringMVC类似，对比其他javaweb框架的好处，官方说是简化开发，约定大于配置，  you can &ldquo;just run&rdquo;，能迅速的开发web应用，几行代码开发一个http接口。</p>
-    </div>
-  </div>
-
-  <div class="extra content">
-    <a class="reading-time">
-      <i class="clock icon"></i>
-      1 minute read
-    </a>
-  </div>
-</article>
-
-    </div>
-  
-
-  <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
-    
-
-
-
-  </div>
 </div>
 
           </div>
@@ -844,7 +808,6 @@
   </section>
 
   
-    
   
 </div>
 
@@ -888,9 +851,11 @@
 <script src="/js/theme.js"></script>
 
     
-<script src="/js/imagesloaded.pkgd.min.js"></script>
-<script src="/js/masonry.pkgd.min.js"></script>
-<script src="/js/grid.js"></script>
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
 
 
     

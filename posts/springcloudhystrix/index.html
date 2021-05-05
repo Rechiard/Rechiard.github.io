@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SpringCloud——Hystrix | 🏹 Boo 的博客网站</title>
+
+    
+<link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="🏹 Boo" />
+<meta name="description" content="Hystrix，在SpringCloud发生服务雪崩的时候，触发的一种自我保护的机制，它提供了多种自我保护机制的方法，为微服务架构的稳定性提供了不可或缺的作用。
+" />
+
+
+
+<meta name="generator" content="Hugo 0.78.2" />
+
+<link rel="canonical" href="https://rechiard.gitee.io/posts/springcloudhystrix/" />
+
+
+<meta property="og:title" content="SpringCloud——Hystrix" />
+<meta property="og:description" content="Hystrix，在SpringCloud发生服务雪崩的时候，触发的一种自我保护的机制，它提供了多种自我保护机制的方法，为微服务架构的稳定性提供了不可或缺的作用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rechiard.gitee.io/posts/springcloudhystrix/" />
+<meta property="article:published_time" content="2021-05-05T17:35:17+08:00" />
+<meta property="article:modified_time" content="2021-05-05T17:35:17+08:00" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SpringCloud——Hystrix"/>
+<meta name="twitter:description" content="Hystrix，在SpringCloud发生服务雪崩的时候，触发的一种自我保护的机制，它提供了多种自我保护机制的方法，为微服务架构的稳定性提供了不可或缺的作用。"/>
+
+
+<link rel="stylesheet" href="/css/semantic.min.css" />
+<link rel="stylesheet" href="/css/icomoon.css" />
+<link rel="stylesheet" href="/css/OverlayScrollbars.min.css" />
+<link rel="stylesheet" href="/css/github-markdown.css" />
+<link rel="stylesheet" href="/css/site.css" />
+
+<style>
+  a:hover {
+    text-decoration: underline; 
+  }
+
+  
+  a {
+    color: seagreen !important;
+  }
+  
+
+  
+  .inverted a,
+  .inverted a:hover {
+     color: darkseagreen !important;
+  }
+  
+
+  
+  body.default {
+    
+
+    
+    background-image: url(/me/backgroundwhite.jpg);
+    
+  }
+  
+
+  
+  body.dark {
+    
+    background-color: black;
+    
+
+    
+    background-image: url(/me/backgroundblack.jpg);
+    
+  }
+  
+</style>
+
+    
+
+
+
+
+
+
+  </head>
+
+  <body class="default">
+    
+<nav class="ui secondary menu dream-menu">
+
+  <div class="item">
+    <i class="large link bullseye icon dream-flip-toggle" title="Flip it!"></i>
+  </div>
+  <div class="item">
+    <i class="large link home icon" title="Home" onclick="window.location.href = 'https:\/\/rechiard.gitee.io'"></i>
+  </div>
+  <div class="item">
+    <i class="large link icon theme-switch" onclick="themeSwitch()"></i>
+  </div>
+  
+  <div class="item">
+    <i class="large link search icon" onclick="toggleSearch()"></i>
+  </div>
+  
+</nav>
+
+    <div class="flip-container">
+      <div class="flipper">
+        <section class="front">
+          <div class="dream-max-width">
+            
+<div class="ui centered relaxed grid dream-grid">
+  <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment cover">
+      <div class="cover-img" style="background-image: url(/img/ice5.jpg);"></div>
+    </section>
+    
+    <section class="ui attached segment">
+      <header>
+        <h1 class="ui large header">
+          SpringCloud——Hystrix
+          <div class="sub header">
+            @
+            
+              🏹 Boo
+            
+
+            | 
+                Wednesday, May 5, 2021
+              
+
+            | 2 minute read
+
+            | Update at
+              
+                Wednesday, May 5, 2021
+              
+          </div>
+        </h1>
+      </header>
+
+      <article class="main"><p>Hystrix，在SpringCloud发生服务雪崩的时候，触发的一种自我保护的机制，它提供了多种自我保护机制的方法，为微服务架构的稳定性提供了不可或缺的作用。</p>
+<p>项目存放地址：<a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为&quot;Spring Cloud&quot;</p>
+<h1 id="hystrix介绍">Hystrix介绍</h1>
+<h3 id="分布式系统面临的问题">分布式系统面临的问题</h3>
+<p>​		复杂分布式体系结构中的应用程序有数十个依赖关系，每个依赖关系在某些时候将不可避免的失败!</p>
+<h3 id="服务雪崩">服务雪崩</h3>
+<p>​		多个微服务之间调用的时候，假设微服务A调用微服务B和微服务C，微服务B和微服务C又调用其他的微服务，这就是所谓的“扇出&quot;、如果扇出的链路上某个微服务的调用响应时间过长或者不可用，对微服务A的调用就会占用越来越多的系统资源，进而引起系统崩溃，所谓的“雪崩效应&quot;&quot;。</p>
+<p>​		对于高流量的应用来说，单一的后端依赖可能会导致所有服务器上的所有资源都在几秒中内饱和。比失败更糟糕的是，这些应用程序还可能导致服务之间的延迟增加，备份队列，线程和其他系统资源紧张，导致整个系统发生更多的级联故障，这些都表示需要对故障和延迟进行隔离和管理，以便单个依赖关系的失败，不能取消整个应用程序或系统。</p>
+<p>我们需要弃车保帅-</p>
+<h3 id="什么是hystrix">什么是Hystrix</h3>
+<p>​		Hystrix是一个<strong>用于处理分布式系统的延迟和容错的开源库</strong>，在分布式系统里，许多依赖不可避免的会调用失败，比如超时，异常等，Hystrix能够保证在一个依赖出问题的情况下，不会导致整体服务失败，避免级联故障，以提高分布式系统的弹性。</p>
+<p>​		“断路器&quot;本身是一种开关装置，当某个服务单元发生故障之后，通过断路器的故障监控(类似熔断保险丝)，**向调用方返回一个服务预期的，可处理的备选响应(FallBack)，而不是长时间的等待或者抛出调用方法无法处理的异常，这样就可以保证了服务调用方的线程不会被长时间，**不必要的占用，从而避免了故障在分布式系统中的蔓延，乃至雪崩。</p>
+<h3 id="hystrix能干嘛">Hystrix能干嘛</h3>
+<ul>
+<li>服务降级</li>
+<li>服务熔断</li>
+<li>服务限流</li>
+<li>接近实时的监控</li>
+<li>&hellip;</li>
+</ul>
+<h1 id="hystrix的服务熔断">Hystrix的服务熔断</h1>
+<h3 id="服务熔断">服务熔断</h3>
+<p>​		熔断机制是对应雪崩效应的一种微服务链路保护机制。</p>
+<p>​		当扇出链路的某个微服务不可用或者响应时间太长时，会进行**服务的降级，进而熔断该节点微服务的调用，快速返回错误的响应信息。**当检测到该节点微服务调用响应正常后恢复调用链路。在SpringCloud框架里熔断机制通过Hystrix实现。Hystrix会监控微服务间调用的状况，当失败的调用到一定阈值，缺省是5秒内20次调用失败就会启动熔断机制。熔断机制的注解是<code>@HystrixCommand</code>。</p>
+<h3 id="具体操作">具体操作</h3>
+<p>1、pom.xml添加依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--Hystrix--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-hystrix<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>2、编写熔断机制+注解<code>@HystrixCommand</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud.controller<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> com.example.springcloud.pojo.Dept<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> com.example.springcloud.service.DeptService<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Autowired<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.GetMapping<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.PathVariable<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//提供Restful服务
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@RestController</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeptController</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Autowired</span>
+    <span style="color:#66d9ef">private</span> DeptService deptService<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/dept/get/{id}&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#75715e">//熔断机制的注解，加入后可以在代码抛出异常后执行fallback方法
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@HystrixCommand</span><span style="color:#f92672">(</span>fallbackMethod <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hystrixGet&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> Dept <span style="color:#a6e22e">queryById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span>Long id<span style="color:#f92672">){</span>
+        Dept dept <span style="color:#f92672">=</span> deptService<span style="color:#f92672">.</span><span style="color:#a6e22e">queryById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>dept <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">){</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id=&gt;&#34;</span><span style="color:#f92672">+</span>id<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;,不存在该用户，或者信息无法找到~&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> dept<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    
+    <span style="color:#75715e">//备选方案，fallback方法
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> Dept <span style="color:#a6e22e">hystrixGet</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> Long id<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Dept<span style="color:#f92672">()</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setDeptno</span><span style="color:#f92672">(</span>id<span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setDname</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id=&gt;&#34;</span><span style="color:#f92672">+</span>id<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;,没有对应的信息，null--@Hystrix~&#34;</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setDb_source</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No this database in MySQL&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>3、启动类上加入<code>@EnableCircuitBreaker</code>注解</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@EnableCircuitBreaker</span>   <span style="color:#75715e">//添加对熔断的支持
+</span></code></pre></div><p>4、测试结果，当输入不存在的<code>id</code>时，就会抛出异常，并不是会返回异常信息，而是执行备用方法，这就是Hystrix的服务熔断操作</p>
+<p><img src="/textImgs/DCXD%5DHBZ8$AEWBP9%60EUG3DY.png" alt="img"></p>
+<h1 id="hystrix的服务降级">Hystrix的服务降级</h1>
+<h3 id="服务降级">服务降级</h3>
+<p>是在服务器压力陡增的情况下，利用有限资源，根据当前业务情况，关闭某些服务接口或者页面，以此释放服务器资源以保证核心任务的正常运行。</p>
+<h3 id="具体操作-1">具体操作</h3>
+<p>1、在api接口中创建<code>DeptClientService</code>的接口实现类<code>DeptClientServiceFallbackFactroy</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud.service<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> com.example.springcloud.pojo.Dept<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> feign.hystrix.FallbackFactory<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Component<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.util.List<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//降级~
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeptClientServiceFallbackFactory</span> <span style="color:#66d9ef">implements</span> FallbackFactory <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>Throwable throwable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> DeptClientService<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> Dept <span style="color:#a6e22e">queryById</span><span style="color:#f92672">(</span>Long id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Dept<span style="color:#f92672">()</span>
+                        <span style="color:#f92672">.</span><span style="color:#a6e22e">setDeptno</span><span style="color:#f92672">(</span>id<span style="color:#f92672">)</span>
+                        <span style="color:#f92672">.</span><span style="color:#a6e22e">setDname</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id=&gt;&#34;</span><span style="color:#f92672">+</span>id<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;,没有对应的信息，客户端提供了降级的信息，这个服务已经被关闭了&#34;</span><span style="color:#f92672">)</span>
+                        <span style="color:#f92672">.</span><span style="color:#a6e22e">setDb_source</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No DATABASE&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Dept<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">queryAll</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">addDept</span><span style="color:#f92672">(</span>Dept dept<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">};</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>2、在<code>DeptClientService</code>类上添加注解<code>@FeignClent</code>,其中value的值是我们服务提供者的名称，而fallbackFactory的值指向的类则是我们第一步创建的实现类。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@FeignClient</span><span style="color:#f92672">(</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;springcloud-provider-dept&#34;</span><span style="color:#f92672">,</span>fallbackFactory <span style="color:#f92672">=</span> DeptClientServiceFallbackFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+</code></pre></div><p>3、由于使用的是<code>Feign</code>，所以修改消费者Feign子模块（建议先看SpringCloud——Feign）的yaml文件，开启降级</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#开启降级</span>
+<span style="color:#f92672">feign</span>:
+  <span style="color:#f92672">hystrix</span>:
+    <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div><p>4、启动注册中心eureka7001、服务提供者8001，服务消费者feign三个子模块，调用接口无误后，我们关闭服务提供者8001后，再次调用接口测试，此时结果：</p>
+<p><img src="/textImgs/%7D$CZHYCU%5BXE%7DIB2J6QQWQ7T.png" alt="img"></p>
+<h3 id="服务降级和服务熔断的区别">服务降级和服务熔断的区别：</h3>
+<blockquote>
+<p>服务熔断：针对服务端的某个服务超时或异常，引起熔断，类似保险丝</p>
+<p>服务降级：针对客户端，从整体网站请求负载考虑，当某个服务熔断或者关闭之后，服务将不再被调用。此时在客户端可以准备一个FallbackFactory，返回一个默认的值（缺省值），整体的服务水平下降了，为了解决客户突然暴多问题</p>
+</blockquote>
+<h1 id="hystrix的服务监控">Hystrix的服务监控</h1>
+<h3 id="服务监控">服务监控</h3>
+<p>用于对每个服务的流量进行实时的监控和管理，错误率高的服务是需要修改的和调整的，以便于维护人员进行后期的维护工作。</p>
+<p>1、导入监控页面依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--Hystrix的监控页面--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-hystrix-dashboard<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#75715e">&lt;!--Hystrix--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-hystrix<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>1.4.6.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>2、配置端口配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">9001</span>
+</code></pre></div><p>3、主启动类上开启监控注解<code>@EnaleHystrixDashboard</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@EnableHystrixDashboard</span> <span style="color:#75715e">//开启监控页面
+</span></code></pre></div><p><strong>注意：Hystrix的服务监控需要在拥有熔断机制的项目里才能显示出实时的数据监控</strong></p>
+<p>4、所以这里使用开启了服务熔断的服务提供者8001，进行配置</p>
+<ul>
+<li>
+<p>添加监控信息的依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--完善监控信息--&gt;</span><span style="color:#f92672">&lt;dependency&gt;</span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span style="color:#f92672">&lt;/artifactId&gt;&lt;/dependency&gt;</span>
+</code></pre></div></li>
+<li>
+<p>主启动类的编写</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud<span style="color:#f92672">;</span><span style="color:#f92672">import</span> com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.boot.SpringApplication<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.boot.autoconfigure.SpringBootApplication<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.boot.web.servlet.ServletRegistrationBean<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.cloud.client.discovery.EnableDiscoveryClient<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.cloud.netflix.eureka.EnableEurekaClient<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.context.annotation.Bean<span style="color:#f92672">;</span><span style="color:#a6e22e">@SpringBootApplication@EnableEurekaClient</span> <span style="color:#75715e">//在服务启动后，自动注册到Eureka中，也就是springcloud-eureka-7001这个项目中@EnableDiscoveryClient  //服务发现~@EnableCircuitBreaker   //添加对熔断的支持public class DeptProviderHystrix_8001 {    public static void main(String[] args) {        SpringApplication.run(DeptProviderHystrix_8001.class,args);    }    //增加一个Servlet，用于被Hystrix的监控到    //必须要触动熔断机制才能显示监控数据，也就是在主启动类上添加@EnableCircuitBreakeer    @Bean    public ServletRegistrationBean HystrixMetricsStreamServlet(){        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new HystrixMetricsStreamServlet());        registrationBean.addUrlMappings(&#34;/actuator/hystrix.stream&#34;);        return registrationBean;    }}
+</span></code></pre></div></li>
+</ul>
+<p>5、开启注册中心7001、服务提供者8001（开启了<strong>熔断机制</strong>的）、服务消费者（带监控页面的）</p>
+<p>监控页面：</p>
+<p><img src="/textImgs/image-20210505100849376.png" alt="image-20210505100849376"></p>
+<p>测试get请求后，监控路径<code>localhost:8001/actuator/hystrix.stream</code>:</p>
+<p><img src="/textImgs/image-20210505101014636.png" alt="image-20210505101014636"></p>
+<p>将服务加载到监控页面后：</p>
+<p><img src="/textImgs/image-20210505095836513.png" alt="image-20210505095836513"></p>
+<h3 id="解释监控页面">解释监控页面</h3>
+<ul>
+<li>
+<p>一圈</p>
+<p>实心圆：公有两种含义，他通过颜色的变化代表了实例的健康程度</p>
+<p>他的健康程度从 绿色&lt;黄色&lt;橙色&lt;红色 递减</p>
+<p>该实心圆除了颜色的变化之外，它的大小也会根据实例的请求流量发生变化，流量越大，该实心圆就越大，所以通过该实心圆的展示，就可以在大量的实例中快速发现故障实例和高压力实例。</p>
+</li>
+<li>
+<p>一线</p>
+<p>曲线：用来记录2分钟内流量的相对变化，可以通过它来观察到流量的上升和下降趋势</p>
+</li>
+<li>
+<p>整体说明：</p>
+<p><img src="/textImgs/image-20210505095640362.png" alt="image-20210505095640362"></p>
+</li>
+<li>
+<p>复杂的监控页面：</p>
+<p><img src="/textImgs/image-20210505095703232.png" alt="image-20210505095703232"></p>
+</li>
+</ul>
+<h3 id="总结">总结</h3>
+<p>Hystrix，为SpringCloud用于解决微服务出现雪崩情况提供了各种有效的方式，这些方法能为团队中做维护的小伙伴提供了友好的监控和给用户良好的解决措施和体验，并且可以挽救公司极大的损失。</p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=14">https://www.bilibili.com/video/BV1jJ411S7xr?p=14</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=15">https://www.bilibili.com/video/BV1jJ411S7xr?p=15</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=16">https://www.bilibili.com/video/BV1jJ411S7xr?p=16</a></p></article>
+    </section>
+
+    <footer class="ui attached segment dream-tags" data-html2canvas-ignore>
+      
+          <a class="ui label">No Tags</a>
+      
+      <div
+        class="ui label"
+        style="float: right; cursor: pointer;"
+        onclick="savePostAsImg()">
+        <i class="save icon"></i>Save as image
+      </div>
+    </footer>
+
+    
+
+    
+    
+    
+      <div class="ui segment utterances-comments" data-html2canvas-ignore>
+        <script src="https://utteranc.es/client.js"
+          repo="Rechiard/Rechiard.github.io"
+          issue-term="og:title"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    
+
+    
+
+  </div>
+  <div class="sixteen wide mobile sixteen wide tablet four wide computer column">
+    <article class="dream-header">
+  <section class="ui top attached center aligned segment">
+    <div class="ui small circular image">
+      
+        <img src="/me/yy.jpg">
+      
+    </div>
+
+    
+    <div class="ui medium header">
+    
+      🏹 Boo 的博客
+      <div class="sub header" style="margin-top: 0.5rem;">行至朝暮里，坠入暮云间，与星辰一同为你着迷.</div>
+    
+    </div>
+    
+
+    <div class="ui horizontal list">
+      
+      <a class="item" href="/posts">
+        <i class="archive icon" title="Archives"></i>
+      </a>
+      
+      <a class="item" href="/tags">
+        <i class="tags icon" title="All Tags"></i>
+      </a>
+      <a class="item" href="/categories">
+        <i class="th list icon" title="All Categories"></i>
+      </a>
+    </div>
+  </section>
+
+  
+  <section class="ui attached center aligned segment dream-tags">
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">
+        前端
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E5%BC%80%E6%BA%90/" title="开源">
+        开源
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E7%94%9F%E6%B4%BB/" title="生活">
+        生活
+      </a>
+    
+      
+      
+      <a class="ui label" href="/tags/%E8%B5%84%E6%BA%90/" title="资源">
+        资源
+      </a>
+    
+  </section>
+  
+
+  
+  <section class="ui attached segment dream-categories">
+    <div class="ui accordion">
+      
+      
+      
+      
+      
+
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/git/" title="Git">
+              Git
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub4/">玩转Github（4）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub3/">玩转Github（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub2/">玩转Github（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E7%8E%A9%E8%BD%ACgithub1/">玩转Github（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/java%E6%A0%B8%E5%BF%83/" title="Java核心">
+              Java核心
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E7%AE%97%E6%B3%95/">对Java核心——垃圾回收与算法</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83jvm%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3/">对Java核心——JVM的详细了解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring/" title="Spring">
+              Spring
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis_plus%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%92%8C%E6%8E%8C%E6%8F%A1/">MyBatis_Plus的学习和掌握</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/mybatis%E6%BA%90%E7%A0%81%E7%BA%A7%E5%88%AB%E6%A0%B8%E5%BF%83%E7%90%86%E8%A7%A3/">MyBatis源码级别核心理解</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/jpa%E5%92%8Cmybatis%E7%9A%84%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Jpa和MyBatis的对比学习总结</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/spring%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%80%BB%E7%BB%93/">Spring初次体验总结（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/spring-cloud/" title="Spring Cloud">
+              Spring Cloud
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudconfig/">SpringCloud——Config</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudzuul/">SpringCloud——Zuul</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudhystrix/">SpringCloud——Hystrix</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudfeign/">SpringCloud——Feign</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudribbon/">SpringCloud——Ribbon</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springcloudeureka/">SpringCloud——Eureka</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8Espringcloud/">微服务与SpringCloud</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/springboot/" title="Springboot">
+              Springboot
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/dubbo%E5%92%8Czookeeper%E9%9B%86%E6%88%90/">Dubbo和Zookeeper集成</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/swagger%E7%9A%84%E4%BA%86%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/">SpringBoot集成Swagger的了解和使用</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot2/">SpringBoot-Web——SpringBoot运行原理探究</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/springboot1/">SpringBoot-Web——概述和基本理解</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+        
+
+        
+          <div class="title">
+            <i class="dropdown icon"></i>
+            
+            
+            <a class="item" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="多线程">
+              多线程
+            </a>
+          </div>
+          <div class="content">
+            <div class="ui list">
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A33/">对Java核心——Java多线程并发的理解（3）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83-java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A32/">对Java核心——Java多线程并发的理解（2）</a>
+                </div>
+              </div>
+            
+              <div class="item">
+                <div class="content">
+                  <a class="item" href="/posts/%E5%AF%B9java%E6%A0%B8%E5%BF%83java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E7%9A%84%E7%90%86%E8%A7%A3/">对Java核心——Java多线程并发的理解（1）</a>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
+
+      
+    </div>
+  </section>
+  
+
+  <section class="ui attached segment header-socials">
+    <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class=" mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class=" twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class=" facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class=" instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class=" github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class=" codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+  </section>
+
+  <section class="ui bottom attached center aligned segment">
+    
+      <p>© 2020 - 2021 🏹 Boo 的博客网站</p>
+    
+
+    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
+
+    
+  </section>
+</article>
+
+  </div>
+</div>
+
+          </div>
+        </section>
+        <section class="back">
+          <div class="dream-max-width">
+            <div class="ui centered relaxed grid dream-grid dream-back">
+  
+  
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">社交</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <p>通过以下方式了解我</p>
+<ul>
+<li>我的B站uid：<code>8552591</code></li>
+<li>我的微信号：<code>bobo616316004</code>(求偶误加，已有妻子)</li>
+<li>我的QQ账号：<code>616316004</code></li>
+</ul>
+<p>喜欢游戏的可以关注我的公众号，看我告诉你一些你不知道好玩的游戏介绍吧~
+公众号：<code>脱口Game秀</code></p>
+<blockquote>
+</blockquote>
+<p><img src="/me/qrcode.jpg" alt="avatar"></p>
+
+        </div>
+      </article>
+    </section>
+  
+    <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+      <article>
+        <div class="ui top attached segment">
+          <h3 class="ui header">关于我</h3>
+        </div>
+        <div class="ui bottom attached segment markdown-body">
+          <ul>
+<li>
+<p>Hi, my name is Gong jianbo.</p>
+</li>
+<li>
+<p>🏹 Boo 的❤️博客</p>
+</li>
+<li>
+<p>记录一些 🌈 生活上，还有技术上的事情</p>
+</li>
+<li>
+<p>一名成长中的大学生</p>
+</li>
+<li>
+<p>就读于天津师范大学软件学院</p>
+</li>
+<li>
+<p>业余时间喜欢打篮球和陪女朋友</p>
+</li>
+<li>
+<p>目前主要想学习的方向：</p>
+<ul>
+<li>Java &amp; Python &amp; PHP</li>
+<li>后端大体系统框架</li>
+<li>个人语言沟通表达技巧</li>
+<li>Android Studio</li>
+<li>Cocos2d游戏引擎</li>
+</ul>
+</li>
+<li>
+<p>写着玩：</p>
+<ul>
+<li>JAVA &amp; Android Studio</li>
+<li>JAVA &amp; Spring MVC</li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>This is my blog.</p>
+</li>
+<li>
+<p>2020年11月22日更新</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </section>
+  
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    <article>
+      <div class="ui top attached segment">
+        <h3 class="ui header">Social Links</h3>
+      </div>
+      <div class="ui bottom attached segment">
+        <nav class="ui secondary menu dream-menu dream-socials">
+  
+  
+    <div class="item">
+      <a href="mailto:616316004@gmail.com">
+        <i class="large mail icon" title="Email"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://twitter.com/Rechiard" target="_blank">
+        <i class="large twitter icon" title="Twitter"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://facebook.com/Rechiard" target="_blank">
+        <i class="large facebook icon" title="Facebook"></i>
+      </a>
+    </div>
+  
+
+  
+    <div class="item">
+      <a href="https://instagram.com/Rechiard" target="_blank">
+        <i class="large instagram icon" title="Instagram"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://github.com/Rechiard" target="_blank">
+        <i class="large github icon" title="GitHub"></i>
+      </a>
+    </div>
+  
+
+  
+
+  
+    <div class="item">
+      <a href="https://codepen.io/Rechiard" target="_blank">
+        <i class="large codepen icon" title="Codepen"></i>
+      </a>
+    </div>
+  
+</nav>
+
+      </div>
+    </article>
+  </section>
+
+  <section class="sixteen wide mobile eight wide tablet four wide computer column dream-column">
+    
+  </section>
+
+  
+  
+</div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+  window.backgroundDark = "black"
+  window.backgroundImageDark = "/me/backgroundblack.jpg"
+  window.darkNav =  null 
+  window.hasTwitterEmbed =  null 
+
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/theme.js"></script>
+
+    
+<script src="/js/html2canvas.min.js"></script>
+<script src="/js/post.js"></script>
+
+
+
+
+
+    
+      <div class="ui inverted segment" id="dream-search">
+  <div class="ui search">
+    <div class="ui transparent input">
+      <input class="prompt" type="text" placeholder="Search" />
+    </div>
+    <div class="results"></div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $.getJSON('https:\/\/rechiard.gitee.io/index.json', function (data) {
+      $('.ui.search').search({
+        source: data,
+        searchFields: ['title'],
+        showNoResults: true,
+      })
+    })
+  })
+</script>
+<script src="/js/search.js"></script>
+
+    
+
+    
+  </body>
+</html>

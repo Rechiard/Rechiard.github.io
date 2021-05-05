@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>玩转Github（2） | 🏹 Boo 的博客网站</title>
+    <title>SpringCloud——Config | 🏹 Boo 的博客网站</title>
 
     
 <link href="/static/avatar/favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -13,28 +13,28 @@
 
 
 <meta name="author" content="🏹 Boo" />
-<meta name="description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库
+<meta name="description" content="Config，是项目是一个解决分布式系统的配置管理方案。它包含了客户端和服务端两个部分，服务端提供配置文件的存储、以接口的形式将配置文件的内容提供出去，客户端通过接口获取数据、并依据此数据初始化自己的应用。
 " />
 
 
 
 <meta name="generator" content="Hugo 0.78.2" />
 
-<link rel="canonical" href="https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub2/" />
+<link rel="canonical" href="https://rechiard.gitee.io/posts/springcloudconfig/" />
 
 
-<meta property="og:title" content="玩转Github（2）" />
-<meta property="og:description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库" />
+<meta property="og:title" content="SpringCloud——Config" />
+<meta property="og:description" content="Config，是项目是一个解决分布式系统的配置管理方案。它包含了客户端和服务端两个部分，服务端提供配置文件的存储、以接口的形式将配置文件的内容提供出去，客户端通过接口获取数据、并依据此数据初始化自己的应用。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rechiard.gitee.io/posts/%E7%8E%A9%E8%BD%ACgithub2/" />
-<meta property="article:published_time" content="2020-12-21T14:38:47+08:00" />
-<meta property="article:modified_time" content="2020-12-21T14:38:47+08:00" />
+<meta property="og:url" content="https://rechiard.gitee.io/posts/springcloudconfig/" />
+<meta property="article:published_time" content="2021-05-05T17:35:26+08:00" />
+<meta property="article:modified_time" content="2021-05-05T17:35:26+08:00" />
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="玩转Github（2）"/>
-<meta name="twitter:description" content="本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库"/>
+<meta name="twitter:title" content="SpringCloud——Config"/>
+<meta name="twitter:description" content="Config，是项目是一个解决分布式系统的配置管理方案。它包含了客户端和服务端两个部分，服务端提供配置文件的存储、以接口的形式将配置文件的内容提供出去，客户端通过接口获取数据、并依据此数据初始化自己的应用。"/>
 
 
 <link rel="stylesheet" href="/css/semantic.min.css" />
@@ -122,13 +122,13 @@
   <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column markdown-body dream-single" id="dream-save-post-as-img">
     
     <section class="ui top attached segment cover">
-      <div class="cover-img" style="background-image: url(/img/code1.jpg);"></div>
+      <div class="cover-img" style="background-image: url(/img/ice3.jpg);"></div>
     </section>
     
     <section class="ui attached segment">
       <header>
         <h1 class="ui large header">
-          玩转Github（2）
+          SpringCloud——Config
           <div class="sub header">
             @
             
@@ -136,176 +136,169 @@
             
 
             | 
-                Monday, Dec 21, 2020
+                Wednesday, May 5, 2021
               
 
-            | 1 minute read
+            | 2 minute read
 
             | Update at
               
-                Monday, Dec 21, 2020
+                Wednesday, May 5, 2021
               
           </div>
         </h1>
       </header>
 
-      <article class="main"><p>本博客介绍的是Git软件的安装、Git的工作区域、Git添加文件过程、利用Git远程管理Github仓库</p>
-<h1 id="git的安装以及基本使用">Git的安装以及基本使用</h1>
-<ol>
-<li>
-<h3 id="下载git">下载Git</h3>
-<p>目的：通过git管理github托管项目代码</p>
-<p>Git官网下载：https://www.git.scm.com/download/win</p>
-<p>双击安装</p>
-</li>
-<li>
-<h3 id="git工作区域">Git工作区域</h3>
-<ol>
-<li><strong>Git Repostitory（Git 仓库）</strong></li>
-</ol>
-<p>最终确定的文件保存到仓库，成为一个新的版本，并且对他人可见</p>
-<ol start="2">
-<li><strong>暂存区</strong></li>
-</ol>
-<p>暂存已经修改的文件最后统一提交到git仓库中</p>
-<ol start="3">
-<li><strong>工作区（Working Directory）</strong></li>
-</ol>
-<p>添加、编辑、修改文件等动作</p>
-</li>
-<li>
-<h3 id="向仓库添加文件流程">向仓库添加文件流程</h3>
-<p><img src="/textImgs/image-20201221134221066.png" alt="image-20201221134221066"></p>
-</li>
-<li>
-<h3 id="初始化git本地操作工作区-暂存区">初始化git(本地操作)————（工作区-&gt;暂存区）</h3>
-<ol>
-<li>
-<p><strong>基本信息设置</strong></p>
-<ol>
-<li>
-<p>设置用户名</p>
-<p><code>git config --global user.name 'XXXXX'</code></p>
-</li>
-<li>
-<p>设置用户名邮箱</p>
-<p><code>git config --global user.email  '616316004@qq.com'</code></p>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>初始化一个新的git仓库</strong></p>
-<ol>
-<li>
-<p>创建文件夹</p>
-<p><code>mkdir 文件名</code></p>
-</li>
-<li>
-<p>在文件内初始化git（创建git仓库）</p>
-<p>进入目标文件夹：<code>cd 文件名</code></p>
-<p>初始化本地git仓库（暂存区）：<code>git init</code></p>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>向仓库添加文件</strong></p>
-<ol>
-<li>
-<p>添加到本地仓库（暂存区）：</p>
-<p><code>git add 文件名.后缀</code></p>
-</li>
-<li>
-<p>查看：</p>
-<p><code>git status</code></p>
-</li>
-<li>
-<p>将文件从暂存区提交到github仓库</p>
-<p><code>git commit -m '提交状态信息说明'</code></p>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>修改仓库文件</strong></p>
-<ol>
-<li>
-<p>将文件的内容修改</p>
-</li>
-<li>
-<p>重新进行第三个步骤</p>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>删除仓库文件</strong></p>
-<ol>
-<li>
-<p>删除文件</p>
-<p><code>rm 文件名.后缀</code></p>
-</li>
-<li>
-<p>从Git中删除文件</p>
-<p><code>git rm 文件名.后缀</code></p>
-</li>
-<li>
-<p>提交操作</p>
-<p><code>git commit -m '提交描述'</code></p>
-</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>
-<h3 id="git管理远程仓库暂存区-git-repository">Git管理远程仓库————（暂存区-&gt;Git Repository）</h3>
-<p>使用远程仓库的目的：备份，实现代码共享集中化管理</p>
-<p><img src="/textImgs/image-20201221140739178.png" alt="image-20201221140739178"></p>
-<ol>
-<li>
-<p>添加远程地址
-命令：<code>git remote add origin https://github.com/Rechiard/ProjectCollection.git</code> （远程地址）</p>
-<p><img src="/textImgs/image-20210107094407529.png" alt="image-20210107094407529"></p>
-</li>
-<li>
-<p>添加到本地仓库（暂存区）：</p>
-<p><code>git add 文件名.后缀</code></p>
-</li>
-<li>
-<p>将文件从暂存区提交到github仓库</p>
-<p><code>git commit -m '提交状态信息说明'</code></p>
-</li>
-<li>
-<p>将本地仓库同步到git远程仓库</p>
-<p><code>git push origin master</code></p>
-</li>
-<li>
-<p>报错：The requested URL returned error:403 Forbidden while accessing或没有权限</p>
-<p>回答：是因为这是私有项目，没有权限，输入用户名密码，或者远程地址采用这种类型：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">vi .git<span style="color:#f92672">/</span>config
-      
-<span style="color:#75715e"># 将
-</span><span style="color:#75715e"></span>[remote <span style="color:#e6db74">&#34;origin&#34;</span>]
-  url <span style="color:#f92672">=</span> https:<span style="color:#75715e">//github.com/用户名/仓库名.git
-</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">修改为：</span>
-[remote <span style="color:#e6db74">&#34;origin&#34;</span>]
-  url <span style="color:#f92672">=</span> https:<span style="color:#75715e">//用户名:密码@github.com/用户名/仓库名.git
-</span></code></pre></div></li>
-</ol>
-</li>
-<li>
-<h3 id="git克隆操作">Git克隆操作</h3>
-<p>目的：将远程仓库（github对应的项目）</p>
-<ol>
-<li>通过github仓库的<code>Clone or download</code>复制链接</li>
-</ol>
-<p><img src="/textImgs/image-20201221141317576.png" alt="image-20201221141317576"></p>
-<ol>
-<li>
-<p>克隆：<code>git clone 复制的链接</code></p>
-<p>查看：<code>git config --list</code></p>
-<p><img src="/textImgs/image-20201221141732527.png" alt="image-20201221141732527"></p>
-</li>
-</ol>
-</li>
-</ol></article>
+      <article class="main"><p>Config，是项目是一个解决分布式系统的配置管理方案。它包含了客户端和服务端两个部分，服务端提供配置文件的存储、以接口的形式将配置文件的内容提供出去，客户端通过接口获取数据、并依据此数据初始化自己的应用。</p>
+<p>Config配置文件地址：<a href="https://gitee.com/rechiard/springcloud-config">https://gitee.com/rechiard/springcloud-config</a></p>
+<p>本文章项目存放在：项目存放地址：<a href="https://github.com/Rechiard/ProjectCollection">https://github.com/Rechiard/ProjectCollection</a>，后缀名为&quot;Spring Cloud&quot;</p>
+<h1 id="conig简介">conig简介</h1>
+<h3 id="分布式系统面临的配置文件的问题">分布式系统面临的——配置文件的问题</h3>
+<p>​		微服务意味着要将单体应用中的业务拆分成一个个子服务，每个服务的粒度相对较小，因此系统中会出现大量的服务，由于每个服务都需要必要的配置信息才能运行，所以一套集中式的，动态的配置管理设施是必不可少的。SpringCloud提供了ConfigServer来解决这个问题，我们每一个微服务自己带着一个application.yml，那上百的的配置文件要修改起来，岂不是要发疯!</p>
+<h3 id="什么是springcloud-config分布式配置中心">什么是SpringCloud config分布式配置中心</h3>
+<p><img src="/textImgs/image-20210505120136832.png" alt="image-20210505120136832"></p>
+<p>​		Spring Cloud config为微服务架构中的微服务提供集中化的外部配置支持，配置服务器为<strong>各个不同的微服务应用的所有环节提供了一个中心化的外部配置。</strong></p>
+<p>​		Spring Cloud Config 分为<strong>服务端</strong>和<strong>客户端</strong>两部分;</p>
+<p>​		服务端也称为 分布式配置中心 ，它是一个独立的微服务应用，用来连接配置服务器并为客户端提供获取配置信息，加密，解密信息等访问接口。</p>
+<p>​		客户端则是通过指定的配置中心来管理应用资源，以及与业务相关的配置内容，并在启动的时候从配置中心获取和加载配置信息。配置服务器默认采用git来存储配置信息，这样就有助于对环境配置进行版本管理。并且可以通过git客户端工具来方便的管理和访问配置内容。</p>
+<h3 id="springcloud-config分布式配置中心能干嘛">SpringCloud config分布式配置中心能干嘛</h3>
+<ul>
+<li>集中管理配置文件</li>
+<li>不同环境，不同配置，动态化的配置更新，分环境部署，比如ldev /test/ lprod /beta /release</li>
+<li>运行期间动态调整配置，不再需要在每个服务部署的机器上编写配置文件，服务会向配置中心统一拉取配置自己的信息。</li>
+<li>当配置发生变动时，服务不需要重启，即可感知到配置的变化，并应用新的配置</li>
+<li>将配置信息以REST接口的形式暴露</li>
+</ul>
+<h3 id="springcloud-config分布式配置中心与github整合">SpringCloud config分布式配置中心与github整合</h3>
+<p>​		由于Spring Cloud Config默认使用Git来存储配置文件（也有其他方式，比如支持SVN和本地文件)，但是最推荐的还是Git ，而且使用的是http / https 访问的形式;</p>
+<h1 id="服务端搭建">服务端搭建</h1>
+<p>1、在github或者gitee上创建一个仓库并且利用<code>ssh</code>保存到本地目录中，搭建第一次与远程仓库的连接</p>
+<p>2、在本地目录中编写<code>application.yaml</code>配置文件并且上传文件到远程仓库中</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>:
+    <span style="color:#f92672">active</span>: <span style="color:#ae81ff">dev</span>
+---
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>: <span style="color:#ae81ff">dev</span>
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">spingcloud-config-dev</span>
+---
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>: <span style="color:#ae81ff">test</span>
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">spingcloud-config-test</span>
+</code></pre></div><p>3、Config也是一个独立的微服务应用，我们利用创建服务的方式创建Config子模块并且导入相关依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--config--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-config-server<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>2.1.1.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#75715e">&lt;!--完善监控信息--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-web<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>4、编写yaml配置文件，连接到远程仓库中的yaml文件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">3344</span>
+
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">springcloud-config-server</span>
+  <span style="color:#75715e"># 连接到远程仓库</span>
+  <span style="color:#f92672">cloud</span>:
+    <span style="color:#f92672">config</span>:
+      <span style="color:#f92672">server</span>:
+        <span style="color:#f92672">git</span>:
+          <span style="color:#f92672">uri</span>: <span style="color:#ae81ff">https://gitee.com/rechiard/springcloud-config.git</span>
+<span style="color:#75715e">#通过 config-server，可以连接到git，访问其中的资源以及配置</span>
+</code></pre></div><p>5、在主启动类上添加注解<code>@EnableConfigServe</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@EnableConfigServer</span> <span style="color:#75715e">//开启远程服务配置
+</span></code></pre></div><p>6、创建主启动类进行启动，访问路径<code>localohost:3344/application-dev.yaml</code>测试，能够得到远程仓库中我们编写的yaml文件</p>
+<p><img src="/textImgs/image-20210505164005671.png" alt="image-20210505164005671"></p>
+<h1 id="客户端搭建">客户端搭建</h1>
+<p>1、编写<code>config-client.yaml</code>并且上传到远程仓库，方便在本地实现客户端调用服务端操作</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>:
+    <span style="color:#f92672">active</span>: <span style="color:#ae81ff">dev</span>
+---
+<span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">8201</span>
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>: <span style="color:#ae81ff">dev</span>
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">springcloud-provider-dept</span>
+
+<span style="color:#75715e">#Eureka的配置，服务注册到那里</span>
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">service-url</span>:
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://eureka7001.com:7001/eureka/</span>
+
+---
+<span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">8202</span>
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">profiles</span>: <span style="color:#ae81ff">test</span>
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">springcloud-provider-dept</span>
+
+<span style="color:#75715e">#Eureka的配置，服务注册到那里</span>
+<span style="color:#f92672">eureka</span>:
+  <span style="color:#f92672">client</span>:
+    <span style="color:#f92672">service-url</span>:
+      <span style="color:#f92672">defaultZone</span>: <span style="color:#ae81ff">http://eureka7001.com:7001/eureka/</span>
+</code></pre></div><p>2、创建客户端子模块，并且添加相关pom依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!--config 启动器--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-config<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;version&gt;</span>2.1.1.RELEASE<span style="color:#f92672">&lt;/version&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#75715e">&lt;!--完善监控信息--&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-web<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>3、编写配置文件<code>bootstrap.yaml</code>(系统级配置，优先级最高，防止访问不到远程仓库的配置文件）和<code>application.yaml</code></p>
+<p>bootstrap.yaml</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#系统级别的配置</span>
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">cloud</span>:
+    <span style="color:#f92672">config</span>:
+      <span style="color:#f92672">uri</span>: <span style="color:#ae81ff">http://localhost:3344</span>
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">config-client</span> <span style="color:#75715e">#需要从git上读取的资源名称，不需要后缀</span>
+      <span style="color:#f92672">profile</span>: <span style="color:#ae81ff">dev </span> <span style="color:#75715e">#dev的端口号是8201</span>
+      <span style="color:#f92672">label</span>: <span style="color:#ae81ff">master</span>
+</code></pre></div><p>application.yaml</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e">#用户级别的配置</span>
+<span style="color:#f92672">spring</span>:
+  <span style="color:#f92672">application</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">springcloud-config-client-3355</span>
+</code></pre></div><p>4、创建controller得到远程仓库中yaml的文件信息</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> com.example.springcloud.controller<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Value<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestMapping<span style="color:#f92672">;</span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController<span style="color:#f92672">;</span><span style="color:#a6e22e">@RestControllerpublic</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ConfigClientController</span> <span style="color:#f92672">{</span>    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${spring.application.name}&#34;</span><span style="color:#f92672">)</span>    <span style="color:#66d9ef">private</span> String applicationName<span style="color:#f92672">;</span>    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${eureka.client.service-url.defaultZone}&#34;</span><span style="color:#f92672">)</span>    <span style="color:#66d9ef">private</span> String eurekaServer<span style="color:#f92672">;</span>    <span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${server.port}&#34;</span><span style="color:#f92672">)</span>    <span style="color:#66d9ef">private</span> String port<span style="color:#f92672">;</span>    <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/config&#34;</span><span style="color:#f92672">)</span>    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getConfig</span><span style="color:#f92672">(){</span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;applicationName:&#34;</span><span style="color:#f92672">+</span>applicationName<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;--&#34;</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34;eurekaServer:&#34;</span><span style="color:#f92672">+</span>eurekaServer<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;--&#34;</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34;port:&#34;</span><span style="color:#f92672">+</span>port<span style="color:#f92672">;</span>    <span style="color:#f92672">}}</span>
+</code></pre></div><p>5、创建主启动类进行启动，同时开启服务端3344模块</p>
+<p>访问路径<code>http:localhost:334/config-client-dev.yaml</code>，测试服务端3344开启成功</p>
+<p><img src="/textImgs/image-20210505163826663.png" alt="image-20210505163826663"></p>
+<p>访问路径：<code>http://localhost:8201/config</code>测试客户端3355开启成功，并且得到yaml中文件具体信息</p>
+<p><img src="/textImgs/image-20210505164826566.png" alt="image-20210505164826566"></p>
+<h3 id="总结">总结</h3>
+<p>SpringCloud-Config的作用其实就是将一些相同模块的配置文件统一放在远程仓库进行统一管理，这样方便维护和更新，并且适用于团队合作等等。</p>
+<hr>
+<h3 id="参考链接">参考链接：</h3>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=18">https://www.bilibili.com/video/BV1jJ411S7xr?p=18</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=19">https://www.bilibili.com/video/BV1jJ411S7xr?p=19</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=20">https://www.bilibili.com/video/BV1jJ411S7xr?p=20</a></p>
+<p><a href="https://www.bilibili.com/video/BV1jJ411S7xr?p=21">https://www.bilibili.com/video/BV1jJ411S7xr?p=21</a></p></article>
     </section>
 
     <footer class="ui attached segment dream-tags" data-html2canvas-ignore>

@@ -6,7 +6,34 @@
     <description>Recent content in Posts on 🏹 Boo 的博客网站</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Tue, 04 May 2021 20:43:53 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 05 May 2021 17:35:26 +0800</lastBuildDate><atom:link href="https://rechiard.gitee.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringCloud——Config</title>
+      <link>https://rechiard.gitee.io/posts/springcloudconfig/</link>
+      <pubDate>Wed, 05 May 2021 17:35:26 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudconfig/</guid>
+      <description>&lt;p&gt;Config，是项目是一个解决分布式系统的配置管理方案。它包含了客户端和服务端两个部分，服务端提供配置文件的存储、以接口的形式将配置文件的内容提供出去，客户端通过接口获取数据、并依据此数据初始化自己的应用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Zuul</title>
+      <link>https://rechiard.gitee.io/posts/springcloudzuul/</link>
+      <pubDate>Wed, 05 May 2021 17:35:21 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudzuul/</guid>
+      <description>&lt;p&gt;Zuul，是Spring Cloud全家桶中的微服务API网关，本质上是一个web servlet应用，用于路由跳转以及路径过滤。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpringCloud——Hystrix</title>
+      <link>https://rechiard.gitee.io/posts/springcloudhystrix/</link>
+      <pubDate>Wed, 05 May 2021 17:35:17 +0800</pubDate>
+      
+      <guid>https://rechiard.gitee.io/posts/springcloudhystrix/</guid>
+      <description>&lt;p&gt;Hystrix，在SpringCloud发生服务雪崩的时候，触发的一种自我保护的机制，它提供了多种自我保护机制的方法，为微服务架构的稳定性提供了不可或缺的作用。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>SpringCloud——Feign</title>
       <link>https://rechiard.gitee.io/posts/springcloudfeign/</link>

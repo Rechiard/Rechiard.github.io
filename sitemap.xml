@@ -4,26 +4,41 @@
   
   <url>
     <loc>https://rechiard.gitee.io/categories/</loc>
-    <lastmod>2021-05-04T20:43:53+08:00</lastmod>
+    <lastmod>2021-05-05T17:35:26+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://rechiard.gitee.io/posts/</loc>
-    <lastmod>2021-05-04T20:43:53+08:00</lastmod>
+    <lastmod>2021-05-05T17:35:26+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://rechiard.gitee.io/categories/spring-cloud/</loc>
-    <lastmod>2021-05-04T20:43:53+08:00</lastmod>
+    <lastmod>2021-05-05T17:35:26+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://rechiard.gitee.io/posts/springcloudfeign/</loc>
-    <lastmod>2021-05-04T20:43:53+08:00</lastmod>
+    <loc>https://rechiard.gitee.io/posts/springcloudconfig/</loc>
+    <lastmod>2021-05-05T17:35:26+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://rechiard.gitee.io/</loc>
+    <lastmod>2021-05-05T17:35:26+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rechiard.gitee.io/posts/springcloudzuul/</loc>
+    <lastmod>2021-05-05T17:35:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rechiard.gitee.io/posts/springcloudhystrix/</loc>
+    <lastmod>2021-05-05T17:35:17+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rechiard.gitee.io/posts/springcloudfeign/</loc>
     <lastmod>2021-05-04T20:43:53+08:00</lastmod>
   </url>
   
